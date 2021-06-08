@@ -52,6 +52,7 @@ public class StaticConfFiles {
 	public final static String c_rock_pulveriser = "conf/gameconfs/cards/2_c_u_rock_pulveriser.json";
 	public final static String c_serpenti = "conf/gameconfs/cards/2_c_u_serpenti.json";
 	public final static String c_windshrike = "conf/gameconfs/cards/2_c_u_windshrike.json";
+	//the 10th card is hailstone_golem (String under deck 1)
 	
 	// Deck 2 Units
 	public final static String u_blaze_hound = "conf/gameconfs/units/blaze_hound.json";
