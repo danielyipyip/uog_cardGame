@@ -7,6 +7,13 @@ import java.util.Stack;
 import utils.BasicObjectBuilders;
 import utils.StaticConfFiles;
 
+/**
+ * A basic representation of a player's deck
+ * can draw/shuffle card
+ * @author Dainel Yip
+ *
+ */
+
 public class Deck {
 
 	public Deck(int playerID) {
