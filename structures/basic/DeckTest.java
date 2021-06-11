@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class DeckTest {
-
+	
 	@Test
 	//both deck should have 20 cards
 	public void testDeckSize() {

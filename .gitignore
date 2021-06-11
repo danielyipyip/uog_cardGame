@@ -1,2 +1,4 @@
 #ignor the files inside assets
 /assets
+/.metadata
+/.project
