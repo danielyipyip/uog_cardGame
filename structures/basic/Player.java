@@ -13,11 +13,11 @@ import Exceptions.NotEnoughCardException;
  *@author Dainel Yip
  */
 public class Player {
-	int health;
-	int mana;
-	Deck mydeck;
-	Hand myhand;
-	int playerID;
+	protected int health;
+	protected int mana;
+	protected Deck mydeck;
+	protected Hand myhand;
+	protected int playerID;
 	
 	public Player() {
 		super();
@@ -53,5 +53,7 @@ public class Player {
 	public void setMydeck(Deck mydeck) {this.mydeck = mydeck;}
 	public int getPlayerID() {return playerID;}
 	public void setPlayerID(int playerID) {this.playerID = playerID;}
+	public Hand getMyhand() {return myhand;}
+	public void setMyhand(Hand myhand) {this.myhand = myhand;}
 	
 }

@@ -23,4 +23,7 @@ public class Hand {
 	}
 	public Card getCard(int index) {return myhand.get(index);}
 	public void removeCard(int index) {myhand.remove(index);}
+
+	public ArrayList<Card> getMyhand() {return myhand;}
+	public void setMyhand(ArrayList<Card> myhand) {this.myhand = myhand;}
 }
