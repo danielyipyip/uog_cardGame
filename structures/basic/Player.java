@@ -15,24 +15,27 @@ public class Player {
 	int health;
 	int mana;
 	Deck mydeck;
+	Hand myhand;
 	int playerID;
 	
-	public Player(int playerID) {
+	public Player() {
 		super();
-		new Player(20, 2, playerID); //turn 1 already 2 mana, so basic should be 2
+		new Player(20, 2); //turn 1 already 2 mana, so basic should be 2
 		//original implementation
 //		this.health = 20;
 //		this.mana = 0;
 	}
-	public Player(int health, int mana, int playerID) {
+	public Player(int health, int mana) {
 		super();
 		this.health = health;
 		this.mana = mana;
-		this.playerID=playerID;
-		mydeck = new Deck(playerID);
+//		this.playerID=playerID;
+//		mydeck = new Deck(1);
 		//card shuffled when player is created (should be start of game?
 		//should this functionality be here OR in init?
-		mydeck.shuffleCard(); 
+//		mydeck.shuffleCard(); 
+		//card draw in start of game
+		
 	}
 
 	public int getHealth() {return health;	}

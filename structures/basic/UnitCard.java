@@ -6,6 +6,8 @@ public class UnitCard extends Card{
 	//ability?
 //	String[] abilities;
 	
+	UnitCard(){super();};
+	
 	public UnitCard(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard) {
 		super(id, cardname, manacost, miniCard, bigCard);
 		this.attack = this.getBigCard().getAttack();

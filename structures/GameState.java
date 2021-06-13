@@ -20,8 +20,8 @@ public class GameState {
 		this.turn=1; //start of game, turn =1
 		
 		//create new players
-		player1 = new Player(1);
-		player2 = new Player(2);
+		player1 = new Player();
+		player2 = new Player();
 	}
 	
 	
