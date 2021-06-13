@@ -20,8 +20,9 @@ public class GameState {
 		this.turn=1; //start of game, turn =1
 		
 		//create new players
-		player1 = new Player();
-		player2 = new Player();
+		//starting mana =2 (turn 1)
+		player1 = new HumanPlayer(20,2);
+		player2 = new AIPlayer(20,2);
 	}
 	
 	

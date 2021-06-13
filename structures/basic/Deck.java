@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
+import Exceptions.WrongPlayerIDException;
 import utils.BasicObjectBuilders;
 import utils.StaticConfFiles;
 
@@ -21,7 +22,8 @@ public class Deck {
 		//call helper method to create the deck
 		if (playerID==1) {playerDeck(player1UnitCardConf, player1SpellCardConf);}
 		else if (playerID==2) {playerDeck(player2UnitCardConf, player2SpellCardConf);}
-		else {}//exception handling, throw exception OR display text on screen?
+		//exception handling, throw exception OR display text on screen?
+		else {throw new WrongPlayerIDException("wrong player ID when creating deck");}
 	}
 
 	//create deck for player 1 & 2
@@ -50,6 +52,8 @@ public class Deck {
 	}
 	
 	public Stack<Card> getDeck(){return mydeck;}
+	
+	public boolean isEmpty() {return mydeck.empty();}
 
 
 	private Stack<Card> mydeck; //the deck

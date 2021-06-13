@@ -1,5 +1,7 @@
 package structures.basic;
 
+import Exceptions.NotEnoughCardException;
+
 /**
  * A basic representation of of the Player. A player
  * has health and mana.
@@ -11,7 +13,6 @@ package structures.basic;
  *@author Dainel Yip
  */
 public class Player {
-
 	int health;
 	int mana;
 	Deck mydeck;
@@ -25,20 +26,25 @@ public class Player {
 //		this.health = 20;
 //		this.mana = 0;
 	}
+	
 	public Player(int health, int mana) {
 		super();
 		this.health = health;
-		this.mana = mana;
-//		this.playerID=playerID;
-//		mydeck = new Deck(1);
-		//card shuffled when player is created (should be start of game?
-		//should this functionality be here OR in init?
-//		mydeck.shuffleCard(); 
-		//card draw in start of game
-		
+		this.mana = mana;		
+	}
+	
+	public void cardDraw() {
+		Card tempCard;
+		if (mydeck.isEmpty()) {
+			//exception handling for deck is empty
+			throw new NotEnoughCardException("Empty deck to draw");
+		}else {
+			tempCard = mydeck.drawCard();
+			myhand.addCard(tempCard);
+		}
 	}
 
-	public int getHealth() {return health;	}
+	public int getHealth() {return health;}
 	public void setHealth(int health) {this.health = health;}
 	public int getMana() {return mana;}
 	public void setMana(int mana) {this.mana = mana;}
