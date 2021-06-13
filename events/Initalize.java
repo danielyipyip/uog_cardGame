@@ -30,7 +30,6 @@ public class Initalize implements EventProcessor{
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 		setUpPlayerHealthMana(out, gameState);
 		drawHand(out, gameState); //only for player 1
-		
 	}
 
 	//helper methods
