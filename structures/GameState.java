@@ -14,6 +14,7 @@ public class GameState {
 	int turn;
 	Player player1;
 	Player player2;
+	Board board;
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -23,6 +24,7 @@ public class GameState {
 		//starting mana =2 (turn 1)
 		player1 = new HumanPlayer(20,2);
 		player2 = new AIPlayer(20,2);
+		board = new Board();
 	}
 
 	public int getTurn() {return turn;}
@@ -31,7 +33,7 @@ public class GameState {
 	public void setPlayer1(Player player1) {this.player1 = player1;}
 	public Player getPlayer2() {return player2;}
 	public void setPlayer2(Player player2) {this.player2 = player2;}
-	
+	public Board getBoard() {return board;}
 	
 	//to be implemented
 	//when end turn, turn +=1
