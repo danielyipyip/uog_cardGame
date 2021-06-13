@@ -31,9 +31,8 @@ public class Initalize implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
-		Board board = new Board();
 		setUpPlayerHealthMana(out, gameState);
-		displayTiles(out,board);
+		displayTiles(out,gameState.getBoard());
 		drawHand(out, gameState); //only for player 1
 		
 	}
@@ -55,9 +54,9 @@ public class Initalize implements EventProcessor{
 		int x = board.getX();
 		int y = board.getY();
 		
-		for(int i=1; i<=x; i++) {
+		for(int i=0; i<x; i++) {
 			
-			for(int j =1; j<=y;j++) 
+			for(int j=0; j<y;j++) 
 				{
 				String index = Integer.toString(i)+Integer.toString(j);
 				Tile tile = board.getTile(i, j);

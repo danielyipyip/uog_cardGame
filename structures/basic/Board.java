@@ -36,9 +36,9 @@ public class Board {
 			
 		 //Store the tiles in HashMap, key is the string of xy..e.g. x:2 y:2 key = 22;
 			
-			for(int i=1; i<=x; i++) {
+			for(int i=0; i<x; i++) {
 				
-				for(int j =1; j<=y;j++) 
+				for(int j =0; j<y;j++) 
 					{
 					String index = Integer.toString(i)+Integer.toString(j);
 					Tile tile = BasicObjectBuilders.loadTile(i, j);
