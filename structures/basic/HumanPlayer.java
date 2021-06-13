@@ -20,6 +20,7 @@ public class HumanPlayer extends Player{
 		super(health, mana);
 		//deck is created with player
 		mydeck = new Deck(1);
+		
 		//card shuffle when deck is created
 		mydeck.shuffleCard(); 
 		//draw 3 cards when deck is created

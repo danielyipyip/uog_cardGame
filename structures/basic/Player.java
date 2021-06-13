@@ -31,6 +31,7 @@ public class Player {
 		super();
 		this.health = health;
 		this.mana = mana;		
+		myhand = new Hand();
 	}
 	
 	public void cardDraw() {

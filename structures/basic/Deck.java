@@ -19,6 +19,7 @@ public class Deck {
 
 	public Deck(int playerID) {
 		this.cardID=1;
+		mydeck = new Stack<Card>();
 		//call helper method to create the deck
 		if (playerID==1) {playerDeck(player1UnitCardConf, player1SpellCardConf);}
 		else if (playerID==2) {playerDeck(player2UnitCardConf, player2SpellCardConf);}
