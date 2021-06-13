@@ -10,15 +10,26 @@ public class Board {
 	
 		
 		public HashMap<String, Tile> tileMap;
+		int x;
+		int y;
 
 		
-
+		public Board() 
 		
-		public Board() { //constructor
-			
+			{ //constructor
+				
 				tileMap = new HashMap<String,Tile>();
-				addTiles(9,5);  //Create a board with tiles 9*5;
-		
+				x = 9;
+				y = 5;
+				addTiles(x,y);  //Create a board with tiles x:9* y:5;
+			}
+
+		public int getX() {
+			return x;
+		}
+
+		public int getY() {
+			return y;
 		}
 
 		public void addTiles (int x, int y) {
@@ -27,25 +38,34 @@ public class Board {
 			
 			for(int i=1; i<=x; i++) {
 				
-				for(int j =1; j<=y;j++) {
+				for(int j =1; j<=y;j++) 
+					{
 					String index = Integer.toString(i)+Integer.toString(j);
 					Tile tile = BasicObjectBuilders.loadTile(i, j);
 					tileMap.put(index, tile);
-					try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-				}			
-				}
+					
+					}			
+			}
 		}
 
 
-		public Tile getTile(int x, int y) { // use the x and y index to get the tile
-			
+		public Tile getTile(int x, int y) // use the x and y index to get the tile
+			{ 
 			Tile tile = tileMap.get(Integer.toString(x)+Integer.toString(y));
-		
 			return tile;
+			}
+
+
+
+		public void highlightedTile (int x, int y, int mode, ActorRef out) {
+			
+			Tile targetTile = getTile(x,y) ;
+			BasicCommands.drawTile(out, targetTile, mode);	
 		}
-		
-		
-	}
+			
+
+}		
+
 
 	
 	
