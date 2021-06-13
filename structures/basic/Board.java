@@ -14,16 +14,13 @@ public class Board {
 		
 
 		
-		public Board(ActorRef out) {
+		public Board() { //constructor
 			
 				tileMap = new HashMap<String,Tile>();
 				addTiles(9,5);  //Create a board with tiles 9*5;
 		
 		}
-		
 
-		
-		
 		public void addTiles (int x, int y) {
 			
 		 //Store the tiles in HashMap, key is the string of xy..e.g. x:2 y:2 key = 22;
