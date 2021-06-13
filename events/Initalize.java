@@ -3,6 +3,7 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import commands.BasicCommands;
 import demo.CommandDemo;
 import structures.GameState;
 
@@ -23,9 +24,20 @@ public class Initalize implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
-
+		setUpPlayerHealthMana(out, gameState);
+		
 	}
 
+	public void setUpPlayerHealthMana(ActorRef out, GameState gameState) {
+		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setPlayer1Mana(out, gameState.getPlayer1());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setPlayer2Mana(out, gameState.getPlayer2());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	}
 }
 
 

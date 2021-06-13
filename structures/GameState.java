@@ -24,6 +24,13 @@ public class GameState {
 		player1 = new HumanPlayer(20,2);
 		player2 = new AIPlayer(20,2);
 	}
+
+	public int getTurn() {return turn;}
+	public void setTurn(int turn) {this.turn = turn;}
+	public Player getPlayer1() {return player1;}
+	public void setPlayer1(Player player1) {this.player1 = player1;}
+	public Player getPlayer2() {return player2;}
+	public void setPlayer2(Player player2) {this.player2 = player2;}
 	
 	
 	//to be implemented
