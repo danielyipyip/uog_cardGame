@@ -1,5 +1,7 @@
 package events;
 
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
@@ -9,6 +11,8 @@ import structures.GameState;
 import structures.basic.Board;
 import structures.basic.Tile;
 import utils.BasicObjectBuilders;
+import structures.basic.Card;
+import structures.basic.Hand;
 
 /**
  * Indicates that both the core game loop in the browser is starting, meaning
@@ -30,9 +34,11 @@ public class Initalize implements EventProcessor{
 		Board board = new Board();
 		setUpPlayerHealthMana(out, gameState);
 		displayTiles(out,board);
+		drawHand(out, gameState); //only for player 1
 		
 	}
 
+	//helper methods
 	public void setUpPlayerHealthMana(ActorRef out, GameState gameState) {
 		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -61,9 +67,20 @@ public class Initalize implements EventProcessor{
 		}
 	}
 		
+	
+	
+	
+
+
+	public void drawHand(ActorRef out, GameState gameState) {
+		int pos=0;
+		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
+		for (Card i:currHand) {
+			BasicCommands.drawCard(out, i, pos++, 0);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		}
 	}
-	
-	
+}
 
 
 
