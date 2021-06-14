@@ -62,7 +62,6 @@ public class Initalize implements EventProcessor{
 			
 			for(int j=0; j<y;j++) 
 				{
-				String index = Integer.toString(i)+Integer.toString(j);
 				Tile tile = board.getTile(i, j);
 				BasicCommands.drawTile(out, tile, 0);
 				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -89,17 +88,28 @@ public class Initalize implements EventProcessor{
 		int player1XPosition = gameState.getPlayer1Position().getTilex();
 		int player1YPosition = gameState.getPlayer1Position().getTiley();
 		Unit player1Avatar = gameState.getBoard().getPlayer1Avatar();
+		int health = gameState.getPlayer1().getHealth();
 		Tile playerTile =  gameState.getBoard().getTile(player1XPosition, player1YPosition);
 		BasicCommands.drawUnit(out,player1Avatar,playerTile);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitAttack(out, player1Avatar, 2);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, player1Avatar, health);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
+	
 	
 	public void displayPlayer2Avatar(ActorRef out, GameState gameState) {
 		int player2XPosition = gameState.getPlayer2Position().getTilex();
 		int player2YPosition = gameState.getPlayer2Position().getTiley();
 		Unit player2Avatar = gameState.getBoard().getPlayer2Avatar();
+		int health = gameState.getPlayer2().getHealth();
 		Tile playerTile =  gameState.getBoard().getTile(player2XPosition, player2YPosition);
 		BasicCommands.drawUnit(out,player2Avatar,playerTile);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitAttack(out, player2Avatar, 2);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, player2Avatar, health);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 	
