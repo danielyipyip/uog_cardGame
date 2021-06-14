@@ -8,6 +8,7 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import demo.CommandDemo;
 import structures.GameState;
+import structures.basic.Avatar;
 import structures.basic.Board;
 import structures.basic.Tile;
 import structures.basic.Unit;
@@ -68,12 +69,7 @@ public class Initalize implements EventProcessor{
 				}			
 		}
 	}
-		
 	
-	
-	
-
-
 	public void drawHand(ActorRef out, GameState gameState) {
 		int pos=0;
 		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
@@ -87,12 +83,13 @@ public class Initalize implements EventProcessor{
 	public void displayPlayer1Avatar(ActorRef out, GameState gameState) {
 		int player1XPosition = gameState.getPlayer1Position().getTilex();
 		int player1YPosition = gameState.getPlayer1Position().getTiley();
-		Unit player1Avatar = gameState.getBoard().getPlayer1Avatar();
+		Avatar player1Avatar = gameState.getBoard().getPlayer1Avatar();
 		int health = gameState.getPlayer1().getHealth();
+		int attack = player1Avatar.getAttack();
 		Tile playerTile =  gameState.getBoard().getTile(player1XPosition, player1YPosition);
 		BasicCommands.drawUnit(out,player1Avatar,playerTile);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setUnitAttack(out, player1Avatar, 2);
+		BasicCommands.setUnitAttack(out, player1Avatar, attack);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitHealth(out, player1Avatar, health);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -102,12 +99,13 @@ public class Initalize implements EventProcessor{
 	public void displayPlayer2Avatar(ActorRef out, GameState gameState) {
 		int player2XPosition = gameState.getPlayer2Position().getTilex();
 		int player2YPosition = gameState.getPlayer2Position().getTiley();
-		Unit player2Avatar = gameState.getBoard().getPlayer2Avatar();
+		Avatar player2Avatar = gameState.getBoard().getPlayer2Avatar();
 		int health = gameState.getPlayer2().getHealth();
+		int attack = player2Avatar.getAttack();
 		Tile playerTile =  gameState.getBoard().getTile(player2XPosition, player2YPosition);
 		BasicCommands.drawUnit(out,player2Avatar,playerTile);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setUnitAttack(out, player2Avatar, 2);
+		BasicCommands.setUnitAttack(out, player2Avatar, attack);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitHealth(out, player2Avatar, health);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
