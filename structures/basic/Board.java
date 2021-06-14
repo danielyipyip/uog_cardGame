@@ -5,14 +5,17 @@ import java.util.HashMap;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import utils.BasicObjectBuilders;
+import utils.StaticConfFiles;
 
 public class Board {
 	
 		
-		public HashMap<String, Tile> tileMap;
-		int x;
-		int y;
-
+		private HashMap<String, Tile> tileMap;
+		private int x;
+		private int y;
+		private Unit player1Avatar;
+		private Unit player2Avatar;
+		
 		
 		public Board() 
 		
@@ -22,7 +25,13 @@ public class Board {
 				x = 9;
 				y = 5;
 				addTiles(x,y);  //Create a board with tiles x:9* y:5;
+				addPlayer1Avatar(1,2);
+				addPlayer2Avatar(7,2);
 			}
+
+		public Unit getPlayer1Avatar() {
+			return player1Avatar;
+		}
 
 		public int getX() {
 			return x;
@@ -55,12 +64,31 @@ public class Board {
 			return tile;
 			}
 
+		public void addPlayer1Avatar (int x, int y) {
+			
+			player1Avatar = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Unit.class);
+			Tile tile = getTile(x,y);
+			player1Avatar.setPositionByTile(tile); 
+			
+		}
+		
+		public void addPlayer2Avatar (int x, int y) {
+			
+			player2Avatar = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Unit.class);
+			Tile tile = getTile(x,y);
+			player2Avatar.setPositionByTile(tile); 
+			
+		}
 
 
 		public void highlightedTile (int x, int y, int mode, ActorRef out) {
 			
 			Tile targetTile = getTile(x,y) ;
 			BasicCommands.drawTile(out, targetTile, mode);	
+		}
+
+		public Unit getPlayer2Avatar() {
+			return player2Avatar;
 		}
 			
 
