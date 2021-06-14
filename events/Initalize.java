@@ -10,9 +10,11 @@ import demo.CommandDemo;
 import structures.GameState;
 import structures.basic.Board;
 import structures.basic.Tile;
+import structures.basic.Unit;
 import utils.BasicObjectBuilders;
 import structures.basic.Card;
 import structures.basic.Hand;
+import structures.basic.Position;
 
 /**
  * Indicates that both the core game loop in the browser is starting, meaning
@@ -34,6 +36,8 @@ public class Initalize implements EventProcessor{
 		setUpPlayerHealthMana(out, gameState);
 		displayTiles(out,gameState.getBoard());
 		drawHand(out, gameState); //only for player 1
+		displayPlayer1Avatar(out,gameState);
+		displayPlayer2Avatar(out,gameState);
 		
 	}
 
@@ -79,6 +83,27 @@ public class Initalize implements EventProcessor{
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 	}
+	
+	
+	public void displayPlayer1Avatar(ActorRef out, GameState gameState) {
+		int player1XPosition = gameState.getPlayer1Position().getTilex();
+		int player1YPosition = gameState.getPlayer1Position().getTiley();
+		Unit player1Avatar = gameState.getBoard().getPlayer1Avatar();
+		Tile playerTile =  gameState.getBoard().getTile(player1XPosition, player1YPosition);
+		BasicCommands.drawUnit(out,player1Avatar,playerTile);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
+	public void displayPlayer2Avatar(ActorRef out, GameState gameState) {
+		int player2XPosition = gameState.getPlayer2Position().getTilex();
+		int player2YPosition = gameState.getPlayer2Position().getTiley();
+		Unit player2Avatar = gameState.getBoard().getPlayer2Avatar();
+		Tile playerTile =  gameState.getBoard().getTile(player2XPosition, player2YPosition);
+		BasicCommands.drawUnit(out,player2Avatar,playerTile);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
+	
 }
 
 
