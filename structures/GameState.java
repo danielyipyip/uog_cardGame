@@ -1,5 +1,7 @@
 package structures;
 
+import akka.actor.ActorRef;
+import commands.BasicCommands;
 import structures.basic.*;
 
 /**
@@ -18,6 +20,9 @@ public class GameState {
 	Position player1Position;
 	Position player2Position;
 	
+	Card cardSelected; //cardSelected = x when card x is clicked
+	int cardPos; //cardPos = y when card on hand position y is clicked
+	
 	//constructor
 	public GameState() { //is an object hold by GameActor
 		this.turn=1; //start of game, turn =1
@@ -29,6 +34,10 @@ public class GameState {
 		board = new Board();
 		player1Position = board.getPlayer1Avatar().getPosition();
 		player2Position = board.getPlayer2Avatar().getPosition();
+		
+		//Default cardSelected is null and cardPos is -1
+		cardSelected = null; 
+		cardPos = -1;
 	}
 
 	public int getTurn() {return turn;}
@@ -43,8 +52,18 @@ public class GameState {
 	public Position getPlayer2Position() {return player2Position;}
 	public void setPlayer2Position(Position player2Position) {this.player2Position = player2Position;}
 	
+
+	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}
+	public Card getCardSelected() {return cardSelected;}
+	public void setcardPos(int pos) {this.cardPos = pos;}
+	public int getcardPos() {return cardPos;}
 	
-	
+	//Method to unhighlight card and set instance variables to default value
+	public void unHighlightCard(ActorRef out) {
+		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
+		cardSelected = null; 
+		cardPos = -1;
+	}
 	//to be implemented
 	//when end turn, turn +=1
 }

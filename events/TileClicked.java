@@ -51,6 +51,8 @@ public class TileClicked implements EventProcessor{
 			BasicCommands.addPlayer1Notification(out,"Avatar Tile", 5);
 			highlightMoveTile(out,gameState.getBoard());		}
 		
+		//unhighlight card
+		gameState.unHighlightCard(out);
 		
 		}
 	
