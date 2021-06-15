@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import commands.GroupsCommands;
 import demo.CommandDemo;
 import structures.GameState;
 import structures.basic.Avatar;
@@ -34,7 +35,7 @@ public class Initalize implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
-		setUpPlayerHealthMana(out, gameState);
+		GroupsCommands.setUpPlayerHealthMana(out, gameState);
 		displayTiles(out,gameState.getBoard());
 		drawHand(out, gameState); //only for player 1
 		displayPlayer1Avatar(out,gameState);
@@ -42,18 +43,7 @@ public class Initalize implements EventProcessor{
 		
 	}
 
-	//helper methods
-	public void setUpPlayerHealthMana(ActorRef out, GameState gameState) {
-		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setPlayer1Mana(out, gameState.getPlayer1());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setPlayer2Mana(out, gameState.getPlayer2());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-	}
-	
+	//helper methods	
 	public void displayTiles(ActorRef out, Board board) {//Method to display Tiles
 		
 		int x = board.getX();
@@ -70,6 +60,7 @@ public class Initalize implements EventProcessor{
 		}
 	}
 	
+	//drawHand means drawing out the hand
 	public void drawHand(ActorRef out, GameState gameState) {
 		int pos=0;
 		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();

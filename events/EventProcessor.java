@@ -25,6 +25,6 @@ public interface EventProcessor {
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message);
 	
 	//newly added: the amount of thread.sleep(time) after each command
-	int sleepTime=100;
+	int sleepTime=50;
 	
 }

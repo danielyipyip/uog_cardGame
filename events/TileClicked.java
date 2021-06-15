@@ -42,8 +42,11 @@ public class TileClicked implements EventProcessor{
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 
+		//orig code
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
+		
+		
 		player1Position = gameState.getBoard().getPlayer1Avatar().getPosition();
 		int player1PositionX = player1Position.getTilex();
 		int player1PositionY = player1Position.getTiley();
@@ -53,6 +56,11 @@ public class TileClicked implements EventProcessor{
 		
 		//unhighlight card
 		gameState.unHighlightCard(out);
+		
+		//play unit
+		if (gameState.getCardSelected()!=null) {
+			
+		}
 		
 		}
 	

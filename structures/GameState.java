@@ -1,5 +1,7 @@
 package structures;
 
+import java.util.ArrayList;
+
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.basic.*;
@@ -19,9 +21,13 @@ public class GameState {
 	Board board;
 	Position player1Position;
 	Position player2Position;
+	ArrayList<Unit> player1Unit;
+	ArrayList<Unit> player2Unit;
 	
 	Card cardSelected; //cardSelected = x when card x is clicked
-	int cardPos; //cardPos = y when card on hand position y is clicked
+	//cardPos = n when card on hand position n is clicked
+	//if no selsecting anyCard, n=-1
+	int cardPos; 
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -38,6 +44,7 @@ public class GameState {
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
+		
 	}
 
 	public int getTurn() {return turn;}
