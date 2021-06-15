@@ -1,9 +1,17 @@
 package structures;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.*;
+>>>>>>> 5dcb2c06170d57fac523f35e40f465cd66271537
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+
 import structures.basic.*;
 
 /**
@@ -19,10 +27,14 @@ public class GameState {
 	Player player1;
 	Player player2;
 	Board board;
+<<<<<<< HEAD
 	Position player1Position;
 	Position player2Position;
 	ArrayList<Unit> player1Unit;
 	ArrayList<Unit> player2Unit;
+=======
+	ArrayList<Tile> occupiedTiles; //to store the tile that are occupied by both player1 and 2.
+>>>>>>> 5dcb2c06170d57fac523f35e40f465cd66271537
 	
 	Card cardSelected; //cardSelected = x when card x is clicked
 	//cardPos = n when card on hand position n is clicked
@@ -38,14 +50,32 @@ public class GameState {
 		player1 = new HumanPlayer(20,2);
 		player2 = new AIPlayer(20,2);
 		board = new Board();
-		player1Position = board.getPlayer1Avatar().getPosition();
-		player2Position = board.getPlayer2Avatar().getPosition();
+		occupiedTiles = new ArrayList<Tile>();
+		
 		
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> 5dcb2c06170d57fac523f35e40f465cd66271537
 	}
+	
+	public ArrayList<Tile> mergeOccupiedTile (){
+	
+		
+		ArrayList<Tile> list1 = new ArrayList<Tile>();
+						list1 = board.getPlayer1UnitTiles();
+		ArrayList<Tile> list2 =  new ArrayList<Tile>();
+						list2 = board.getPlayer2UnitTiles();
+						list1.addAll(list2);
+				return  list1;
+}
+	
+	
+	
 
 	public int getTurn() {return turn;}
 	public void setTurn(int turn) {this.turn = turn;}
@@ -54,10 +84,15 @@ public class GameState {
 	public Player getPlayer2() {return player2;}
 	public void setPlayer2(Player player2) {this.player2 = player2;}
 	public Board getBoard() {return board;}
-	public Position getPlayer1Position() {return player1Position;}
-	public void setPlayer1Position(Position player1Position) {this.player1Position = player1Position;}
-	public Position getPlayer2Position() {return player2Position;}
-	public void setPlayer2Position(Position player2Position) {this.player2Position = player2Position;}
+
+	public ArrayList<Tile> getOccupiedTiles() {
+		return occupiedTiles;
+	}
+
+	public void setOccupiedTiles(ArrayList<Tile> occupiedTiles) {
+		this.occupiedTiles = occupiedTiles;
+	}
+	
 	
 
 	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}

@@ -27,6 +27,7 @@ public class Tile {
 	int height;
 	int tilex;
 	int tiley;
+	Unit unit;
 	
 	public Tile() {}
 	
@@ -95,6 +96,14 @@ public class Tile {
 		this.tiley = tiley;
 	}
 	
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
 	/**
 	 * Loads a tile from a configuration file
 	 * parameters.

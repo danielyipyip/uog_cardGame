@@ -1,5 +1,7 @@
 package structures.basic;
 
+import java.util.ArrayList;
+
 import Exceptions.NotEnoughCardException;
 
 /**
@@ -18,10 +20,13 @@ public class Player {
 	protected Deck mydeck;
 	protected Hand myhand;
 	protected int playerID;
+
+
 	
 	public Player() {
 		super();
-		new Player(20, 2); //turn 1 already 2 mana, so basic should be 2
+		new Player(20, 2);
+		//turn 1 already 2 mana, so basic should be 2
 		//original implementation
 //		this.health = 20;
 //		this.mana = 0;
@@ -32,6 +37,7 @@ public class Player {
 		this.health = health;
 		this.mana = mana;		
 		myhand = new Hand();
+		
 	}
 	
 	public void cardDraw() {
@@ -55,5 +61,8 @@ public class Player {
 	public void setPlayerID(int playerID) {this.playerID = playerID;}
 	public Hand getMyhand() {return myhand;}
 	public void setMyhand(Hand myhand) {this.myhand = myhand;}
+
+
+	
 	
 }

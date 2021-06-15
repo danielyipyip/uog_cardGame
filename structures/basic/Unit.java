@@ -78,5 +78,5 @@ public class Unit {
 		position = new Position(tile.getXpos(),tile.getYpos(),tile.getTilex(),tile.getTiley());
 	}
 	
-	
+
 }
