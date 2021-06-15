@@ -1,13 +1,9 @@
 package structures;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.*;
->>>>>>> 5dcb2c06170d57fac523f35e40f465cd66271537
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
@@ -27,14 +23,11 @@ public class GameState {
 	Player player1;
 	Player player2;
 	Board board;
-<<<<<<< HEAD
 	Position player1Position;
 	Position player2Position;
 	ArrayList<Unit> player1Unit;
 	ArrayList<Unit> player2Unit;
-=======
 	ArrayList<Tile> occupiedTiles; //to store the tile that are occupied by both player1 and 2.
->>>>>>> 5dcb2c06170d57fac523f35e40f465cd66271537
 	
 	Card cardSelected; //cardSelected = x when card x is clicked
 	//cardPos = n when card on hand position n is clicked
@@ -56,11 +49,6 @@ public class GameState {
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
-<<<<<<< HEAD
-		
-=======
-
->>>>>>> 5dcb2c06170d57fac523f35e40f465cd66271537
 	}
 	
 	public ArrayList<Tile> mergeOccupiedTile (){
