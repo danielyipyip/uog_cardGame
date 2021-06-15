@@ -59,6 +59,7 @@ public class TileClicked implements EventProcessor{
 		
 		
 		
+		
 		//Unhighlighted Tiles. Below Doesnt work. Still working on it
 		if(!(tilex==tile.getTilex()&&tiley==tile.getTiley())){ 
 			unhighlightTiles(out);
@@ -123,6 +124,8 @@ public class TileClicked implements EventProcessor{
 			}
 		}
 	}
+	
+	
 	
 	public void unhighlightTiles(ActorRef out) {
 		
