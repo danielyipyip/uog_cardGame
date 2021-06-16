@@ -24,9 +24,9 @@ public class OtherClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		//unhighlight card
 		gameState.unHighlightCard(out);
-		gameState.unhighlightTiles(out);
+		gameState.getBoard().unhighlightTiles(out);
 	}
-
 }
+
 
 

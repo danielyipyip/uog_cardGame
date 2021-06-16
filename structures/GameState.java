@@ -23,12 +23,7 @@ public class GameState {
 	Player player1;
 	Player player2;
 	Board board;
-	Position player1Position;
-	Position player2Position;
-	ArrayList<Unit> player1Unit;
-	ArrayList<Unit> player2Unit;
-	ArrayList<Tile> occupiedTiles; //to store the tile that are occupied by both player1 and 2.
-	ArrayList<Tile> highlightedTiles;
+
 	/*cardSelected = x when card x is clicked
 	 *cardPos = n when card on hand position n is clicked
 	 *if not selecting anyCard, n=-1 */
@@ -45,56 +40,25 @@ public class GameState {
 		player1 = new HumanPlayer(20,2);
 		player2 = new AIPlayer(20,2);
 		board = new Board();
-		occupiedTiles = new ArrayList<Tile>();
-		
 		
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
-		
-		highlightedTiles = new ArrayList<Tile>();
 	}
 	
-	public ArrayList<Tile> mergeOccupiedTile (){
-		ArrayList<Tile> list1 = new ArrayList<Tile>();
-						list1 = board.getPlayer1UnitTiles();
-		ArrayList<Tile> list2 =  new ArrayList<Tile>();
-						list2 = board.getPlayer2UnitTiles();
-						
-		ArrayList<Tile> list3 = new ArrayList<Tile>();
-						list3.addAll(list1);
-						list3.addAll(list2);
-				return  list3;				
-	}
 	
+	
+	//Getter and Setter Method
 	public int getTurn() {return turn;}
 	public void setTurn(int turn) {this.turn = turn;}
 	public Player getPlayer1() {return player1;}
-	public void setPlayer1(Player player1) {this.player1 = player1;}
 	public Player getPlayer2() {return player2;}
-	public void setPlayer2(Player player2) {this.player2 = player2;}
 	public Board getBoard() {return board;}
-
-	public ArrayList<Tile> getOccupiedTiles() {
-		return occupiedTiles;
-	}
-
-	public void setOccupiedTiles(ArrayList<Tile> occupiedTiles) {
-		this.occupiedTiles = occupiedTiles;
-	}
-	
 	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
 	public int getcardPos() {return cardPos;}
-	
-	
-	public void setHighlightedTiles(ArrayList<Tile> highlightedTiles) {
-		this.highlightedTiles = highlightedTiles;
-	}
-	public ArrayList<Tile> getHighlightedTiles() {
-		return highlightedTiles;
-	}
+
 	
 	//Method to unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
@@ -103,14 +67,7 @@ public class GameState {
 		cardPos = -1;
 	}
 	
-	//Method to unhighlight tiles
-	public void unhighlightTiles(ActorRef out) {
-		for(Tile tile: highlightedTiles) {
-			BasicCommands.drawTile(out, tile, 0);
-			try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-		highlightedTiles.clear();
-	}
+	
 	
 	//to be implemented
 	//when end turn, turn +=1

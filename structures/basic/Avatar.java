@@ -9,7 +9,7 @@ public class Avatar extends Unit{
 	public Avatar() {
 		
 		super();
-		attack = 2;
+		
 		
 	}
 

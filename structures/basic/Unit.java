@@ -69,7 +69,6 @@ public class Unit {
 	public void setPosition(Position position) {this.position = position;}
 	public UnitAnimationSet getAnimations() {return animations;}
 	public void setAnimations(UnitAnimationSet animations) {this.animations = animations;}
-	
 	public int getAttack() {return attack;}
 	public void setAttack(int attack) {
 		if (attack<0) {this.attack = 0;} else {this.attack = attack;}
@@ -78,6 +77,7 @@ public class Unit {
 	public void setHealth(int health) {
 		if (health<0) {this.health = 0;} else {this.health = health;}
 	}
+
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.
