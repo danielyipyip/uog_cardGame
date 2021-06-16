@@ -30,6 +30,8 @@ public class GameState {
 	Card cardSelected; 
 	int cardPos; 
 	
+	Unit unitClicked;
+	Player currentPlayer;
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -44,6 +46,9 @@ public class GameState {
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
+		
+		//start from player 1
+		currentPlayer=player1;
 	}
 	
 	
@@ -57,9 +62,14 @@ public class GameState {
 	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
-	public int getcardPos() {return cardPos;}
+	public int getcardPos() {return cardPos;}	
+	public Unit getUnitClicked() {return unitClicked;}
+	public void setUnitClicked(Unit unitClicked) {this.unitClicked = unitClicked;}
+	public Player getCurrentPlayer() {return currentPlayer;}
+	public void setCurrentPlayer(Player currentPlayer) {this.currentPlayer = currentPlayer;}
 
-	
+
+
 	//Method to unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
@@ -70,5 +80,5 @@ public class GameState {
 	
 	
 	//to be implemented
-	//when end turn, turn +=1
+	//when end turn, turn +=1 OR change player
 }

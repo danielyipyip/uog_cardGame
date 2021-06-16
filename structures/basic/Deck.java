@@ -21,9 +21,11 @@ public class Deck {
 		this.cardID=1;
 		mydeck = new Stack<Card>();
 		//call helper method to create the deck
-		if (playerID==1) {playerDeck(player1UnitCardConf, player1SpellCardConf);}
-		else if (playerID==2) {playerDeck(player2UnitCardConf, player2SpellCardConf);}
-		//exception handling, throw exception OR display text on screen?
+		if (playerID==1) {
+			for (int i=0; i<2; i++) playerDeck(player1UnitCardConf, player1SpellCardConf);
+		}else if (playerID==2) {
+			for (int i=0; i<2; i++) playerDeck(player2UnitCardConf, player2SpellCardConf);
+		}//exception handling, throw exception OR display text on screen?
 		else {throw new WrongPlayerIDException("wrong player ID when creating deck");}
 	}
 
@@ -53,7 +55,7 @@ public class Deck {
 	}
 	
 	public Stack<Card> getDeck(){return mydeck;}
-	
+	public int size() {return mydeck.size();}
 	public boolean isEmpty() {return mydeck.empty();}
 
 
