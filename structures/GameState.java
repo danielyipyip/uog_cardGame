@@ -33,6 +33,7 @@ public class GameState {
 	//cardPos = n when card on hand position n is clicked
 	//if no selsecting anyCard, n=-1
 	int cardPos; 
+	ArrayList<Tile> highlightedTiles; 
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -49,6 +50,8 @@ public class GameState {
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
+		
+		highlightedTiles = new ArrayList<Tile>();
 	}
 	
 	public ArrayList<Tile> mergeOccupiedTile (){
@@ -88,12 +91,30 @@ public class GameState {
 	public void setcardPos(int pos) {this.cardPos = pos;}
 	public int getcardPos() {return cardPos;}
 	
+	
+	public void setHighlightedTiles(ArrayList<Tile> highlightedTiles) {
+		this.highlightedTiles = highlightedTiles;
+	}
+	public ArrayList<Tile> getHighlightedTiles() {
+		return highlightedTiles;
+	}
+	
 	//Method to unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
 		cardSelected = null; 
 		cardPos = -1;
 	}
+	
+	//Method to unhighlight tiles
+	public void unhighlightTiles(ActorRef out, ArrayList <Tile> highlightedTile) {
+		for(Tile tile: highlightedTile) {
+			BasicCommands.drawTile(out, tile, 0);
+			try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+		}
+		highlightedTile.clear();
+	}
+	
 	//to be implemented
 	//when end turn, turn +=1
 }
