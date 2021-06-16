@@ -31,6 +31,8 @@ public class GameState {
 	int cardPos; 
 	Tile tileClicked; //to store the clicked tile;
 	
+	Unit unitClicked;
+	Player currentPlayer;
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -46,7 +48,11 @@ public class GameState {
 		cardSelected = null; 
 		cardPos = -1;
 		
+
 		tileClicked = null;
+
+		//start from player 1
+		currentPlayer=player1;
 	}
 	
 	
@@ -60,7 +66,8 @@ public class GameState {
 	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
-	public int getcardPos() {return cardPos;}
+
+
 	
 	
 	public Tile getTileClicked() {
@@ -72,6 +79,13 @@ public class GameState {
 	public void setTileClicked(Tile tileClicked) {
 		this.tileClicked = tileClicked;
 	}
+
+	public int getcardPos() {return cardPos;}	
+	public Unit getUnitClicked() {return unitClicked;}
+	public void setUnitClicked(Unit unitClicked) {this.unitClicked = unitClicked;}
+	public Player getCurrentPlayer() {return currentPlayer;}
+	public void setCurrentPlayer(Player currentPlayer) {this.currentPlayer = currentPlayer;}
+
 
 
 
@@ -85,5 +99,5 @@ public class GameState {
 	
 	
 	//to be implemented
-	//when end turn, turn +=1
+	//when end turn, turn +=1 OR change player
 }

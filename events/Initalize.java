@@ -42,15 +42,7 @@ public class Initalize implements EventProcessor{
 		displayPlayer1Avatar(out,gameState);
 		displayPlayer2Avatar(out,gameState);
 		
-		Tile tile = gameState.getBoard().getTile(1, 1);
-		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 1, Unit.class);
-		fire_spitter.setPositionByTile(tile); 
-		tile.setUnit(fire_spitter);
-		 gameState.getBoard().getPlayer1UnitTiles().add(tile);
-		 gameState.getBoard().getUnitOccupiedTiles().add(tile);
-		 gameState.getBoard().getPlayer1Units().add(fire_spitter);
-		BasicCommands.drawUnit(out, fire_spitter, tile);
-		try {Thread.sleep(30);} catch (InterruptedException e) {e.printStackTrace();}
+
 	}
 
 	//helper methods	
