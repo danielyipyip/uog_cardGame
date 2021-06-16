@@ -29,7 +29,7 @@ public class Board {
 		y = 5;
 		addTiles(x,y);  //Create a board with tiles x:9* y:5;
 		addPlayer1Avatar(1,2);
-		addPlayer2Avatar(2,3);
+		addPlayer2Avatar(7,2);
 	}
 
 	public void addTiles (int x, int y) {

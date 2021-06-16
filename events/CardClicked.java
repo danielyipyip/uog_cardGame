@@ -59,7 +59,7 @@ public class CardClicked implements EventProcessor{
 		 *card id 6: Azurite lion
 		 */
 		if(cardID > 0 && cardID < 9) {		
-			gameState.unhighlightTiles(out, gameState.getHighlightedTiles());
+			gameState.unhighlightTiles(out);
 			//Select Azurite lion, highlight all unoccupied tiles
 			if(cardSelected.getId() == 6) {	
 				for(int i=0; i<gameState.getBoard().getX(); i++) {
@@ -97,7 +97,7 @@ public class CardClicked implements EventProcessor{
 		 *card id 10: Sundrop Elixir
 		 */
 		if(cardID == 9) {
-			gameState.unhighlightTiles(out, gameState.getHighlightedTiles());
+			gameState.unhighlightTiles(out);
 			for(Tile i: player2UnitTiles) {
 				tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
 				BasicCommands.drawTile(out, tile, 2);
@@ -105,7 +105,7 @@ public class CardClicked implements EventProcessor{
 			}
 		}
 		if(cardID == 10) {
-			gameState.unhighlightTiles(out, gameState.getHighlightedTiles());
+			gameState.unhighlightTiles(out);
 			for(Tile i: player1UnitTiles) {
 				tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
 				BasicCommands.drawTile(out, tile, 2);

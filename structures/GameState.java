@@ -28,12 +28,13 @@ public class GameState {
 	ArrayList<Unit> player1Unit;
 	ArrayList<Unit> player2Unit;
 	ArrayList<Tile> occupiedTiles; //to store the tile that are occupied by both player1 and 2.
-	
-	Card cardSelected; //cardSelected = x when card x is clicked
-	//cardPos = n when card on hand position n is clicked
-	//if no selsecting anyCard, n=-1
+	ArrayList<Tile> highlightedTiles;
+	/*cardSelected = x when card x is clicked
+	 *cardPos = n when card on hand position n is clicked
+	 *if not selecting anyCard, n=-1 */
+	Card cardSelected; 
 	int cardPos; 
-	ArrayList<Tile> highlightedTiles; 
+	
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -55,19 +56,17 @@ public class GameState {
 	}
 	
 	public ArrayList<Tile> mergeOccupiedTile (){
-	
-		
 		ArrayList<Tile> list1 = new ArrayList<Tile>();
 						list1 = board.getPlayer1UnitTiles();
 		ArrayList<Tile> list2 =  new ArrayList<Tile>();
 						list2 = board.getPlayer2UnitTiles();
-						list1.addAll(list2);
-				return  list1;
-}
+						
+		ArrayList<Tile> list3 = new ArrayList<Tile>();
+						list3.addAll(list1);
+						list3.addAll(list2);
+				return  list3;				
+	}
 	
-	
-	
-
 	public int getTurn() {return turn;}
 	public void setTurn(int turn) {this.turn = turn;}
 	public Player getPlayer1() {return player1;}
@@ -84,8 +83,6 @@ public class GameState {
 		this.occupiedTiles = occupiedTiles;
 	}
 	
-	
-
 	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
@@ -107,12 +104,12 @@ public class GameState {
 	}
 	
 	//Method to unhighlight tiles
-	public void unhighlightTiles(ActorRef out, ArrayList <Tile> highlightedTile) {
-		for(Tile tile: highlightedTile) {
+	public void unhighlightTiles(ActorRef out) {
+		for(Tile tile: highlightedTiles) {
 			BasicCommands.drawTile(out, tile, 0);
 			try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 		}
-		highlightedTile.clear();
+		highlightedTiles.clear();
 	}
 	
 	//to be implemented

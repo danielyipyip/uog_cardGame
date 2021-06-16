@@ -45,14 +45,14 @@ public class Initalize implements EventProcessor{
 		
 		
 		
-		
+		/*
 		//This is just to test whether the highlight tiles object works.
 		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 1, Unit.class);
 		fire_spitter.setPositionByTile(gameState.getBoard().getTile(2,2));
 		BasicCommands.drawUnit(out, fire_spitter, gameState.getBoard().getTile(2,2));
 		gameState.getBoard().getPlayer1UnitTiles().add(gameState.getBoard().getTile(2,2));
 		gameState.getBoard().getTile(2,2).setUnit(fire_spitter);
-		
+		*/
 	}
 
 	//helper methods	
@@ -113,11 +113,7 @@ public class Initalize implements EventProcessor{
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.setUnitHealth(out, player2Avatar, health);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-
-
-	
-	
-}
+		}
 }
 
 
