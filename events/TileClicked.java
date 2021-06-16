@@ -34,23 +34,41 @@ import structures.basic.Unit;
  */
 public class TileClicked implements EventProcessor{
 	
+	
+	
 	public TileClicked() {
+		
 		
 	}
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-
+		
+		//to clear all the highlighted tile first;
+		gameState.getBoard().unhighlightRedTiles(out);
+		gameState.getBoard().unhighlightWhiteTiles(out);
+		
 		//orig code
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
+		Tile tileClicked = gameState.getBoard().getTile(tilex, tiley);
+		gameState.setTileClicked(tileClicked); //store the clicked tile in game state class.
+		
+		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles(); 
 
-		Tile tile = gameState.getBoard().getTile(tilex, tiley);
-		if(!(tile.getUnit()==null)){
-			Unit unit = tile.getUnit();
+		if(tileClicked==gameState.getTileClicked()) {
+		
+		if((player1UnitTiles.contains(tileClicked))){
+			Unit unit = tileClicked.getUnit();
 			gameState.getBoard().highlightMoveTile(out, gameState, unit);
-
+			
+		}else {
+			gameState.getBoard().unhighlightRedTiles(out);
+			gameState.getBoard().unhighlightWhiteTiles(out);
 		}
 		}
+		
+		
+		
 }
-
+}

@@ -29,6 +29,7 @@ public class GameState {
 	 *if not selecting anyCard, n=-1 */
 	Card cardSelected; 
 	int cardPos; 
+	Tile tileClicked; //to store the clicked tile;
 	
 	
 	//constructor
@@ -44,6 +45,8 @@ public class GameState {
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
+		
+		tileClicked = null;
 	}
 	
 	
@@ -58,8 +61,20 @@ public class GameState {
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
 	public int getcardPos() {return cardPos;}
-
 	
+	
+	public Tile getTileClicked() {
+		return tileClicked;
+	}
+
+
+
+	public void setTileClicked(Tile tileClicked) {
+		this.tileClicked = tileClicked;
+	}
+
+
+
 	//Method to unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
