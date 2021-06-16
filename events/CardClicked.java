@@ -30,6 +30,8 @@ public class CardClicked implements EventProcessor{
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		int handPosition = message.get("position").asInt();
+		gameState.getBoard().unhighlightRedTiles(out);
+		gameState.getBoard().unhighlightWhiteTiles(out);
 		
 		//------------------------------------Highlight Card(START)------------------------------------//
 		Card cardSelected = gameState.getPlayer1().getMyhand().getCard(handPosition);
@@ -60,7 +62,6 @@ public class CardClicked implements EventProcessor{
 		 *card id 6: Azurite lion
 		 */
 		if(cardID > 0 && cardID < 9) {		
-			gameState.getBoard().unhighlightTiles(out);
 			//Select Azurite lion, highlight all unoccupied tiles
 			if(cardSelected.getId() == 6) {	
 				for(int i=0; i<gameState.getBoard().getX(); i++) {
@@ -98,7 +99,6 @@ public class CardClicked implements EventProcessor{
 		 *card id 10: Sundrop Elixir
 		 */
 		if(cardID == 9) {
-			gameState.getBoard().unhighlightTiles(out);
 			for(Tile i: player2UnitTiles) {
 				tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
 				BasicCommands.drawTile(out, tile, 2);
@@ -106,7 +106,6 @@ public class CardClicked implements EventProcessor{
 			}
 		}
 		if(cardID == 10) {
-			gameState.getBoard().unhighlightTiles(out);
 			for(Tile i: player1UnitTiles) {
 				tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
 				BasicCommands.drawTile(out, tile, 2);

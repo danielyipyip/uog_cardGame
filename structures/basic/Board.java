@@ -92,10 +92,10 @@ public class Board {//This Class is used to store all the variables related to u
 	}
 
 	//Method to unhighlight tiles in Red Color
-	public void unhighlightTiles(ActorRef out) {
+	public void unhighlightRedTiles(ActorRef out) {
 		for(Tile tile: highlightedRedTiles) {
 			BasicCommands.drawTile(out, tile, 0);
-			try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		highlightedRedTiles.clear();
 	}
@@ -104,9 +104,9 @@ public class Board {//This Class is used to store all the variables related to u
 	public void unhighlightWhiteTiles(ActorRef out) {
 		for(Tile tile: highlightedWhiteTiles) {
 			BasicCommands.drawTile(out, tile, 0);
-			try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 		}
-		highlightedRedTiles.clear();
+		highlightedWhiteTiles.clear();
 	}
 	
 	
