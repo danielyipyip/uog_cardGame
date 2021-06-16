@@ -41,18 +41,8 @@ public class Initalize implements EventProcessor{
 		drawHand(out, gameState); //only for player 1
 		displayPlayer1Avatar(out,gameState);
 		displayPlayer2Avatar(out,gameState);
-		gameState.setOccupiedTiles(gameState.mergeOccupiedTile()); //merge two player's unit tile.
 		
-		
-		
-		/*
-		//This is just to test whether the highlight tiles object works.
-		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 1, Unit.class);
-		fire_spitter.setPositionByTile(gameState.getBoard().getTile(2,2));
-		BasicCommands.drawUnit(out, fire_spitter, gameState.getBoard().getTile(2,2));
-		gameState.getBoard().getPlayer1UnitTiles().add(gameState.getBoard().getTile(2,2));
-		gameState.getBoard().getTile(2,2).setUnit(fire_spitter);
-		*/
+	
 	}
 
 	//helper methods	
@@ -86,13 +76,12 @@ public class Initalize implements EventProcessor{
 	public void displayPlayer1Avatar(ActorRef out, GameState gameState) {
 		int player1XPosition = gameState.getBoard().getPlayer1Avatar().getPosition().getTilex();
 		int player1YPosition = gameState.getBoard().getPlayer1Avatar().getPosition().getTiley();
-		Avatar player1Avatar = gameState.getBoard().getPlayer1Avatar();
+		Unit player1Avatar = gameState.getBoard().getPlayer1Avatar();
 		int health = gameState.getPlayer1().getHealth();
 		int attack = player1Avatar.getAttack();
 		Tile playerTile =  gameState.getBoard().getTile(player1XPosition, player1YPosition);
 		BasicCommands.drawUnit(out,player1Avatar,playerTile);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setUnitAttack(out, player1Avatar, 2);
 		BasicCommands.setUnitAttack(out, player1Avatar, attack);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitHealth(out, player1Avatar, health);
@@ -102,13 +91,12 @@ public class Initalize implements EventProcessor{
 		public void displayPlayer2Avatar(ActorRef out, GameState gameState) {
 			int player2XPosition = gameState.getBoard().getPlayer2Avatar().getPosition().getTilex();
 			int player2YPosition = gameState.getBoard().getPlayer2Avatar().getPosition().getTiley();
-			Avatar player2Avatar = gameState.getBoard().getPlayer2Avatar();
+			Unit player2Avatar = gameState.getBoard().getPlayer2Avatar();
 			int health = gameState.getPlayer2().getHealth();
 			int attack = player2Avatar.getAttack();
 			Tile playerTile =  gameState.getBoard().getTile(player2XPosition, player2YPosition);
 			BasicCommands.drawUnit(out,player2Avatar,playerTile);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			BasicCommands.setUnitAttack(out, player2Avatar, 2);
 			BasicCommands.setUnitAttack(out, player2Avatar, attack);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.setUnitHealth(out, player2Avatar, health);

@@ -50,7 +50,7 @@ public class CardClicked implements EventProcessor{
 		
 		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
 		ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
-		ArrayList<Tile> occupiedTiles = gameState.getOccupiedTiles();
+		ArrayList<Tile> occupiedTiles = gameState.getBoard().getUnitOccupiedTiles();
 		Tile tile;
 		ArrayList <Tile> highlightedTile = new ArrayList<Tile>();
 		
@@ -59,7 +59,7 @@ public class CardClicked implements EventProcessor{
 		 *card id 6: Azurite lion
 		 */
 		if(cardID > 0 && cardID < 9) {		
-			gameState.unhighlightTiles(out);
+			gameState.getBoard().unhighlightTiles(out);
 			//Select Azurite lion, highlight all unoccupied tiles
 			if(cardSelected.getId() == 6) {	
 				for(int i=0; i<gameState.getBoard().getX(); i++) {

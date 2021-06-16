@@ -26,7 +26,7 @@ public class OtherClicked implements EventProcessor{
 		gameState.unHighlightCard(out);
 		gameState.unhighlightTiles(out);
 	}
-
 }
+
 
 

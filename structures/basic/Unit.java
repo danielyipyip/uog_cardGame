@@ -24,6 +24,8 @@ public class Unit {
 	Position position;
 	UnitAnimationSet animations;
 	ImageCorrection correction;
+	int attack;
+	int health;
 	
 	//different constructors
 	public Unit() {}
@@ -67,7 +69,10 @@ public class Unit {
 	public void setPosition(Position position) {this.position = position;}
 	public UnitAnimationSet getAnimations() {return animations;}
 	public void setAnimations(UnitAnimationSet animations) {this.animations = animations;}
-	
+	public int getAttack() {return attack;}
+	public void setAttack(int attack) {this.attack = attack;}
+	public int getHealth() {return health;}
+	public void setHealth(int health) {this.health = health;}
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.
