@@ -65,11 +65,9 @@ public class TileClicked implements EventProcessor{
 		}
 		
 		
-		
-}
-}
-=======
-		Tile tile = gameState.getBoard().getTile(tilex, tiley);
+	
+
+	Tile tile = gameState.getBoard().getTile(tilex, tiley);
 		//if an unit is clicked b4
 		if (gameState.getUnitClicked()!=null) {
 			if (tile.getUnit()!=null) {
@@ -94,4 +92,4 @@ public class TileClicked implements EventProcessor{
 }
 
 
->>>>>>> 111295b426f115549bc2148f5433adcfdfaa578b
+
