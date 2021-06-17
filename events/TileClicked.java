@@ -34,62 +34,60 @@ import structures.basic.UnitAnimationType;
  *
  */
 public class TileClicked implements EventProcessor{
-
+	
+	
 	
 	
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
-		//to clear all the highlighted tile first;
-		gameState.getBoard().unhighlightRedTiles(out);
-		gameState.getBoard().unhighlightWhiteTiles(out);
-		
 		//orig code
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
-		Tile tileClicked = gameState.getBoard().getTile(tilex, tiley);
-		gameState.setTileClicked(tileClicked); //store the clicked tile in game state class.
 		
+		//Get the tile with the clicked position
+		Tile tile= gameState.getBoard().getTile(tilex, tiley);
 		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles(); 
-
-		if(tileClicked==gameState.getTileClicked()) {
 		
-		if((player1UnitTiles.contains(tileClicked))){
-			Unit unit = tileClicked.getUnit();
-			GroupsCommands.highlightMoveTile(out,gameState,unit);
-			
-		}else {
+		/*Check that whether the clickedTile, is equal to the previous clicked tile 
+		 * or whether it belongs to the whiteHighlighted Tiles.
+		 * if not, the tiles will be unhighlighted. And update gameState tileClicked variable
+		 */
+		if(!(gameState.getTileClicked()==tile))
+			{
+			if(!(checkTile(tile,gameState.getBoard().getHighlightedWhiteTiles()))){
 			gameState.getBoard().unhighlightRedTiles(out);
 			gameState.getBoard().unhighlightWhiteTiles(out);
-		}
+			gameState.setTileClicked(tile);
+		}}
+		
+		/*
+		 * Use helped method to check the tileClick belongs to player1 unit or not.
+		 * If true, call the highlightmoveTile to highlight the tiles.
+		 */
+		if(checkTile(tile, player1UnitTiles)) {
+			gameState.setUnitClicked(tile.getUnit());
+			GroupsCommands.highlightMoveTile(out,gameState,tile.getUnit());	
+			gameState.setTileClicked(tile);
 		}
 		
-		
-	
-
-	Tile tile = gameState.getBoard().getTile(tilex, tiley);
-		//if an unit is clicked b4
-		if (gameState.getUnitClicked()!=null) {
-			if (tile.getUnit()!=null) {
-				if(tile.getUnit().equals(gameState.getUnitClicked())) {
-					//i.e. clicked on itself -> trigger unclick ((a) variable; (b) unhighlight)
-					gameState.setUnitClicked(null);
-					gameState.getBoard().unhighlightWhiteTiles(out);
-				}
-			}
-			else if(gameState.getBoard().getHighlightedWhiteTiles().indexOf(tile)!=-1) {
-				//i.e. this tile is found in HighlightedWhiteTiles -> move (see group commands for steps)
-				GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(), tile);
-			}
-		}else if(!(tile.getUnit()==null)){
-			Unit unit = tile.getUnit();
-			gameState.setUnitClicked(unit); //newly added (Jun16)
-			GroupsCommands.highlightMoveTile(out, gameState, unit);
+		/*
+		 * Use helped method to check the tileClick belongs to player1 highlightedTiles List.
+		 * 
+		 * If true, unhighlight the tiles and then call the moveUnit method.
+		 */
+		if((checkTile(tile,gameState.getBoard().getHighlightedWhiteTiles()))){
+			
+			gameState.getBoard().unhighlightWhiteTiles(out);
+			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(), tile);
 		}
-
-
 	}
+	
+	public boolean checkTile (Tile tile, ArrayList<Tile> a) {//check whether the tile is in a arraylist.
+	
+		if(a.contains(tile)) {
+		return true;	
+		}return false;}
+
+
 }
-
-
-

@@ -49,8 +49,6 @@ public class GameState {
 		cardPos = -1;
 		
 
-		tileClicked = null;
-
 		//start from player 1
 		currentPlayer=player1;
 	}
