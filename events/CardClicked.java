@@ -10,7 +10,10 @@ import commands.BasicCommands;
 import structures.GameState;
 import structures.basic.Board;
 import structures.basic.Card;
+import structures.basic.SpellCard;
 import structures.basic.Tile;
+import structures.basic.Unit;
+import structures.basic.UnitCard;
 import utils.BasicObjectBuilders;
 
 /**
@@ -32,13 +35,13 @@ public class CardClicked implements EventProcessor{
 		int handPosition = message.get("position").asInt();
 		gameState.getBoard().unhighlightRedTiles(out);
 		gameState.getBoard().unhighlightWhiteTiles(out);
-		
+
 		//------------------------------------Highlight Card(START)------------------------------------//
 		Card cardSelected = gameState.getPlayer1().getMyhand().getCard(handPosition);
-		
+
 		Card previousCard = gameState.getCardSelected();
 		int previousPos = gameState.getcardPos();
-		
+
 		if(previousCard != null) {
 			BasicCommands.drawCard(out, previousCard, previousPos, 0);
 		} 
@@ -46,29 +49,34 @@ public class CardClicked implements EventProcessor{
 		gameState.setCardSelected(cardSelected);
 		gameState.setcardPos(handPosition);
 		//------------------------------------Highlight Card(END)------------------------------------//
-		
+
 		//------------------------------------Highlight Tiles(START)------------------------------------//
-		int cardID = cardSelected.getId();
-		
+		String cardName = cardSelected.getCardname();
+
 		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
 		ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
 		ArrayList<Tile> occupiedTiles = gameState.getBoard().getUnitOccupiedTiles();
 		ArrayList<Tile> highlightedWhiteTile = gameState.getBoard().getHighlightedWhiteTiles();
 		ArrayList<Tile> highlightedRedTile = gameState.getBoard().getHighlightedRedTiles();
 		Tile tile;
-		
+
 		/*For unit card, the tiles surrounding ally units will be highlighted
 		 *card id 1-8: unit card 
 		 *card id 6: Azurite lion
 		 */
-		if(cardID > 0 && cardID < 9) {		
-			//Select Azurite lion, highlight all unoccupied tiles
-			if(cardSelected.getId() == 6) {	
+		//add exception card for player 2: 
+		//"Planar Scout"
+		//UNIT card
+		if(cardSelected instanceof UnitCard ) {	//if it is a unit card
+			//if "Azurite Lion"/"Planar Scout", highlight all unoccupied tiles
+			if(cardName.equals("Azurite Lion") || cardName.equals("Planar Scout")) {	
 				for(int i=0; i<gameState.getBoard().getX(); i++) {
 					for(int j=0; j<gameState.getBoard().getY();j++) {
 						tile = gameState.getBoard().getTile(i, j);
 						if(occupiedTiles.contains(tile)) continue;
-						BasicCommands.drawTile(out, tile, 1);
+						if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+							BasicCommands.drawTile(out, tile, 1); //only draw for player1
+						}
 						highlightedWhiteTile.add(tile);
 						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 					}			
@@ -83,7 +91,9 @@ public class CardClicked implements EventProcessor{
 						for(int j=y; j<=y+2; j++) {
 							tile = gameState.getBoard().getTile(i, j);
 							if(occupiedTiles.contains(tile)) continue;
-							BasicCommands.drawTile(out, tile, 1);
+							if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+								BasicCommands.drawTile(out, tile, 1);
+							}
 							highlightedWhiteTile.add(tile);
 							try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 						}
@@ -91,31 +101,50 @@ public class CardClicked implements EventProcessor{
 				}
 			}
 		}
-		
+
 		/*For spell card
 		 *Truestrike: highlight all enemy units (red)
 		 *Sundrop Elixir: highlight all ally units (red)
 		 *card id 9: Truestrike
 		 *card id 10: Sundrop Elixir
 		 */
-		if(cardID == 9) {
-			for(Tile i: player2UnitTiles) {
-				tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
-				BasicCommands.drawTile(out, tile, 2);
+		//added spell card for player 2
+		//"Staff of Y'Kir'" (own avatar), "Entropic Decay" (non-avatar unit)
+		if(cardSelected instanceof SpellCard ) {
+			if(cardName.equals("Truestrike")) {
+				for(Tile i: player2UnitTiles) {
+					tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
+					if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+						BasicCommands.drawTile(out, tile, 2);
+					}
+					highlightedRedTile.add(tile);
+				}
+			}
+			if(cardName.equals("Sundrop Elixir")) {
+				for(Tile i: player1UnitTiles) {
+					tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
+					if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+						BasicCommands.drawTile(out, tile, 2);
+					}
+					highlightedRedTile.add(tile);
+				}
+			}
+			if(cardName.equals("Staff of Y'Kir'")) { 
+				//avatar is always first unit; 
+				//only player 2 can have this card currently, so hardcoded for player 2 for now
+				tile = gameState.getBoard().getPlayer2UnitTiles().get(0); 
 				highlightedRedTile.add(tile);
 			}
-		}
-		if(cardID == 10) {
-			for(Tile i: player1UnitTiles) {
-				tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
-				BasicCommands.drawTile(out, tile, 2);
-				highlightedRedTile.add(tile);
+			if(cardName.equals("Entropic Decay")) { 
+				for(Tile i: occupiedTiles) {
+					highlightedRedTile.add(i);
+				}
 			}
 		}
-		
+
 		//------------------------------------Highlight Tiles(END)------------------------------------//
-		
+
 
 	}
-	
+
 }
