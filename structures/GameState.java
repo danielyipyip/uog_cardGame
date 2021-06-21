@@ -29,8 +29,9 @@ public class GameState {
 	 *if not selecting anyCard, n=-1 */
 	Card cardSelected; 
 	int cardPos; 
-	Tile tileClicked; //to store the clicked tile;
-	
+	Tile tileClicked; //to store the previous clicked tile;
+	boolean attack = false; //to store whether the player has attacked or not
+	boolean move = false;//to store whether the player has moved or not
 	Unit unitClicked;
 	Player currentPlayer;
 	
@@ -48,6 +49,7 @@ public class GameState {
 		cardSelected = null; 
 		cardPos = -1;
 		
+		
 
 		//start from player 1
 		currentPlayer=player1;
@@ -64,10 +66,34 @@ public class GameState {
 	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
-
+	
 
 	
 	
+	public boolean isAttack() {
+		return attack;
+	}
+
+
+
+	public void setAttack(boolean attack) {
+		this.attack = attack;
+	}
+
+
+
+	public boolean isMove() {
+		return move;
+	}
+
+
+
+	public void setMove(boolean move) {
+		this.move = move;
+	}
+
+
+
 	public Tile getTileClicked() {
 		return tileClicked;
 	}

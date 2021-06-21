@@ -35,7 +35,7 @@ import structures.basic.UnitAnimationType;
  */
 public class TileClicked implements EventProcessor{
 	
-	
+	Tile currentTileClicked;
 	
 	
 	@Override
@@ -44,50 +44,72 @@ public class TileClicked implements EventProcessor{
 		//orig code
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
-		
-		//Get the tile with the clicked position
-		Tile tile= gameState.getBoard().getTile(tilex, tiley);
+		currentTileClicked= gameState.getBoard().getTile(tilex, tiley);
 		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles(); 
+	
+		//Set gameState.setTileClicked() = currentTile for the first round
+		if(gameState.getTileClicked()==null){		
+			gameState.setTileClicked(currentTileClicked);}
+	
+		/*First checking whether the unit can move or not
+		  if move and attack is true, there is no valid move tile and attack unit. Emptying the two arrays */
 		
-		/*Check that whether the clickedTile, is equal to the previous clicked tile 
-		 * or whether it belongs to the whiteHighlighted Tiles.
-		 * if not, the tiles will be unhighlighted. And update gameState tileClicked variable
+		if(gameState.isAttack()==true) {gameState.getBoard().unhighlightRedTiles(out);}
+		if(gameState.isMove()==true)  {gameState.getBoard().unhighlightWhiteTiles(out);}
+
+		/*Second, check that whether the newclickedTile, is equal to the previous clicked tile 
+		 * or whether it belongs to the whiteHighlighted Tiles or the redHighligted Tiles.
+		 * if not, the tiles will be unhighlighted.
 		 */
-		if(!(gameState.getTileClicked()==tile))
-			{
-			if(!(checkTile(tile,gameState.getBoard().getHighlightedWhiteTiles()))){
-			gameState.getBoard().unhighlightRedTiles(out);
-			gameState.getBoard().unhighlightWhiteTiles(out);
-			gameState.setTileClicked(tile);
-		}}
+
+		if(!(currentTileClicked.equals(gameState.getTileClicked())) &&
+			(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles()))) &&
+				(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())))){
+						gameState.getBoard().unhighlightRedTiles(out);
+						gameState.getBoard().unhighlightWhiteTiles(out);}
 		
-		/*
-		 * Use helped method to check the tileClick belongs to player1 unit or not.
-		 * If true, call the highlightmoveTile to highlight the tiles.
+		/* Third, use helper method to check the newtileClick belongs to player1 unit or not.
+		 * If true, then check whether attack or move is applicable.
+		 * call the highlightmoveTile to highlight the valid move tiles and attack tiles
 		 */
-		if(checkTile(tile, player1UnitTiles)) {
-			gameState.setUnitClicked(tile.getUnit());
-			GroupsCommands.highlightMoveTile(out,gameState,tile.getUnit());	
-			gameState.setTileClicked(tile);
-		}
-		
+
+		if(checkTile(currentTileClicked, player1UnitTiles)) {	
+			gameState.setUnitClicked(currentTileClicked.getUnit());
+			if(gameState.isAttack()==false) {GroupsCommands.highlightAttackTile(out,gameState,gameState.getUnitClicked());}
+			if(gameState.isMove()==false) {GroupsCommands.highlightMoveTile(out,gameState,gameState.getUnitClicked()); }}	
 		/*
 		 * Use helped method to check the tileClick belongs to player1 highlightedTiles List.
-		 * 
-		 * If true, unhighlight the tiles and then call the moveUnit method.
-		 */
-		if((checkTile(tile,gameState.getBoard().getHighlightedWhiteTiles()))){
-			
+		 * If true, unhighlight the tiles and then call the moveUnit method.*/
+		 
+		if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())){
 			gameState.getBoard().unhighlightWhiteTiles(out);
-			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(), tile);
-		}
+			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);}
+			
+		if(checkTile(currentTileClicked, gameState.getBoard().getHighlightedRedTiles())){
+			gameState.getBoard().unhighlightRedTiles(out);
+			GroupsCommands.attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);}	
+		
+		//Setting the gameState's TileClicked with the current tile clicked at the end.
+		gameState.setTileClicked(currentTileClicked);
 	}
+			
 	
-	public boolean checkTile (Tile tile, ArrayList<Tile> a) {//check whether the tile is in a arraylist.
+	//Helper method
 	
+	public boolean checkTile (Tile tile, ArrayList<Tile> a) {//check whether the tile is in an arraylist.
 		if(a.contains(tile)) {
 		return true;	
 		}return false;}
 
+	
+	
+	
+	//Getter and setter
+	
+	public Tile getCurrentTileClicked() {return currentTileClicked;}
+	public void setCurrentTileClicked(Tile currentTileClicked) {this.currentTileClicked = currentTileClicked;}
+	
 
+	
+	
 }

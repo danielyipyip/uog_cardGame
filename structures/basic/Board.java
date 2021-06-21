@@ -70,6 +70,7 @@ public class Board {//This Class is used to store all the variables related to u
 	public void addPlayer1Avatar (int x, int y) {
 		Avatar player1Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 1, Avatar.class);
 		player1Avatar.setAttack(2);
+		player1Avatar.setHealth(20);
 		Tile tile = this.getTile(x,y);
 		player1Avatar.setPositionByTile(tile);
 		tile.setUnit(player1Avatar);
@@ -81,6 +82,7 @@ public class Board {//This Class is used to store all the variables related to u
 	public void addPlayer2Avatar (int x, int y) {
 		Avatar player2Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, -1, Avatar.class);
 		player2Avatar.setAttack(2);
+		player2Avatar.setHealth(20);
 		Tile tile = getTile(x,y);
 		player2Avatar.setPositionByTile(tile); 	
 		tile.setUnit(player2Avatar);
@@ -107,8 +109,48 @@ public class Board {//This Class is used to store all the variables related to u
 		highlightedWhiteTiles.clear();
 	}
 	
+	
+	
+	/*Below is to add the unit and tile to player unit and player tiles and occuiped tile array.
+	 * If player 1 is calling the method.The playerTileArray will be player1TileArray.
+	 * Tile will be the tile the unit is going to occupy.
+	 * Then add the tile to the array and the occupied array.
+	 * Check that the first tile of playerTileArray contains and add the unit to the corresponding player.
+	 *  
+	 */
 
+	public void addTileAndAvatarToPlayerArray (Tile tile, ArrayList<Tile> playerTileArray,Unit unit) {
+		
+			 Unit playerAvatar = playerTileArray.get(0).getUnit();
+			 unit.setPositionByTile(tile);
+			 tile.setUnit(unit);
+			 playerTileArray.add(tile);
+			 unitOccupiedTiles.add(tile);
+			 if(player1Units.contains(playerAvatar)) {
+				 player1Units.add(unit);		 
+			 }else {
+				 player2Units.add(unit);
+			 }
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	public void addHightlightWhiteTiles(Tile tile) {highlightedWhiteTiles.add(tile);}
+	public void addHightlightRedTiles(Tile tile) {highlightedRedTiles.add(tile);}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//Getter and setter method for Board Class;
 	public ArrayList<Tile> getPlayer1UnitTiles() {return player1UnitTiles;}
@@ -123,7 +165,7 @@ public class Board {//This Class is used to store all the variables related to u
 	public ArrayList<Tile> getHighlightedWhiteTiles() {return highlightedWhiteTiles;}
 	public Unit getPlayer1Avatar() {return player1Units.get(0);}	
 	public Unit getPlayer2Avatar() {return player2Units.get(0);}	
-
+	
 }		
 
 
