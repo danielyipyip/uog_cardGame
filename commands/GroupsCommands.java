@@ -54,6 +54,11 @@ public class GroupsCommands {
 		gameState.setUnitClicked(null);
 	}
 
+	//play spell cards
+	public static void playSpellCard() {
+		
+	}
+	
 	//Below is the method to highlight the tiles in white for move
 	public static void highlightMoveTile (ActorRef out,GameState gameState ,Unit unit) {
 		int positionX = unit.getPosition().getTilex();
