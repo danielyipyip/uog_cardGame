@@ -26,6 +26,7 @@ public class Unit {
 	ImageCorrection correction;
 	int attack;
 	int health;
+	int maxHealth;
 	
 	//different constructors
 	public Unit() {}
@@ -78,6 +79,8 @@ public class Unit {
 		if (health<0) {this.health = 0;} else {this.health = health;}
 	}
 
+	public int getMaxHealth() {return maxHealth;}
+	public void setMaxHealth(int maxHealth) {this.maxHealth = maxHealth;}
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.

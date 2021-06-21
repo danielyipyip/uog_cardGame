@@ -48,14 +48,14 @@ public class GameState {
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;
-		
-		
 
 		//start from player 1
 		currentPlayer=player1;
 	}
 	
-	
+	//helper method
+	//just to group 2 steps in once
+	public void unSelectCard() {this.setcardPos(-1); this.setCardSelected(null);}
 	
 	//Getter and Setter Method
 	public int getTurn() {return turn;}

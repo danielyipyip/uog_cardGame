@@ -102,14 +102,10 @@ public class CardClicked implements EventProcessor{
 			}
 		}
 
-		/*For spell card
-		 *Truestrike: highlight all enemy units (red)
-		 *Sundrop Elixir: highlight all ally units (red)
-		 *card id 9: Truestrike
-		 *card id 10: Sundrop Elixir
-		 */
-		//added spell card for player 2
-		//"Staff of Y'Kir'" (own avatar), "Entropic Decay" (non-avatar unit)
+		/*For spell card (valid target, red highlight)
+		*player 1 spell card: Truestrike (enemy units); Sundrop Elixir: (ally units)
+		*player 2 spell card: "Staff of Y'Kir'" (own avatar), "Entropic Decay" (non-avatar unit)
+		*/
 		if(cardSelected instanceof SpellCard ) {
 			if(cardName.equals("Truestrike")) {
 				for(Tile i: player2UnitTiles) {
@@ -124,9 +120,9 @@ public class CardClicked implements EventProcessor{
 				for(Tile i: player1UnitTiles) {
 					tile = gameState.getBoard().getTile(i.getTilex(), i.getTiley());
 					if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
-						BasicCommands.drawTile(out, tile, 2);
+						BasicCommands.drawTile(out, tile, 2); //change the tile to red
 					}
-					highlightedRedTile.add(tile);
+					highlightedRedTile.add(tile); //add in "red-tile" list
 				}
 			}
 			if(cardName.equals("Staff of Y'Kir'")) { 
@@ -136,9 +132,10 @@ public class CardClicked implements EventProcessor{
 				highlightedRedTile.add(tile);
 			}
 			if(cardName.equals("Entropic Decay")) { 
-				for(Tile i: occupiedTiles) {
-					highlightedRedTile.add(i);
-				}
+				//hightlight unit except at position 1 of array (=avatar)
+				//do it separately for player1 & 2 units
+				for(Tile i: player1UnitTiles.subList(1, player1UnitTiles.size())){highlightedRedTile.add(i);}
+				for(Tile i: player2UnitTiles.subList(1, player2UnitTiles.size())){highlightedRedTile.add(i);}
 			}
 		}
 

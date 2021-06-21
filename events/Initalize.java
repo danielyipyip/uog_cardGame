@@ -42,7 +42,30 @@ public class Initalize implements EventProcessor{
 		displayPlayer1Avatar(out,gameState);
 		displayPlayer2Avatar(out,gameState);
 		
+		
+		//delete later
+		//Player 1 Unit
+		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 2, Unit.class);
+		Tile tile = gameState.getBoard().getTile(3, 3);
+		gameState.getBoard().addTileAndAvatarToPlayerArray(tile, gameState.getBoard().getPlayer1UnitTiles(), fire_spitter);
+		BasicCommands.drawUnit(out, fire_spitter, tile);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitAttack(out, fire_spitter, 2);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, fire_spitter , fire_spitter.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 
+		//Player2 Unit
+		Unit fire_spitter1 = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, -2, Unit.class);
+		Tile tile1 = gameState.getBoard().getTile(4, 2);
+		fire_spitter1.setHealth(10);
+		gameState.getBoard().addTileAndAvatarToPlayerArray(tile1, gameState.getBoard().getPlayer2UnitTiles(), fire_spitter1);
+		BasicCommands.drawUnit(out, fire_spitter1, tile1);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitAttack(out, fire_spitter1, 2);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, fire_spitter1 , fire_spitter1.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
 	//helper methods	

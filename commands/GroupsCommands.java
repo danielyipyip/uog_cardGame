@@ -52,15 +52,57 @@ public class GroupsCommands {
 		BasicCommands.moveUnitToTile(out, unit, targetTile);
 		unit.setPositionByTile(targetTile); 
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		//(6) set seleted unit to null
-		gameState.setUnitClicked(null);
+		//(6) set seleted unit to null & pos to -1
+		gameState.unSelectCard();
 		//(7) set move to true
-		gameState.setMove(true);
+		gameState.setMove(true); //////////////need to change ///////////////////////
 	}
 
+	//method that do both front-end display & back-end unit health
+	public static void setUnitHealth(ActorRef out, Unit targetUnit, int health) {
+		targetUnit.setHealth(health);
+		BasicCommands.setUnitHealth(out, targetUnit, health);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
+	//method that do both front-end display & back-end unit attack
+	public static void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
+		targetUnit.setHealth(attack);
+		BasicCommands.setUnitAttack(out, targetUnit, attack);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
 	//play spell cards
-	public static void playSpellCard() {
-		
+	//////////////without animation///////////////////
+	public static void playSpellCard(ActorRef out, String cardName, Tile currentTileClicked) {
+		//Unit that the spell act on
+		Unit targetUnit = currentTileClicked.getUnit();
+		//play the card: separated by which card is played
+		if(cardName.equals("Truestrike")) {//deal 2 damage to a unit
+			GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getHealth()-2);
+		}
+		if(cardName.equals("Sundrop Elixir")) { //heal a unit by 5
+			int newHealth = targetUnit.getHealth()+5;
+			if (newHealth>targetUnit.getMaxHealth()) { //if >max, set to max
+				GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getMaxHealth());
+			}else {GroupsCommands.setUnitHealth(out, targetUnit, newHealth);} //if NOT > max, set to health+5
+		}
+		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
+			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
+		}
+		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
+			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
+		}
+	}
+	//after card played, 
+	//un-hightlight
+	gameState.getBoard().unhighlightRedTiles(out);
+	//animation??
+	
+	//remove the card from hand
+	BasicCommands.deleteCard(out, gameState.getcardPos());
+	try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	gameState.unSelectCard();
 	}
 	
 	//Below is the method to highlight the tiles in white for move
