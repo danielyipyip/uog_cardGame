@@ -145,13 +145,6 @@ public class Board {//This Class is used to store all the variables related to u
 	public void addHightlightRedTiles(Tile tile) {highlightedRedTiles.add(tile);}
 	
 	
-	
-	
-	
-	
-	
-	
-	
 	//Getter and setter method for Board Class;
 	public ArrayList<Tile> getPlayer1UnitTiles() {return player1UnitTiles;}
 	public ArrayList<Tile> getPlayer2UnitTiles() {return player2UnitTiles;}

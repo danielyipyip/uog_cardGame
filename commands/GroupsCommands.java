@@ -15,7 +15,7 @@ public class GroupsCommands {
 	static int sleepTime = EventProcessor.sleepTime;
 
 	public static void setUpPlayerHealthMana(ActorRef out, GameState gameState) {
-		gameState.getBoard().getPlayer1Avatar().setHealth(gameState.getPlayer1().getHealth());
+		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -54,8 +54,8 @@ public class GroupsCommands {
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		//(6) set seleted unit to null
 		gameState.setUnitClicked(null);
-		//(7) set move to true
-		gameState.setMove(true);
+		//(7) set move to false
+		unit.setMoved(true);
 	}
 
 	//Below is the method to highlight the tiles in white for move
@@ -117,26 +117,37 @@ public class GroupsCommands {
 				for(int j=y;j<=positionY+1;j++) {
 					Tile tile = gameState.getBoard().getTile(i, j) ;		
 					if(!(gameState.getBoard().getPlayer1Avatar().equals(tile.getUnit()))){
-						if((player2UnitTiles.contains(tile))) {
+						if((player2UnitTiles.contains(tile))){
 							BasicCommands.drawTile(out, tile, 2);
 							try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 							gameState.getBoard().addHightlightRedTiles(tile);}
-						}
+					}
 				}
 			}
 	}
 	
-	//adjacent attack
+	//adjacent attack, include counter attack condition.
 	public static void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {
 
 			Unit attackTarget = target.getUnit();
-			int newHealth = attackTarget.getHealth() - unit.getAttack();
-			attackTarget.setHealth(newHealth);
+			int targetNewHealth = attackTarget.getHealth() - unit.getAttack();
+			attackTarget.setHealth(targetNewHealth);
+			if(attackTarget.equals(gameState.getBoard().getPlayer2Units().get(0))) {
+				gameState.getPlayer2().setHealth(targetNewHealth);
+				BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
+				
+			}
+			if(attackTarget.equals(gameState.getBoard().getPlayer1Units().get(0))) {
+				gameState.getPlayer1().setHealth(targetNewHealth);
+				BasicCommands.setPlayer1Health(out, gameState.getPlayer2());
+			}
+			
 			BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.setUnitHealth(out, attackTarget , attackTarget.getHealth());
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			gameState.setAttack(true);
+			if(targetNewHealth>=0) {counterAttack(out,gameState,unit,target);
+			unit.setAttacked(true);}
 	}
 		
 	
@@ -151,6 +162,29 @@ public class GroupsCommands {
 		return true;	
 		}return false;}
 	
+	
+	public static void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){
+		
+		int attackerNewHeath = unit.getHealth() - target.getUnit().getAttack();
+		unit.setHealth(attackerNewHeath);
+		if(unit.equals(gameState.getBoard().getPlayer1Units().get(0))) {
+			gameState.getPlayer1().setHealth(attackerNewHeath);
+			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+		}
+		if(unit.equals(gameState.getBoard().getPlayer2Units().get(0))) {
+			gameState.getPlayer2().setHealth(attackerNewHeath);
+			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
+		}
+		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
+		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, unit, unit.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+
+	}
+		
+		
+		
+		
 	
 
 

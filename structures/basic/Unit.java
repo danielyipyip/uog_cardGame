@@ -26,6 +26,8 @@ public class Unit {
 	ImageCorrection correction;
 	int attack;
 	int health;
+	boolean attacked = false; 
+	boolean moved = false; 
 	
 	//different constructors
 	public Unit() {}
@@ -77,7 +79,12 @@ public class Unit {
 	public void setHealth(int health) {
 		if (health<0) {this.health = 0;} else {this.health = health;}
 	}
+	
 
+	public boolean isAttacked() {return attacked;}
+	public void setAttacked(boolean attacked) {this.attacked = attacked;}
+	public boolean isMoved() {return moved;}
+	public void setMoved(boolean moved) {this.moved = moved;}
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.
