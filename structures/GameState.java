@@ -55,7 +55,9 @@ public class GameState {
 	
 	//helper method
 	//just to group 2 steps in once
-	public void unSelectCard() {this.setcardPos(-1); this.setCardSelected(null);}
+	public void unSelectCard() {this.setcardPos(-1); this.setCardSelected(null);} //unselect the card
+	public void deleteCard(int n) {	this.unSelectCard(); this.currentPlayer.getMyhand().removeCard(n); }//also delete the card
+
 	
 	//Getter and Setter Method
 	public int getTurn() {return turn;}

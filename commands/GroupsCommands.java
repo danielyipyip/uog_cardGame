@@ -6,6 +6,7 @@ import akka.actor.ActorRef;
 import events.EventProcessor;
 import events.TileClicked;
 import structures.GameState;
+import structures.basic.Card;
 import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
@@ -64,17 +65,38 @@ public class GroupsCommands {
 		BasicCommands.setUnitHealth(out, targetUnit, health);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
-	
+
 	//method that do both front-end display & back-end unit attack
 	public static void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
 		targetUnit.setHealth(attack);
 		BasicCommands.setUnitAttack(out, targetUnit, attack);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
-	
+
+	//draw the hand in display
+	public static void drawHand(ActorRef out, GameState gameState) {
+		int pos=0;
+		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
+		for (Card i:currHand) {
+			BasicCommands.drawCard(out, i, pos++, 0);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		}
+	}
+
+	//delete a card both in front-end (display) and back-end (Hand)
+	//few things it does: (1)unselect cards: gameState.cardPos=-1 gameState.CardSelected=null
+	//(2) delete card from player's Hand (back-end)
+	//(3) delect card from front-end display and shift the remaining cards to the left
+	public static void deleteCard(ActorRef out, GameState gameState, int n) {gameState.deleteCard(n);
+		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {drawHand(out, gameState);//change the displays:redraw previous card
+			BasicCommands.deleteCard(out, gameState.getCurrentPlayer().getMyhand().getMyhand().size());//change the displays: remove last card (will not be redraw)
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		}
+	} 
+
 	//play spell cards
 	//////////////without animation///////////////////
-	public static void playSpellCard(ActorRef out, String cardName, Tile currentTileClicked) {
+	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
 		//Unit that the spell act on
 		Unit targetUnit = currentTileClicked.getUnit();
 		//play the card: separated by which card is played
@@ -93,18 +115,16 @@ public class GroupsCommands {
 		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
 			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
 		}
+		//after card played, 
+		//un-hightlight
+		gameState.getBoard().unhighlightRedTiles(out);
+		//animation??
+
+		//remove the card from hand (& update display)
+		deleteCard(out, gameState, gameState.getcardPos());
 	}
-	//after card played, 
-	//un-hightlight
-	gameState.getBoard().unhighlightRedTiles(out);
-	//animation??
-	
-	//remove the card from hand
-	BasicCommands.deleteCard(out, gameState.getcardPos());
-	try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-	gameState.unSelectCard();
-	}
-	
+
+
 	//Below is the method to highlight the tiles in white for move
 	public static void highlightMoveTile (ActorRef out,GameState gameState ,Unit unit) {
 		int positionX = unit.getPosition().getTilex();
@@ -147,62 +167,62 @@ public class GroupsCommands {
 
 
 	//Below is the method to highlight the tiles in red for attack
-	
+
 	public static void highlightAttackTile (ActorRef out,GameState gameState ,Unit unit) {
-		
+
 		int positionX = unit.getPosition().getTilex();
 		int positionY = unit.getPosition().getTiley();
-		
+
 		//Highlighted the tiles surrounding the avatar first.
 		int x = positionX-1;
 		int y = positionY-1;
-		
+
 		//Get the opponent unit list
 		ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
-		
-			for(int i=x;i<= positionX+1;i++) {
-				for(int j=y;j<=positionY+1;j++) {
-					Tile tile = gameState.getBoard().getTile(i, j) ;		
-					if(!(gameState.getBoard().getPlayer1Avatar().equals(tile.getUnit()))){
-						if((player2UnitTiles.contains(tile))) {
-							BasicCommands.drawTile(out, tile, 2);
-							try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-							gameState.getBoard().addHightlightRedTiles(tile);}
-						}
+
+		for(int i=x;i<= positionX+1;i++) {
+			for(int j=y;j<=positionY+1;j++) {
+				Tile tile = gameState.getBoard().getTile(i, j) ;		
+				if(!(gameState.getBoard().getPlayer1Avatar().equals(tile.getUnit()))){
+					if((player2UnitTiles.contains(tile))) {
+						BasicCommands.drawTile(out, tile, 2);
+						try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+						gameState.getBoard().addHightlightRedTiles(tile);}
 				}
 			}
+		}
 	}
-	
+
 	//adjacent attack
 	public static void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {
 
-			Unit attackTarget = target.getUnit();
-			int newHealth = attackTarget.getHealth() - unit.getAttack();
-			attackTarget.setHealth(newHealth);
-			BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			BasicCommands.setUnitHealth(out, attackTarget , attackTarget.getHealth());
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			gameState.setAttack(true);
+		Unit attackTarget = target.getUnit();
+		int newHealth = attackTarget.getHealth() - unit.getAttack();
+		attackTarget.setHealth(newHealth);
+		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, attackTarget , attackTarget.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		gameState.setAttack(true);
 	}
-		
-	
-	
-	
-	
-	
+
+
+
+
+
+
 
 	public boolean checkTile (Tile tile, ArrayList<Tile> a) {//check whether the tile is in an arraylist.
-		
+
 		if(a.contains(tile)) {
-		return true;	
+			return true;	
 		}return false;}
-	
-	
+
+
 
 
 
 }
-	
-	
-	
+
+
+
