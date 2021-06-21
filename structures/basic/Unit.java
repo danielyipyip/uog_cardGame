@@ -28,6 +28,8 @@ public class Unit {
 	int health;
 	boolean attacked = false; 
 	boolean moved = false; 
+	int maxHealth;
+
 	
 	//different constructors
 	public Unit() {}
@@ -81,10 +83,15 @@ public class Unit {
 	}
 	
 
+
 	public boolean isAttacked() {return attacked;}
 	public void setAttacked(boolean attacked) {this.attacked = attacked;}
 	public boolean isMoved() {return moved;}
 	public void setMoved(boolean moved) {this.moved = moved;}
+
+	public int getMaxHealth() {return maxHealth;}
+	public void setMaxHealth(int maxHealth) {this.maxHealth = maxHealth;}
+
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.

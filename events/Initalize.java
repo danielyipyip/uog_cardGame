@@ -38,12 +38,13 @@ public class Initalize implements EventProcessor{
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 		GroupsCommands.setUpPlayerHealthMana(out, gameState);
 		displayTiles(out,gameState.getBoard());
-		drawHand(out, gameState); //only for player 1
+		GroupsCommands.drawHand(out, gameState); //only for player 1
 		displayPlayer1Avatar(out,gameState);
 		displayPlayer2Avatar(out,gameState);
-		
+
 		//==========================Below units is just for testing purpose===================================================//
-		
+		//delete later
+		//Player 1 Unit
 		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 2, Unit.class);
 		Tile tile = gameState.getBoard().getTile(3, 3);
 		fire_spitter.setHealth(10);
@@ -56,7 +57,7 @@ public class Initalize implements EventProcessor{
 		BasicCommands.setUnitHealth(out, fire_spitter , fire_spitter.getHealth());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 
-		
+		//Player2 Unit
 		Unit fire_spitter1 = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, -2, Unit.class);
 		Tile tile1 = gameState.getBoard().getTile(4, 2);
 		fire_spitter1.setHealth(10);
@@ -67,11 +68,9 @@ public class Initalize implements EventProcessor{
 		BasicCommands.setUnitAttack(out, fire_spitter1, 2);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitHealth(out, fire_spitter1 , fire_spitter1.getHealth());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}}
 
 		//================================Testing purpose end===================================================//	
-
-	}
 
 	//helper methods	
 	public void displayTiles(ActorRef out, Board board) {//Method to display Tiles
@@ -91,14 +90,7 @@ public class Initalize implements EventProcessor{
 	}
 	
 	//drawHand means drawing out the hand
-	public void drawHand(ActorRef out, GameState gameState) {
-		int pos=0;
-		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
-		for (Card i:currHand) {
-			BasicCommands.drawCard(out, i, pos++, 0);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-	}
+
 	
 	
 	public void displayPlayer1Avatar(ActorRef out, GameState gameState) {
