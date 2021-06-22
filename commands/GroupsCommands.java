@@ -146,6 +146,11 @@ public class GroupsCommands {
 				break;
 		}
 		
+		//Unit cannot move or attack after being summon in the turn
+		unit.setAttacked(true);
+		unit.setMoved(true);
+		
+		//Add the unit to the relevant array
 		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, gameState.getBoard().getPlayer1UnitTiles(), unit);
 		
 		//Draw out Unit and it's stats on the browser
