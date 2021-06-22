@@ -256,8 +256,6 @@ public class GroupsCommands {
 			for(int i=x;i<= positionX+1;i++) {
 				for(int j=y;j<=positionY+1;j++) {
 					Tile tile = gameState.getBoard().getTile(i, j) ;
-							if(!(gameState.getBoard().getPlayer1Avatar().getPosition().getTilex()==positionX)&&
-									!(gameState.getBoard().getPlayer1Avatar().getPosition().getTilex()==positionY)) {
 								if((player2UnitTiles.contains(tile))){
 									BasicCommands.drawTile(out, tile, 2);
 										try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -265,7 +263,7 @@ public class GroupsCommands {
 					}
 				}
 			}
-	}
+	
 
 	
 	//adjacent attack, include counter attack condition.

@@ -57,10 +57,6 @@ public class TileClicked implements EventProcessor{
 		if(gameState.getTileClicked()==null){		
 			gameState.setTileClicked(currentTileClicked);
 		}
-	
-		//Set gameState.setTileClicked() = currentTile for the first round
-		if(gameState.getTileClicked()==null){		
-			gameState.setTileClicked(currentTileClicked);}
 
 		//insert here: play spell card
 		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
@@ -83,19 +79,29 @@ public class TileClicked implements EventProcessor{
 			//e.g. If I summon a player1unit on an empty tile clicked here, 
 			//the following code (line 100) will detect this tile as a player1UnitTile and run the code inside...
 		}
-
+		
+		
+		
+		
+		/*
+		 * Check that whether the newclickedTile, is equal to the previous clicked tile 
+		 * or whether it belongs to the whiteHighlighted Tiles or the redHighligted Tiles.
+		 * if not, the tiles will be unhighlighted and the array are emptied.
+		 */
 
 		if(!(currentTileClicked.equals(gameState.getTileClicked())) &&
 				(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles()))) &&
 					(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())))){
-						gameState.getBoard().unhighlightRedTiles(out);
-						gameState.getBoard().unhighlightWhiteTiles(out);
-		}
-		
+							gameState.getBoard().unhighlightRedTiles(out);
+							gameState.getBoard().unhighlightWhiteTiles(out);}
 
-		/* Third, use helper method to check the newtileClick belongs to player1 unit or not.
+	
+		/* Use helper method to check the newclickedTile belongs to player1 unit or not.
 		 * If true, then check whether attack or move is applicable.
 		 * call the highlightmoveTile to highlight the valid move tiles and attack tiles
+		 * Will add condition if GameState.getPlayer is Player 1...
+		 * And if GameState.getPlayer is Player 2..the game logic will change.....
+		 * i.e. Use random x and y to randomly assign a tile to a unit?
 		 */
 
 		if(checkTile(currentTileClicked, player1UnitTiles)) {	
