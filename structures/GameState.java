@@ -56,7 +56,6 @@ public class GameState {
 	public void unSelectCard() {this.setcardPos(-1); this.setCardSelected(null);} //unselect the card
 	public void deleteCard(int n) {	this.unSelectCard(); this.currentPlayer.getMyhand().removeCard(n); }//also delete the card
 
-	
 	//Getter and Setter Method
 	public int getTurn() {return turn;}
 	public void setTurn(int turn) {this.turn = turn;}
@@ -67,15 +66,9 @@ public class GameState {
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
 	
-
-
-
-
 	public Tile getTileClicked() {
 		return tileClicked;
 	}
-
-
 
 	public void setTileClicked(Tile tileClicked) {
 		this.tileClicked = tileClicked;
@@ -87,17 +80,11 @@ public class GameState {
 	public Player getCurrentPlayer() {return currentPlayer;}
 	public void setCurrentPlayer(Player currentPlayer) {this.currentPlayer = currentPlayer;}
 
-
-
-
-	//Method to unhighlight card and set instance variables to default value
+	//unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
-		cardSelected = null; 
-		cardPos = -1;
+		unSelectCard();
 	}
-	
-	
 	
 	//to be implemented
 	//when end turn, turn +=1 OR change player

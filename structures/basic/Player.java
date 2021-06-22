@@ -62,7 +62,4 @@ public class Player {
 	public Hand getMyhand() {return myhand;}
 	public void setMyhand(Hand myhand) {this.myhand = myhand;}
 
-
-	
-	
 }

@@ -67,12 +67,21 @@ public class TileClicked implements EventProcessor{
 		if (gameState.getCardSelected()!=null) {
 			Card currentCard = gameState.getCardSelected();
 			String cardName = currentCard.getCardname();
+			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
+				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())) {
+					GroupsCommands.playUnitCard(out, gameState, cardName, currentTileClicked);
+				}
+			}
 			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
 				//if is valid target -> play the card
 				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())) {
 					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
 				}
 			}
+			return; 
+			//needs to return here, otherwise the remaining code will run as well and create error
+			//e.g. If I summon a player1unit on an empty tile clicked here, 
+			//the following code (line 100) will detect this tile as a player1UnitTile and run the code inside...
 		}
 
 
