@@ -67,7 +67,7 @@ public class CardClicked implements EventProcessor{
 		//add exception card for player 2: 
 		//"Planar Scout"
 		//UNIT card
-		if(cardSelected instanceof UnitCard ) {	//if it is a unit card
+		if(cardSelected instanceof UnitCard) {	//if it is a unit card
 			//if "Azurite Lion"/"Planar Scout", highlight all unoccupied tiles
 			if(cardName.equals("Azurite Lion") || cardName.equals("Planar Scout")) {	
 				for(int i=0; i<gameState.getBoard().getX(); i++) {

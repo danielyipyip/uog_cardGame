@@ -97,6 +97,7 @@ public class GroupsCommands {
 	} 
 
 	//play unit cards
+	//For player1 only now
 	public static void playUnitCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
 		
 		Unit unit = null;

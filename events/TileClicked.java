@@ -78,6 +78,10 @@ public class TileClicked implements EventProcessor{
 					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
 				}
 			}
+			return; 
+			//needs to return here, otherwise the remaining code will run as well and create error
+			//e.g. If I summon a player1unit on an empty tile clicked here, 
+			//the following code (line 100) will detect this tile as a player1UnitTile and run the code inside...
 		}
 
 
