@@ -11,6 +11,8 @@ import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
+import utils.BasicObjectBuilders;
+import utils.StaticConfFiles;
 
 public class GroupsCommands {
 	static int sleepTime = EventProcessor.sleepTime;
@@ -57,7 +59,7 @@ public class GroupsCommands {
 		gameState.unSelectCard();
 		//(7) set move to false
 		unit.setMoved(true);
-	}
+	} 
 
 	//method that do both front-end display & back-end unit health
 	public static void setUnitHealth(ActorRef out, Unit targetUnit, int health) {
@@ -75,7 +77,7 @@ public class GroupsCommands {
 
 	//draw the hand in display
 	public static void drawHand(ActorRef out, GameState gameState) {
-		int pos=0;
+		int pos=0;	
 		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
 		for (Card i:currHand) {
 			BasicCommands.drawCard(out, i, pos++, 0);
@@ -94,6 +96,71 @@ public class GroupsCommands {
 		}
 	} 
 
+	//play unit cards
+	public static void playUnitCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
+		
+		Unit unit = null;
+		switch (cardName) {
+			//Player1 Unit Cards
+			//Important: the "id" parameter needs to be modified
+			case "Comodo Charger": 
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, 3, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(3);
+				break;
+			case "Hailstone Golem":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_hailstone_golem, 3, Unit.class);
+				unit.setAttack(4);
+				unit.setHealth(6);
+				break;
+			case "Pureblade Enforcer":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_pureblade_enforcer, 3, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(4);
+				break;
+			case "Azure Herald":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 3, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(4);
+				break;
+			case "Silverguard Knight":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 3, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(5);
+				break;
+			case "Azurite Lion":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azurite_lion, 3, Unit.class);
+				unit.setAttack(2);
+				unit.setHealth(3);
+				break;
+			case "Fire Spitter":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 3, Unit.class);
+				unit.setAttack(3);
+				unit.setHealth(2);
+				break;
+			case "Ironcliff Guardian":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_ironcliff_guardian, 3, Unit.class);
+				unit.setAttack(3);
+				unit.setHealth(10);
+				break;
+		}
+		
+		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, gameState.getBoard().getPlayer1UnitTiles(), unit);
+		
+		//Draw out Unit and it's stats on the browser
+		BasicCommands.drawUnit(out, unit, currentTileClicked);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitAttack(out, unit, unit.getAttack());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, unit , unit.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		
+		//Unhighlight Tiles and Delete Cards
+		gameState.getBoard().unhighlightWhiteTiles(out);
+		deleteCard(out, gameState, gameState.getcardPos());
+	}
+	
+	
 	//play spell cards
 	//////////////without animation///////////////////
 	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
