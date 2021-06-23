@@ -110,42 +110,43 @@ public class GroupsCommands {
 				unit.setHealth(3);
 				break;
 			case "Hailstone Golem":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_hailstone_golem, 3, Unit.class);
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_hailstone_golem, 4, Unit.class);
 				unit.setAttack(4);
 				unit.setHealth(6);
 				break;
 			case "Pureblade Enforcer":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_pureblade_enforcer, 3, Unit.class);
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_pureblade_enforcer, 5, Unit.class);
 				unit.setAttack(1);
 				unit.setHealth(4);
 				break;
 			case "Azure Herald":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 3, Unit.class);
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 6, Unit.class);
 				unit.setAttack(1);
 				unit.setHealth(4);
 				break;
 			case "Silverguard Knight":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 3, Unit.class);
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 7, Unit.class);
 				unit.setAttack(1);
 				unit.setHealth(5);
 				break;
 			case "Azurite Lion":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azurite_lion, 3, Unit.class);
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azurite_lion, 8, Unit.class);
 				unit.setAttack(2);
 				unit.setHealth(3);
 				break;
 			case "Fire Spitter":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 3, Unit.class);
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 9, Unit.class);
 				unit.setAttack(3);
 				unit.setHealth(2);
 				break;
 			case "Ironcliff Guardian":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_ironcliff_guardian, 3, Unit.class);
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_ironcliff_guardian, 10, Unit.class);
 				unit.setAttack(3);
 				unit.setHealth(10);
 				break;
 		}
 		
+		unit.setName(cardName);
 		//Unit cannot move or attack after being summon in the turn
 		unit.setAttacked(true);
 		unit.setMoved(true);
@@ -166,7 +167,9 @@ public class GroupsCommands {
 		deleteCard(out, gameState, gameState.getcardPos());
 	}
 	
-	
+	public static void loadUnitAndSetAttackAndHealth() {
+		
+	}
 	//play spell cards
 	//////////////without animation///////////////////
 	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
@@ -184,9 +187,11 @@ public class GroupsCommands {
 		}
 		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
 			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
+			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
 			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
+			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		//after card played, 
 		//un-hightlight
@@ -316,10 +321,26 @@ public class GroupsCommands {
 
 	}
 		
+	//Only works on player1 (when player2 play a spell, buff player1 unit)
+	//Better to modify it to check "does enemy has PureBlade Enforcer" instead of player1 only
+	//(Can it exceed maximum health??)
+	public static void spellThief(ActorRef out, GameState gameState) {
+		ArrayList<Unit> player1Units = gameState.getBoard().getPlayer1Units(); 
 		
+		for(Unit unit: player1Units) {
+			String name = unit.getName();
+			if(name == null) {continue;} //For now, some units do not have name, so use this line to prevent error first
+			if(name.equals("Pureblade Enforcer")) {
+				unit.setAttack(unit.getAttack() + 1);
+				BasicCommands.setUnitAttack(out, unit, unit.getAttack());
+				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+				unit.setHealth(unit.getHealth() + 1);
+				BasicCommands.setUnitHealth(out, unit, unit.getHealth());
+				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			} 
+		}
+	}
 		
-	
-
 }
 
 

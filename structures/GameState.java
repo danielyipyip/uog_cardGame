@@ -23,7 +23,7 @@ public class GameState {
 	Player player1;
 	Player player2;
 	Board board;
-
+	
 	/*cardSelected = x when card x is clicked
 	 *cardPos = n when card on hand position n is clicked
 	 *if not selecting anyCard, n=-1 */
