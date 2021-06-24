@@ -27,6 +27,7 @@ public class GroupsCommands {
 		BasicCommands.setPlayer2Mana(out, gameState.getPlayer2());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
+	
 
 	//6 steps to move a unit: unit (1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
 	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null
