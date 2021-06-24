@@ -4,10 +4,10 @@ public class Avatar extends Unit{
 	
 //	int attack;
 	
-	public Avatar() {super();}
+	public Avatar() {
+		super();
+		this.attack = 2;
+		this.health = 20;
+		}
 
-//	public int getAttack() {return attack;}
-//
-//	public void setAttack(int attack) {this.attack = attack;}
-	
 }

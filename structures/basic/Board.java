@@ -69,8 +69,6 @@ public class Board {//This Class is used to store all the variables related to u
 	
 	public void addPlayer1Avatar (int x, int y) {
 		Avatar player1Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 1, Avatar.class);
-		player1Avatar.setAttack(2);
-		player1Avatar.setHealth(20);
 		Tile tile = this.getTile(x,y);
 		player1Avatar.setPositionByTile(tile);
 		tile.setUnit(player1Avatar);
@@ -81,8 +79,6 @@ public class Board {//This Class is used to store all the variables related to u
 	
 	public void addPlayer2Avatar (int x, int y) {
 		Avatar player2Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, -1, Avatar.class);
-		player2Avatar.setAttack(2);
-		player2Avatar.setHealth(20);
 		Tile tile = getTile(x,y);
 		player2Avatar.setPositionByTile(tile); 	
 		tile.setUnit(player2Avatar);

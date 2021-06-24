@@ -29,7 +29,8 @@ public class Unit {
 	boolean attacked = false; 
 	boolean moved = false; 
 	int maxHealth;
-
+	//For ability
+	String name;
 	
 	//different constructors
 	public Unit() {}
@@ -102,5 +103,8 @@ public class Unit {
 		position = new Position(tile.getXpos(),tile.getYpos(),tile.getTilex(),tile.getTiley());
 	}
 	
+	//For ability
+	public void setName(String name) {this.name = name;}
+	public String getName() {return name;}
 
 }

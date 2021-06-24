@@ -11,6 +11,8 @@ import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import structures.basic.UnitAnimationType;
+import utils.BasicObjectBuilders;
+import utils.StaticConfFiles;
 
 public class GroupsCommands {
 	static int sleepTime = EventProcessor.sleepTime;
@@ -58,7 +60,7 @@ public class GroupsCommands {
 		gameState.unSelectCard();
 		//(7) set move to false
 		unit.setMoved(true);
-	}
+	} 
 
 	//method that do both front-end display & back-end unit health
 	public static void setUnitHealth(ActorRef out, Unit targetUnit, int health) {
@@ -76,7 +78,7 @@ public class GroupsCommands {
 
 	//draw the hand in display
 	public static void drawHand(ActorRef out, GameState gameState) {
-		int pos=0;
+		int pos=0;	
 		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
 		for (Card i:currHand) {
 			BasicCommands.drawCard(out, i, pos++, 0);
@@ -95,6 +97,80 @@ public class GroupsCommands {
 		}
 	} 
 
+	//play unit cards
+	//For player1 only now
+	public static void playUnitCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
+		
+		Unit unit = null;
+		switch (cardName) {
+			//Player1 Unit Cards
+			//Important: the "id" parameter needs to be modified
+			case "Comodo Charger": 
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, 3, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(3);
+				break;
+			case "Hailstone Golem":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_hailstone_golem, 4, Unit.class);
+				unit.setAttack(4);
+				unit.setHealth(6);
+				break;
+			case "Pureblade Enforcer":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_pureblade_enforcer, 5, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(4);
+				break;
+			case "Azure Herald":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 6, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(4);
+				break;
+			case "Silverguard Knight":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 7, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(5);
+				break;
+			case "Azurite Lion":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azurite_lion, 8, Unit.class);
+				unit.setAttack(2);
+				unit.setHealth(3);
+				break;
+			case "Fire Spitter":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 9, Unit.class);
+				unit.setAttack(3);
+				unit.setHealth(2);
+				break;
+			case "Ironcliff Guardian":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_ironcliff_guardian, 10, Unit.class);
+				unit.setAttack(3);
+				unit.setHealth(10);
+				break;
+		}
+		
+		unit.setName(cardName);
+		//Unit cannot move or attack after being summon in the turn
+		unit.setAttacked(true);
+		unit.setMoved(true);
+		
+		//Add the unit to the relevant array
+		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, gameState.getBoard().getPlayer1UnitTiles(), unit);
+		
+		//Draw out Unit and it's stats on the browser
+		BasicCommands.drawUnit(out, unit, currentTileClicked);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitAttack(out, unit, unit.getAttack());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, unit , unit.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		
+		//Unhighlight Tiles and Delete Cards
+		gameState.getBoard().unhighlightWhiteTiles(out);
+		deleteCard(out, gameState, gameState.getcardPos());
+	}
+	
+	public static void loadUnitAndSetAttackAndHealth() {
+		
+	}
 	//play spell cards
 	//////////////without animation///////////////////
 	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
@@ -112,9 +188,11 @@ public class GroupsCommands {
 		}
 		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
 			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
+			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
 			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
+			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		//after card played, 
 		//un-hightlight
@@ -183,16 +261,15 @@ public class GroupsCommands {
 		
 			for(int i=x;i<= positionX+1;i++) {
 				for(int j=y;j<=positionY+1;j++) {
-					Tile tile = gameState.getBoard().getTile(i, j) ;		
-					if(!(gameState.getBoard().getPlayer1Avatar().equals(tile.getUnit()))){
-						if((player2UnitTiles.contains(tile))){
-							BasicCommands.drawTile(out, tile, 2);
-							try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-							gameState.getBoard().addHightlightRedTiles(tile);}
+					Tile tile = gameState.getBoard().getTile(i, j) ;
+								if((player2UnitTiles.contains(tile))){
+									BasicCommands.drawTile(out, tile, 2);
+										try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+											gameState.getBoard().addHightlightRedTiles(tile);}
 					}
 				}
 			}
-	}
+	
 
 	
 	//adjacent attack, include counter attack condition.
@@ -245,10 +322,26 @@ public class GroupsCommands {
 
 	}
 		
+	//Only works on player1 (when player2 play a spell, buff player1 unit)
+	//Better to modify it to check "does enemy has PureBlade Enforcer" instead of player1 only
+	//(Can it exceed maximum health??)
+	public static void spellThief(ActorRef out, GameState gameState) {
+		ArrayList<Unit> player1Units = gameState.getBoard().getPlayer1Units(); 
 		
+		for(Unit unit: player1Units) {
+			String name = unit.getName();
+			if(name == null) {continue;} //For now, some units do not have name, so use this line to prevent error first
+			if(name.equals("Pureblade Enforcer")) {
+				unit.setAttack(unit.getAttack() + 1);
+				BasicCommands.setUnitAttack(out, unit, unit.getAttack());
+				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+				unit.setHealth(unit.getHealth() + 1);
+				BasicCommands.setUnitHealth(out, unit, unit.getHealth());
+				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			} 
+		}
+	}
 		
-	
-
 }
 
 
