@@ -123,6 +123,8 @@ public class GroupsCommands {
 				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 6, Unit.class);
 				unit.setAttack(1);
 				unit.setHealth(4);
+				//seems not a good way to do it here, should be modified later
+				azureHeraldPassive(out, gameState);
 				break;
 			case "Silverguard Knight":
 				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 7, Unit.class);
@@ -167,9 +169,7 @@ public class GroupsCommands {
 		deleteCard(out, gameState, gameState.getcardPos());
 	}
 	
-	public static void loadUnitAndSetAttackAndHealth() {
-		
-	}
+	
 	//play spell cards
 	//////////////without animation///////////////////
 	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
@@ -339,6 +339,22 @@ public class GroupsCommands {
 				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			} 
 		}
+	}
+	
+	public static void azureHeraldPassive(ActorRef out, GameState gameState) {
+		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
+		int value = 0;
+		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
+			value = player1Avatar.getMaxHealth();
+		} else {
+			value = player1Avatar.getHealth() + 3;
+		}
+		player1Avatar.setHealth(value);
+		gameState.getPlayer1().setHealth(value);
+		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, player1Avatar, player1Avatar.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 		
 }
