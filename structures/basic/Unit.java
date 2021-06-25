@@ -3,6 +3,8 @@ package structures.basic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import commands.BasicCommands;
+
 /**
  * This is a representation of a Unit on the game board.
  * A unit has a unique id (this is used by the front-end.
@@ -19,7 +21,8 @@ public class Unit {
 	@JsonIgnore
 	protected static ObjectMapper mapper = new ObjectMapper(); // Jackson Java Object Serializer, is used to read java objects from a file
 	
-	int id;
+	static int id=1;
+	static int id2=-1;
 	UnitAnimationType animation;
 	Position position;
 	UnitAnimationSet animations;
@@ -82,8 +85,6 @@ public class Unit {
 	public void setHealth(int health) {
 		if (health<0) {this.health = 0;} else {this.health = health;}
 	}
-	
-
 
 	public boolean isAttacked() {return attacked;}
 	public void setAttacked(boolean attacked) {this.attacked = attacked;}
@@ -93,6 +94,20 @@ public class Unit {
 	public int getMaxHealth() {return maxHealth;}
 	public void setMaxHealth(int maxHealth) {this.maxHealth = maxHealth;}
 
+	//get a new unit id for object builder
+	public static int newid(int n){if (n==1)return id++; else return id2--;}
+	
+	//set up initial parameter for a card
+	//parameter: (1)attack (2)health (3)maxHealth (4)cardName
+	//(5)Attacked=true (6)moved=True (so cannot move/attack the turn summoned)
+	public void setup(Card card) {
+		this.setAttack(card.getBigCard().getAttack());
+		this.setHealth(card.getBigCard().getHealth());
+		this.setMaxHealth(this.health);
+		this.setName(card.getCardname());
+		this.setAttacked(true);
+		this.setMoved(true);
+	}
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.

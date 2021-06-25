@@ -17,6 +17,7 @@ import utils.StaticConfFiles;
 public class GroupsCommands {
 	static int sleepTime = EventProcessor.sleepTime;
 
+	//group together displaying player 1 & 2: health & mana
 	public static void setUpPlayerHealthMana(ActorRef out, GameState gameState) {
 		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -99,58 +100,14 @@ public class GroupsCommands {
 
 	//play unit cards
 	//For player1 only now
-	public static void playUnitCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
-		
+	public static void playUnitCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
+		String[] nameWord = card.getCardname().split(" ");
+		String unitConfigName = "StaticConfFiles.u_"+nameWord[0]+"_"+nameWord[1];
 		Unit unit = null;
-		switch (cardName) {
-			//Player1 Unit Cards
-			//Important: the "id" parameter needs to be modified
-			case "Comodo Charger": 
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, 3, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(3);
-				break;
-			case "Hailstone Golem":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_hailstone_golem, 4, Unit.class);
-				unit.setAttack(4);
-				unit.setHealth(6);
-				break;
-			case "Pureblade Enforcer":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_pureblade_enforcer, 5, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(4);
-				break;
-			case "Azure Herald":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 6, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(4);
-				break;
-			case "Silverguard Knight":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 7, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(5);
-				break;
-			case "Azurite Lion":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azurite_lion, 8, Unit.class);
-				unit.setAttack(2);
-				unit.setHealth(3);
-				break;
-			case "Fire Spitter":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 9, Unit.class);
-				unit.setAttack(3);
-				unit.setHealth(2);
-				break;
-			case "Ironcliff Guardian":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_ironcliff_guardian, 10, Unit.class);
-				unit.setAttack(3);
-				unit.setHealth(10);
-				break;
-		}
-		
-		unit.setName(cardName);
-		//Unit cannot move or attack after being summon in the turn
-		unit.setAttacked(true);
-		unit.setMoved(true);
+		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {int n=1;}
+		else {int n=2;}
+		unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, Unit.newid(n), Unit.class);
+		unit.setup(card); //do anything needed to init a unit
 		
 		//Add the unit to the relevant array
 		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, gameState.getBoard().getPlayer1UnitTiles(), unit);
@@ -168,9 +125,9 @@ public class GroupsCommands {
 		deleteCard(out, gameState, gameState.getcardPos());
 	}
 	
-	public static void loadUnitAndSetAttackAndHealth() {
-		
-	}
+//	public static void loadUnitAndSetAttackAndHealth() {
+//		
+//	}
 	//play spell cards
 	//////////////without animation///////////////////
 	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
@@ -179,19 +136,27 @@ public class GroupsCommands {
 		//play the card: separated by which card is played
 		if(cardName.equals("Truestrike")) {//deal 2 damage to a unit
 			GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getHealth()-2);
+			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		if(cardName.equals("Sundrop Elixir")) { //heal a unit by 5
 			int newHealth = targetUnit.getHealth()+5;
 			if (newHealth>targetUnit.getMaxHealth()) { //if >max, set to max
 				GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getMaxHealth());
 			}else {GroupsCommands.setUnitHealth(out, targetUnit, newHealth);} //if NOT > max, set to health+5
+			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_buff) , currentTileClicked);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
 			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
+			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
 			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
+			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_martyrdom) , currentTileClicked);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		//after card played, 
