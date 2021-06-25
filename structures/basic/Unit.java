@@ -32,6 +32,8 @@ public class Unit {
 	boolean attacked = false; 
 	boolean moved = false; 
 	int maxHealth;
+	static int player1index = 1;
+	static int player2index = -1;
 	//For ability
 	String name;
 	

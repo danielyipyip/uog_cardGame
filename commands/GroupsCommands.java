@@ -104,10 +104,64 @@ public class GroupsCommands {
 		String[] nameWord = card.getCardname().split(" ");
 		String unitConfigName = "StaticConfFiles.u_"+nameWord[0]+"_"+nameWord[1];
 		Unit unit = null;
+<<<<<<< HEAD
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {int n=1;}
 		else {int n=2;}
 		unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, Unit.newid(n), Unit.class);
 		unit.setup(card); //do anything needed to init a unit
+=======
+		switch (cardName) {
+			//Player1 Unit Cards
+			//Important: the "id" parameter needs to be modified
+			case "Comodo Charger": 
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, 3, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(3);
+				break;
+			case "Hailstone Golem":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_hailstone_golem, 4, Unit.class);
+				unit.setAttack(4);
+				unit.setHealth(6);
+				break;
+			case "Pureblade Enforcer":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_pureblade_enforcer, 5, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(4);
+				break;
+			case "Azure Herald":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 6, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(4);
+				//seems not a good way to do it here, should be modified later
+				azureHeraldPassive(out, gameState);
+				break;
+			case "Silverguard Knight":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 7, Unit.class);
+				unit.setAttack(1);
+				unit.setHealth(5);
+				break;
+			case "Azurite Lion":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azurite_lion, 8, Unit.class);
+				unit.setAttack(2);
+				unit.setHealth(3);
+				break;
+			case "Fire Spitter":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 9, Unit.class);
+				unit.setAttack(3);
+				unit.setHealth(2);
+				break;
+			case "Ironcliff Guardian":
+				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_ironcliff_guardian, 10, Unit.class);
+				unit.setAttack(3);
+				unit.setHealth(10);
+				break;
+		}
+		
+		unit.setName(cardName);
+		//Unit cannot move or attack after being summon in the turn
+		unit.setAttacked(true);
+		unit.setMoved(true);
+>>>>>>> a6cd28277d7dbd49cb97bd1ba1cbe424c428decd
 		
 		//Add the unit to the relevant array
 		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, gameState.getBoard().getPlayer1UnitTiles(), unit);
@@ -125,9 +179,13 @@ public class GroupsCommands {
 		deleteCard(out, gameState, gameState.getcardPos());
 	}
 	
+<<<<<<< HEAD
 //	public static void loadUnitAndSetAttackAndHealth() {
 //		
 //	}
+=======
+	
+>>>>>>> a6cd28277d7dbd49cb97bd1ba1cbe424c428decd
 	//play spell cards
 	//////////////without animation///////////////////
 	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
@@ -305,6 +363,22 @@ public class GroupsCommands {
 				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			} 
 		}
+	}
+	
+	public static void azureHeraldPassive(ActorRef out, GameState gameState) {
+		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
+		int value = 0;
+		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
+			value = player1Avatar.getMaxHealth();
+		} else {
+			value = player1Avatar.getHealth() + 3;
+		}
+		player1Avatar.setHealth(value);
+		gameState.getPlayer1().setHealth(value);
+		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, player1Avatar, player1Avatar.getHealth());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 		
 }
