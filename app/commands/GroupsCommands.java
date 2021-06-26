@@ -15,44 +15,38 @@ import utils.BasicObjectBuilders;
 import utils.StaticConfFiles;
 
 public class GroupsCommands {
-	static int sleepTime = EventProcessor.sleepTime;
-
-	//group together displaying player 1 & 2: health & mana
-	public static void setUpPlayerHealthMana(ActorRef out, GameState gameState) {
-		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setPlayer1Mana(out, gameState.getPlayer1());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setPlayer2Mana(out, gameState.getPlayer2());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-	}
-	
+	static int sleepTime = EventProcessor.sleepTime;	
+	static int middleSleepTime = EventProcessor.middleSleepTime;	
+	static int shortSleepTime = EventProcessor.shortSleepTime;
 
 	//6 steps to move a unit: unit (1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
 	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null
 	public static void moveUnit(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+		int player;
+		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
+		else {player=2;}
 		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
 		Tile previousTile = gameState.getTileClicked();
 		previousTile.setUnit(null);
 		targetTile.setUnit(unit);
 		//(2) change player1/2UnitTiles & unitOccupiedTiles
-		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
-			gameState.getBoard().getPlayer1UnitTiles().remove(previousTile);
-			gameState.getBoard().getPlayer1UnitTiles().add(targetTile);
-		}else {
-			gameState.getBoard().getPlayer2UnitTiles().remove(previousTile);
-			gameState.getBoard().getPlayer2UnitTiles().add(targetTile);
-		}
-		gameState.getBoard().getUnitOccupiedTiles().remove(previousTile);
-		gameState.getBoard().getUnitOccupiedTiles().add(targetTile);
+		gameState.getBoard().removeUnit(previousTile);
+		gameState.getBoard().addUnit(targetTile, player);
+		//prev implementation, may remove
+//		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+//			gameState.getBoard().getPlayer1UnitTiles().remove(previousTile);
+//			gameState.getBoard().getPlayer1UnitTiles().add(targetTile);
+//		}else {gameState.getBoard().getPlayer2UnitTiles().remove(previousTile);
+//			gameState.getBoard().getPlayer2UnitTiles().add(targetTile);
+//		}
+//		gameState.getBoard().getUnitOccupiedTiles().remove(previousTile);
+//		gameState.getBoard().getUnitOccupiedTiles().add(targetTile);
 		//(3) un-hightlight tiles
 		gameState.getBoard().unhighlightWhiteTiles(out);
 		gameState.getBoard().unhighlightRedTiles(out);
 		//(4) move animation
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.move);
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		//(5) moveUnitToTile
 		BasicCommands.moveUnitToTile(out, unit, targetTile);
 		unit.setPositionByTile(targetTile); 
@@ -67,14 +61,14 @@ public class GroupsCommands {
 	public static void setUnitHealth(ActorRef out, Unit targetUnit, int health) {
 		targetUnit.setHealth(health);
 		BasicCommands.setUnitHealth(out, targetUnit, health);
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
 	//method that do both front-end display & back-end unit attack
 	public static void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
 		targetUnit.setHealth(attack);
 		BasicCommands.setUnitAttack(out, targetUnit, attack);
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
 	//draw the hand in display
@@ -83,7 +77,7 @@ public class GroupsCommands {
 		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
 		for (Card i:currHand) {
 			BasicCommands.drawCard(out, i, pos++, 0);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 	}
 
@@ -99,93 +93,32 @@ public class GroupsCommands {
 	} 
 
 	//play unit cards
-	//For player1 only now
 	public static void playUnitCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
+		int n;
 		String[] nameWord = card.getCardname().split(" ");
 		String unitConfigName = "StaticConfFiles.u_"+nameWord[0]+"_"+nameWord[1];
 		Unit unit = null;
-<<<<<<< HEAD
-		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {int n=1;}
-		else {int n=2;}
+		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
+		else {n=2;}
 		unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, Unit.newid(n), Unit.class);
 		unit.setup(card); //do anything needed to init a unit
-=======
-		switch (cardName) {
-			//Player1 Unit Cards
-			//Important: the "id" parameter needs to be modified
-			case "Comodo Charger": 
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, 3, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(3);
-				break;
-			case "Hailstone Golem":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_hailstone_golem, 4, Unit.class);
-				unit.setAttack(4);
-				unit.setHealth(6);
-				break;
-			case "Pureblade Enforcer":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_pureblade_enforcer, 5, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(4);
-				break;
-			case "Azure Herald":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azure_herald, 6, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(4);
-				//seems not a good way to do it here, should be modified later
-				azureHeraldPassive(out, gameState);
-				break;
-			case "Silverguard Knight":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_silverguard_knight, 7, Unit.class);
-				unit.setAttack(1);
-				unit.setHealth(5);
-				break;
-			case "Azurite Lion":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_azurite_lion, 8, Unit.class);
-				unit.setAttack(2);
-				unit.setHealth(3);
-				break;
-			case "Fire Spitter":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 9, Unit.class);
-				unit.setAttack(3);
-				unit.setHealth(2);
-				break;
-			case "Ironcliff Guardian":
-				unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_ironcliff_guardian, 10, Unit.class);
-				unit.setAttack(3);
-				unit.setHealth(10);
-				break;
-		}
-		
-		unit.setName(cardName);
-		//Unit cannot move or attack after being summon in the turn
-		unit.setAttacked(true);
-		unit.setMoved(true);
->>>>>>> a6cd28277d7dbd49cb97bd1ba1cbe424c428decd
-		
+
 		//Add the unit to the relevant array
 		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, gameState.getBoard().getPlayer1UnitTiles(), unit);
 		
 		//Draw out Unit and it's stats on the browser
 		BasicCommands.drawUnit(out, unit, currentTileClicked);
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitAttack(out, unit, unit.getAttack());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitHealth(out, unit , unit.getHealth());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		//Unhighlight Tiles and Delete Cards
 		gameState.getBoard().unhighlightWhiteTiles(out);
 		deleteCard(out, gameState, gameState.getcardPos());
 	}
 	
-<<<<<<< HEAD
-//	public static void loadUnitAndSetAttackAndHealth() {
-//		
-//	}
-=======
-	
->>>>>>> a6cd28277d7dbd49cb97bd1ba1cbe424c428decd
 	//play spell cards
 	//////////////without animation///////////////////
 	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
@@ -195,7 +128,7 @@ public class GroupsCommands {
 		if(cardName.equals("Truestrike")) {//deal 2 damage to a unit
 			GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getHealth()-2);
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		if(cardName.equals("Sundrop Elixir")) { //heal a unit by 5
 			int newHealth = targetUnit.getHealth()+5;
@@ -203,25 +136,23 @@ public class GroupsCommands {
 				GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getMaxHealth());
 			}else {GroupsCommands.setUnitHealth(out, targetUnit, newHealth);} //if NOT > max, set to health+5
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_buff) , currentTileClicked);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
 			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
 			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_martyrdom) , currentTileClicked);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		//after card played, 
 		//un-hightlight
 		gameState.getBoard().unhighlightRedTiles(out);
-		//animation??
-
 		//remove the card from hand (& update display)
 		deleteCard(out, gameState, gameState.getcardPos());
 	}
@@ -267,18 +198,13 @@ public class GroupsCommands {
 		}
 	}
 
-
 	//Below is the method to highlight the tiles in red for attack
-
 	public static void highlightAttackTile (ActorRef out,GameState gameState ,Unit unit) {
-
 		int positionX = unit.getPosition().getTilex();
 		int positionY = unit.getPosition().getTiley();
-
 		//Highlighted the tiles surrounding the avatar first.
 		int x = positionX-1;
 		int y = positionY-1;
-
 		//Get the opponent unit list
 		ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
 		
@@ -292,8 +218,6 @@ public class GroupsCommands {
 					}
 				}
 			}
-	
-
 	
 	//adjacent attack, include counter attack condition.
 	public static void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {

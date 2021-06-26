@@ -36,9 +36,19 @@ public class Initalize implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
-		GroupsCommands.setUpPlayerHealthMana(out, gameState);
-		displayTiles(out,gameState.getBoard());
-		GroupsCommands.drawHand(out, gameState); //only for player 1
+		
+		//set up player 1 & 2 initial health and mana
+		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setPlayer1Mana(out, gameState.getPlayer1());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setPlayer2Mana(out, gameState.getPlayer2());
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		
+		displayTiles(out,gameState.getBoard()); //draw the board
+		GroupsCommands.drawHand(out, gameState); //draw the hand only for player 1
 		displayPlayer1Avatar(out,gameState);
 		displayPlayer2Avatar(out,gameState);
 
@@ -72,27 +82,20 @@ public class Initalize implements EventProcessor{
 
 		//================================Testing purpose end===================================================//	
 
-	//helper methods	
-	public void displayTiles(ActorRef out, Board board) {//Method to display Tiles
-		
-		int x = board.getX();
-		int y = board.getY();
-		
-		for(int i=0; i<x; i++) {
-			
-			for(int j=0; j<y;j++) 
-				{
-				Tile tile = board.getTile(i, j);
-				BasicCommands.drawTile(out, tile, 0);
-				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-				}			
+//helper methods	
+	
+	//Method to draw all Tiles
+	//max x, y is stored in board class
+	public void displayTiles(ActorRef out, Board board) {
+		for(int i=0; i<board.getX(); i++){ 
+			for(int j=0; j<board.getY();j++){
+				BasicCommands.drawTile(out, board.getTile(i, j), 0);
+				try{Thread.sleep(drawTileSleepTime);}catch(InterruptedException e){e.printStackTrace();}
+			}	
 		}
 	}
 	
-	//drawHand means drawing out the hand
-
-	
-	
+	/////////////////////seeems likely need refactor////////////////////////////
 	public void displayPlayer1Avatar(ActorRef out, GameState gameState) {
 		int player1XPosition = gameState.getBoard().getPlayer1Avatar().getPosition().getTilex();
 		int player1YPosition = gameState.getBoard().getPlayer1Avatar().getPosition().getTiley();

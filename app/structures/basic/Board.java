@@ -2,6 +2,7 @@ package structures.basic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
@@ -33,13 +34,6 @@ public class Board {//This Class is used to store all the variables related to u
 	//constructor
 	public Board() { 
 		tileMap = new HashMap<String,Tile>();
-//		player1UnitTiles = new ArrayList<Tile>();
-//		player2UnitTiles = new ArrayList<Tile>();
-//		player1Units = new ArrayList<Unit>();
-//		player2Units = new ArrayList<Unit>();
-//		unitOccupiedTiles = new ArrayList<Tile>();
-//		highlightedRedTiles = new ArrayList<Tile>();
-//		highlightedWhiteTiles = new ArrayList<Tile>();
 		addTiles(this.x,this.y);  //Create a board with tiles x:9* y:5;
 		//construct player's avatar when board is created
 		addPlayer1Avatar(1,2); //Construct player1
@@ -112,29 +106,63 @@ public class Board {//This Class is used to store all the variables related to u
 	 * Tile will be the tile the unit is going to occupy.
 	 * Then add the tile to the array and the occupied array.
 	 * Check that the first tile of playerTileArray contains and add the unit to the corresponding player.
-	 *  
 	 */
-
-	public void addTileAndAvatarToPlayerArray (Tile tile, ArrayList<Tile> playerTileArray,Unit unit) {
-		
+	public void addTileAndAvatarToPlayerArray (Tile tile, List<Tile> playerTileArray,Unit unit) {
 			 Unit playerAvatar = playerTileArray.get(0).getUnit();
 			 unit.setPositionByTile(tile);
 			 tile.setUnit(unit);
 			 playerTileArray.add(tile);
 			 unitOccupiedTiles.add(tile);
-			 if(player1Units.contains(playerAvatar)) {
-				 player1Units.add(unit);		 
-			 }else {
-				 player2Units.add(unit);
-			 }
-
+			 if(player1Units.contains(playerAvatar)) {player1Units.add(unit);}
+			 else {player2Units.add(unit);}
 	}
 	
+
 	
+	//things to remove when a unit died: (1)PlayerNUnit (2)playerNUnitTile 
+	//(3)unitOccupiedTiles (4) unit from the title
+	public void removeUnit(Unit unit) {
+		removeUnit(unit2Tile(unit)); //just use the other implementation
+	}
 	
+	//the remove method will only remove if that object is present; 
+	//player 1 & 2 units have different id, so it wont affect the others
+	//for tile side since 1 tile 1 unit, so it wont matter too
+	public void removeUnit(Tile tile) {
+		Unit unit = tile.getUnit();
+		player1Units.remove(unit); //(1)
+		player2Units.remove(unit); //(1)
+		player1UnitTiles.remove(tile);//(2)
+		player2UnitTiles.remove(tile);//(2)
+		unitOccupiedTiles.remove(tile); //(3)
+		tile.setUnit(null); //(4)
+	}
 	
+	//method to add a unit to a tile: things to do similar to above remove unit 
+	public void addUnit(Unit unit, int player) {
+		addUnit(unit, player);
+	}
+	public void addUnit(Tile tile, int player) {
+		Unit unit = tile.getUnit();
+		if (player==1) {
+			player1Units.add(unit);//(1)
+			player1UnitTiles.add(tile);//(2)
+		}else {
+			player2Units.add(unit);//(1)
+			player2UnitTiles.add(tile);//(2)
+		}
+		//both players
+		unitOccupiedTiles.add(tile); //(3)
+		tile.setUnit(unit);
+	}
 	
-	
+	//return the tile unit is on
+	public Tile unit2Tile(Unit unit) {
+		int x=unit.getPosition().getTilex();
+		int y=unit.getPosition().getTiley();
+		Tile tile = this.getTile(x, y);
+		return tile;
+	}
 	
 	
 	public void addHightlightWhiteTiles(Tile tile) {highlightedWhiteTiles.add(tile);}

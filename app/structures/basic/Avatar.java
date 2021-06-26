@@ -8,6 +8,7 @@ public class Avatar extends Unit{
 		super();
 		this.attack = 2;
 		this.health = 20;
+		this.maxHealth = 20;
 		}
 
 }

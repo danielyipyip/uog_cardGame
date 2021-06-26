@@ -26,5 +26,8 @@ public interface EventProcessor {
 	
 	//newly added: the amount of thread.sleep(time) after each command
 	int sleepTime=50;
+	int shortSleepTime=20;
+	int middleSleepTime=30;
+	int drawTileSleepTime=10; //for drawtile
 	
 }

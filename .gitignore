@@ -1,5 +1,22 @@
 #ignor the files inside assets
-/assets
+/app/assets
+/app/.metadata
 /.metadata
-/.project
-tesing.java
+/.settings
+/_
+/bin
+/conf
+/logs
+/null
+/project
+/public
+/sbt-dist
+/scripts
+/target
+.classpath
+.project
+LICENSE
+NOTICE
+README.md
+sbt
+sbt.bat
