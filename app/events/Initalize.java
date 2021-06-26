@@ -55,7 +55,7 @@ public class Initalize implements EventProcessor{
 		//==========================Below units is just for testing purpose===================================================//
 		//delete later
 		//Player 1 Unit
-		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 2, Unit.class);
+		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 99, Unit.class);
 		Tile tile = gameState.getBoard().getTile(3, 3);
 		fire_spitter.setHealth(10);
 		fire_spitter.setAttack(2);
@@ -68,7 +68,7 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 
 		//Player2 Unit
-		Unit fire_spitter1 = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, -2, Unit.class);
+		Unit fire_spitter1 = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, -99, Unit.class);
 		Tile tile1 = gameState.getBoard().getTile(4, 2);
 		fire_spitter1.setHealth(10);
 		fire_spitter1.setAttack(2);
