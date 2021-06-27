@@ -49,17 +49,19 @@ public class Initalize implements EventProcessor{
 		
 		displayTiles(out,gameState.getBoard()); //draw the board
 		GroupsCommands.drawHand(out, gameState); //draw the hand only for player 1
-		displayPlayer1Avatar(out,gameState);
-		displayPlayer2Avatar(out,gameState);
+		gameState.getBoard().addPlayer1Avatar(1,2,gameState); //Construct player1
+		displayPlayerAvatar(out,gameState,gameState.getBoard().getPlayer1Avatar()); //display player 1
+		gameState.getBoard().addPlayer2Avatar(7,2,gameState); //Construct player2
+		displayPlayerAvatar(out,gameState,gameState.getBoard().getPlayer2Avatar());//display player2
 
 		//==========================Below units is just for testing purpose===================================================//
 		//delete later
 		//Player 1 Unit
 		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 99, Unit.class);
-		Tile tile = gameState.getBoard().getTile(3, 3);
+		Tile tile = gameState.getBoard().getTile(0, 0);
 		fire_spitter.setHealth(10);
 		fire_spitter.setAttack(2);
-		gameState.getBoard().addTileAndAvatarToPlayerArray(tile, gameState.getBoard().getPlayer1UnitTiles(), fire_spitter);
+		gameState.getBoard().addTileAndAvatarToPlayerArray(tile, fire_spitter, gameState);
 		BasicCommands.drawUnit(out, fire_spitter, tile);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitAttack(out, fire_spitter, 2);
@@ -72,7 +74,12 @@ public class Initalize implements EventProcessor{
 		Tile tile1 = gameState.getBoard().getTile(4, 2);
 		fire_spitter1.setHealth(10);
 		fire_spitter1.setAttack(2);
-		gameState.getBoard().addTileAndAvatarToPlayerArray(tile1, gameState.getBoard().getPlayer2UnitTiles(), fire_spitter1);
+		fire_spitter1.setPositionByTile(tile1);
+		tile1.setUnit(fire_spitter1);
+		gameState.getBoard().getUnitOccupiedTiles().add(tile1);	
+		gameState.getBoard().getPlayer2Units().add(fire_spitter1);
+		gameState.getBoard().getPlayer2UnitTiles().add(tile1);
+	
 		BasicCommands.drawUnit(out, fire_spitter1, tile1);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitAttack(out, fire_spitter1, 2);
@@ -96,7 +103,8 @@ public class Initalize implements EventProcessor{
 	}
 	
 	/////////////////////seeems likely need refactor////////////////////////////
-	public void displayPlayer1Avatar(ActorRef out, GameState gameState) {
+	//---Combine two methods into one-----//
+	/*public void displayPlayer1Avatar(ActorRef out, GameState gameState) {
 		int player1XPosition = gameState.getBoard().getPlayer1Avatar().getPosition().getTilex();
 		int player1YPosition = gameState.getBoard().getPlayer1Avatar().getPosition().getTiley();
 		Unit player1Avatar = gameState.getBoard().getPlayer1Avatar();
@@ -124,7 +132,25 @@ public class Initalize implements EventProcessor{
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.setUnitHealth(out, player2Avatar, health);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		}*/
+		
+		public void displayPlayerAvatar(ActorRef out, GameState gameState, Avatar avatar) {
+			int x  = avatar.getPosition().getTilex();
+			int y = avatar.getPosition().getTiley();
+			int health = avatar.getHealth();
+			int attack = avatar.getAttack();
+			Tile avatarTile = gameState.getBoard().getTile(x, y);
+			BasicCommands.drawUnit(out,avatar,avatarTile);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			BasicCommands.setUnitAttack(out, avatar, attack);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			BasicCommands.setUnitHealth(out, avatar, health);
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
-}
+			
+			
+		}
+		
+
 
 

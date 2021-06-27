@@ -2,6 +2,7 @@ package events;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -56,8 +57,8 @@ public class CardClicked implements EventProcessor{
 		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
 		ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
 		ArrayList<Tile> occupiedTiles = gameState.getBoard().getUnitOccupiedTiles();
-		ArrayList<Tile> highlightedWhiteTile = gameState.getBoard().getHighlightedWhiteTiles();
-		ArrayList<Tile> highlightedRedTile = gameState.getBoard().getHighlightedRedTiles();
+		HashSet<Tile> highlightedWhiteTile = gameState.getBoard().getHighlightedWhiteTiles();
+		HashSet<Tile> highlightedRedTile = gameState.getBoard().getHighlightedRedTiles();
 		Tile tile;
 
 		/*For unit card, the tiles surrounding ally units will be highlighted

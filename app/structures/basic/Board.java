@@ -2,6 +2,7 @@ package structures.basic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import akka.actor.ActorRef;
@@ -28,16 +29,14 @@ public class Board {//This Class is used to store all the variables related to u
 	private ArrayList<Tile> unitOccupiedTiles = new ArrayList<>();// to store the Tiles occupied by all Units on board.
 	
 	//hightlight: act as valid tiles
-	private ArrayList<Tile> highlightedRedTiles = new ArrayList<>();// to store the tiles for valid attack and spell tiles.
-	private ArrayList<Tile> highlightedWhiteTiles = new ArrayList<>();//to store the tiles for valid move and summon tiles.
+	private HashSet<Tile> highlightedRedTiles = new HashSet<>();// to store the tiles for valid attack and spell tiles.
+	private HashSet<Tile> highlightedWhiteTiles = new HashSet<>();//to store the tiles for valid move and summon tiles.
 
 	//constructor
 	public Board() { 
 		tileMap = new HashMap<String,Tile>();
 		addTiles(this.x,this.y);  //Create a board with tiles x:9* y:5;
 		//construct player's avatar when board is created
-		addPlayer1Avatar(1,2); //Construct player1
-		addPlayer2Avatar(7,2); //Construct player2
 	}
 
 	public void addTiles (int x, int y) { //Store the tiles in HashMap, key is the string of xy..e.g. x:2 y:2 key = 22
@@ -61,7 +60,7 @@ public class Board {//This Class is used to store all the variables related to u
 	 * Add the unit to player1Units 
 	 */
 	
-	public void addPlayer1Avatar (int x, int y) {
+	public void addPlayer1Avatar (int x, int y,GameState gameState) {
 		Avatar player1Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 1, Avatar.class);
 		Tile tile = this.getTile(x,y);
 		player1Avatar.setPositionByTile(tile);
@@ -69,9 +68,10 @@ public class Board {//This Class is used to store all the variables related to u
 		player1UnitTiles.add(tile);
 		unitOccupiedTiles.add(tile);
 		player1Units.add(player1Avatar);
+		player1Avatar.setPlayer(gameState.getPlayer1());
 	}
 	
-	public void addPlayer2Avatar (int x, int y) {
+	public void addPlayer2Avatar (int x, int y,GameState gameState) {
 		Avatar player2Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, -1, Avatar.class);
 		Tile tile = getTile(x,y);
 		player2Avatar.setPositionByTile(tile); 	
@@ -79,6 +79,7 @@ public class Board {//This Class is used to store all the variables related to u
 		player2UnitTiles.add(tile);
 		unitOccupiedTiles.add(tile);
 		player2Units.add(player2Avatar);
+		player2Avatar.setPlayer(gameState.getPlayer2());
 	}
 
 	//Method to unhighlight tiles in Red Color
@@ -107,14 +108,17 @@ public class Board {//This Class is used to store all the variables related to u
 	 * Then add the tile to the array and the occupied array.
 	 * Check that the first tile of playerTileArray contains and add the unit to the corresponding player.
 	 */
-	public void addTileAndAvatarToPlayerArray (Tile tile, List<Tile> playerTileArray,Unit unit) {
-			 Unit playerAvatar = playerTileArray.get(0).getUnit();
-			 unit.setPositionByTile(tile);
-			 tile.setUnit(unit);
-			 playerTileArray.add(tile);
-			 unitOccupiedTiles.add(tile);
-			 if(player1Units.contains(playerAvatar)) {player1Units.add(unit);}
-			 else {player2Units.add(unit);}
+	public void addTileAndAvatarToPlayerArray (Tile tile,Unit unit,GameState gameState) {
+			
+		unit.setPositionByTile(tile);
+		tile.setUnit(unit);
+		unitOccupiedTiles.add(tile);	
+			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+				player1UnitTiles.add(tile);
+				player1Units.add(unit);
+			}
+			 else {player2Units.add(unit);
+			 	  player2UnitTiles.add(tile);}
 	}
 	
 
@@ -139,9 +143,10 @@ public class Board {//This Class is used to store all the variables related to u
 	}
 	
 	//method to add a unit to a tile: things to do similar to above remove unit 
-	public void addUnit(Unit unit, int player) {
-		addUnit(unit, player);
-	}
+	//public void addUnit(Unit unit, int player) {
+		//addUnit(unit, player);
+	//}
+	
 	public void addUnit(Tile tile, int player) {
 		Unit unit = tile.getUnit();
 		if (player==1) {
@@ -154,6 +159,7 @@ public class Board {//This Class is used to store all the variables related to u
 		//both players
 		unitOccupiedTiles.add(tile); //(3)
 		tile.setUnit(unit);
+		unit.setPositionByTile(tile);
 	}
 	
 	//return the tile unit is on
@@ -178,10 +184,30 @@ public class Board {//This Class is used to store all the variables related to u
 	public ArrayList<Unit> getPlayer1Units() {return player1Units;}
 	public ArrayList<Unit> getPlayer2Units() {return player2Units;}
 	public ArrayList<Tile> getUnitOccupiedTiles() {return unitOccupiedTiles;}
-	public ArrayList<Tile> getHighlightedRedTiles() {return highlightedRedTiles;}
-	public ArrayList<Tile> getHighlightedWhiteTiles() {return highlightedWhiteTiles;}
-	public Unit getPlayer1Avatar() {return player1Units.get(0);}	
-	public Unit getPlayer2Avatar() {return player2Units.get(0);}	
+	public HashSet<Tile> getHighlightedRedTiles() {return highlightedRedTiles;}
+	public HashSet<Tile> getHighlightedWhiteTiles() {return highlightedWhiteTiles;}
+	public Avatar getPlayer1Avatar() {
+		for(Unit i: player1Units) {
+			if(i.getId()==1) {
+				
+				if(i instanceof Avatar) {
+					Avatar avatar = (Avatar) i;
+					return avatar;
+				}
+			}	
+		}return null;
+	}	
+	
+	public Avatar getPlayer2Avatar() {
+		for(Unit i: player2Units) {
+			if(i.getId()==-1) {
+			
+				if(i instanceof Avatar) {
+					Avatar avatar = (Avatar) i;
+					return avatar;
+				}
+			}	
+	}return null;}	
 	
 }		
 
