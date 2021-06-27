@@ -121,7 +121,7 @@ public class TileClicked implements EventProcessor{
 		/*Scenario 2&3 : if the player is clicking on a redTile and the not yet moved before, 
 		 * the unit will move and attack.
 		 */
-		
+		if(!(gameState.getUnitClicked()==null)) {
 		if(gameState.getUnitClicked().isMoved()==false&&gameState.getUnitClicked().isAttacked()==false) {		
 			if(checkTile(currentTileClicked, gameState.getBoard().getHighlightedRedTiles())){
 				
@@ -165,7 +165,7 @@ public class TileClicked implements EventProcessor{
 			GroupsCommands.attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}	
 		}
-
+		}
 		//Setting the gameState's TileClicked with the current tile clicked at the end.
 		gameState.setTileClicked(currentTileClicked);
 	}
