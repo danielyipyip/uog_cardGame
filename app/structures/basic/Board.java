@@ -171,8 +171,8 @@ public class Board {//This Class is used to store all the variables related to u
 	}
 	
 	
-	public void addHightlightWhiteTiles(Tile tile) {highlightedWhiteTiles.add(tile);}
-	public void addHightlightRedTiles(Tile tile) {highlightedRedTiles.add(tile);}
+	public void addHighlightWhiteTiles(Tile tile) {highlightedWhiteTiles.add(tile);}
+	public void addHighlightRedTiles(Tile tile) {highlightedRedTiles.add(tile);}
 	
 	
 	//Getter and setter method for Board Class;
