@@ -240,7 +240,7 @@ public class GroupsCommands {
 				displayWhiteTile (out,gameState.getBoard().getHighlightedWhiteTiles());
 			}
 }
-	//Below is the method to highlight the tiles in red for attack
+	//Below is the method to highlight the adjacent tiles in red for attack
 	public static void highlightAttackTile (ActorRef out,GameState gameState ,Tile tileClicked) {
 			
 			int positionX = tileClicked.getTilex();
@@ -254,19 +254,16 @@ public class GroupsCommands {
 			//Checking whether the surrounding tile contains opponent unit. if yes, it will be red highlighted
 			if(gameState.getUnitClicked().isAttacked()==false) {
 				if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
-					if(gameState.getUnitClicked().getId()==99) {
-						rangeAttackHighLight(out, gameState);
-					}else {
 					for(int i=x;i<= positionX+1;i++) {
 						for(int j=y;j<=positionY+1;j++) {
 							Tile tile = gameState.getBoard().getTile(i, j) ;
 								if(player2UnitTiles.contains(tile)&&(!(tile==null))){
 									gameState.getBoard().addHighlightRedTiles(tile);
-							}
-					}
-				}
+								}
+						}
 					}
 					displayRedTile (out,gameState.getBoard().getHighlightedRedTiles());
+				}				
 				}else {
 					//for player2..only add tile..no display
 					for(int i=x;i<= positionX+1;i++) {
@@ -280,7 +277,7 @@ public class GroupsCommands {
 				}
 			}			
 
-	}
+	
 	
 	public static void highlightMoveAndAttackTile (ActorRef out,GameState gameState ,Tile tile) {
 		

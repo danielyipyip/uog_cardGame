@@ -108,7 +108,6 @@ public class TileClicked implements EventProcessor{
 		 */
 		if(gameState.getBoard().getPlayer1UnitTiles().contains(currentTileClicked)) {
 			gameState.setUnitClicked(currentTileClicked.getUnit());
-			BasicCommands.addPlayer1Notification(out, ""+gameState.getUnitClicked().getId(), 2);
 			
 			if((gameState.getUnitClicked().isAttacked()==false)&&(gameState.getUnitClicked().isMoved()==false)) {
 				GroupsCommands.highlightMoveAndAttackTile(out,gameState,currentTileClicked);
@@ -116,7 +115,7 @@ public class TileClicked implements EventProcessor{
 				
 			else if(gameState.getUnitClicked().isAttacked()==false) {
 				//if(gameState.getUnitClicked()== fireSpritter.id) {..I dont know where to find the ID of the unit
-					GroupsCommands.rangeAttackHighLight(out,gameState);
+					//GroupsCommands.rangeAttackHighLight(out,gameState);
 				//}else
 			
 				GroupsCommands.highlightAttackTile(out,gameState,currentTileClicked);
@@ -133,7 +132,7 @@ public class TileClicked implements EventProcessor{
 		if(!(gameState.getUnitClicked()==null)) {
 		if(gameState.getUnitClicked().isMoved()==false&&gameState.getUnitClicked().isAttacked()==false) {		
 			if
-			//((!(gameState.getUnitClicked().getId()==99))&&...rangeAttack unit doesnt do move an attack...
+			//((!(gameState.getUnitClicked().getId()==99))&&...rangeAttack unit doesnt do moveandattack...
 				(checkTile(currentTileClicked, gameState.getBoard().getHighlightedRedTiles())){
 				
 				//The below loop is to find the first tile that is in the whiteTiles
@@ -141,21 +140,21 @@ public class TileClicked implements EventProcessor{
 				int y = currentTileClicked.getTiley()-1;
 				Tile moveTile = null;
 				
+				//Finding the first white tile around the red tile 
 				for(int i=x;i<= x+2;i++) {
 					for(int j=y;j<= y+2; j++) {
-						if(moveTile==null) {
 							Tile tile = gameState.getBoard().getTile(i, j) ;
 							if(checkTile(tile,gameState.getBoard().getHighlightedWhiteTiles())){
-							moveTile = tile;}		
-					}
+								moveTile = tile;
+							}	
+						if(!(moveTile==null)) {break;}	
+						}
+					if(!(moveTile==null)) {break;}	
 				}
-				if(!(gameState.getUnitClicked().getId()==99)) {
 				GroupsCommands.moveUnit(out, gameState,gameState.getUnitClicked(),moveTile);
-				}
 				GroupsCommands.attackUnitWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
-				if(!(moveTile==null)) {break;}
-				}
-			}	
+			}
+			
 		}
 		
 		/*Scenario 2: if the player is clicking on a whiteTile, the unit will move
@@ -172,7 +171,8 @@ public class TileClicked implements EventProcessor{
 		
 		if(gameState.getUnitClicked().isAttacked()==false) {
 			if((checkTile(currentTileClicked ,gameState.getBoard().getHighlightedRedTiles())))
-					//&&if((gameState.getUnitClicked().getId()==99))..Range attack only apply on fire spitter
+					//&&if((gameState.getUnitClicked().getId()==99))..
+					//Range attack only apply on fire spitter, and no counter attack....
 					{
 				gameState.getBoard().unhighlightWhiteTiles(out);
 				gameState.getBoard().unhighlightRedTiles(out);
