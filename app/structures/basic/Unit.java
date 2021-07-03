@@ -21,8 +21,7 @@ public class Unit {
 	@JsonIgnore
 	protected static ObjectMapper mapper = new ObjectMapper(); // Jackson Java Object Serializer, is used to read java objects from a file
 	
-	static int id=1;
-	static int id2=-1;
+	int id;
 	UnitAnimationType animation;
 	Position position;
 	UnitAnimationSet animations;
@@ -32,8 +31,8 @@ public class Unit {
 	boolean attacked = false; 
 	boolean moved = false; 
 	int maxHealth;
-	static int player1index = 1;
-	static int player2index = -1;
+	static int player1index = 2;
+	static int player2index = -2;
 	//For ability
 	String name;
 	
@@ -97,7 +96,7 @@ public class Unit {
 	public void setMaxHealth(int maxHealth) {this.maxHealth = maxHealth;}
 
 	//get a new unit id for object builder
-	public static int newid(int n){if (n==1)return id++; else return id2--;}
+	public static int newid(int n){if (n==1)return player1index++; else return player2index--;}
 	
 	//set up initial parameter for a card
 	//parameter: (1)attack (2)health (3)maxHealth (4)cardName

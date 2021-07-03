@@ -42,7 +42,7 @@ public class GameState {
 		player1 = new HumanPlayer(20,2);
 		player2 = new AIPlayer(20,2);
 		board = new Board();
-		
+		tileClicked= null;
 		//Default cardSelected is null and cardPos is -1
 		cardSelected = null; 
 		cardPos = -1;

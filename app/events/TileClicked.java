@@ -4,6 +4,7 @@ package events;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -50,14 +51,16 @@ public class TileClicked implements EventProcessor{
 
 		//Get the tile with the clicked position
 		currentTileClicked= gameState.getBoard().getTile(tilex, tiley);
-		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles(); 
-
-		
+	
 		//Set gameState.setTileClicked() = currentTile for the first round
 		if(gameState.getTileClicked()==null){		
 			gameState.setTileClicked(currentTileClicked);
 		}
+		
 
+		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+		
+		
 		//insert here: play spell card
 		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
 		if (gameState.getCardSelected()!=null) {
@@ -82,8 +85,14 @@ public class TileClicked implements EventProcessor{
 		
 		
 		
+		/*4 Possible Scenarios:
+		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
+		 * 2. Clicking on the WhiteHighlighted tiles--->Player 1 unit will move
+		 * 3. Clicking on the RedHighlighted tiles--->Player 1 unit will attack
+		 * 4. Clicking on the other tiles--->nth happened
+		 */
 		
-		/*
+		/*Scenario 4:
 		 * Check that whether the newclickedTile, is equal to the previous clicked tile 
 		 * or whether it belongs to the whiteHighlighted Tiles or the redHighligted Tiles.
 		 * if not, the tiles will be unhighlighted and the array are emptied.
@@ -94,46 +103,101 @@ public class TileClicked implements EventProcessor{
 					(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())))){
 							gameState.getBoard().unhighlightRedTiles(out);
 							gameState.getBoard().unhighlightWhiteTiles(out);}
-
-	
-		/* Use helper method to check the newclickedTile belongs to player1 unit or not.
-		 * If true, then check whether attack or move is applicable.
-		 * call the highlightmoveTile to highlight the valid move tiles and attack tiles
-		 * Will add condition if GameState.getPlayer is Player 1...
-		 * And if GameState.getPlayer is Player 2..the game logic will change.....
-		 * i.e. Use random x and y to randomly assign a tile to a unit?
+		/*Scenario 1: if the player is clicking on a player1 unit tile, setting the unitClick of gameState.
+		 * The tiles will get highlighted
 		 */
-
-		if(checkTile(currentTileClicked, player1UnitTiles)) {	
+		if(gameState.getBoard().getPlayer1UnitTiles().contains(currentTileClicked)) {
 			gameState.setUnitClicked(currentTileClicked.getUnit());
-			if(currentTileClicked.getUnit().isAttacked()==false) {
-			GroupsCommands.highlightAttackTile(out,gameState,gameState.getUnitClicked());}
-			if(currentTileClicked.getUnit().isMoved()==false) {
-			GroupsCommands.highlightMoveTile(out,gameState,gameState.getUnitClicked()); }
+			
+			if((gameState.getUnitClicked().isAttacked()==false)&&(gameState.getUnitClicked().isMoved()==false)) {
+				GroupsCommands.highlightMoveAndAttackTile(out,gameState,currentTileClicked);
+			}
+				
+			else if(gameState.getUnitClicked().isAttacked()==false) {
+				//if(gameState.getUnitClicked()== fireSpritter.id) {..I dont know where to find the ID of the unit
+					//GroupsCommands.rangeAttackHighLight(out,gameState);
+				//}else
+			
+				GroupsCommands.highlightAttackTile(out,gameState,currentTileClicked);
+			}
+				
+			else if(gameState.getUnitClicked().isMoved()==false){
+				GroupsCommands.highlightMoveTile(out,gameState,currentTileClicked);
+			}
 		}
-		/*
-		 * Use helped method to check the tileClick belongs to player1 highlightedTiles List.
-		 * If true, unhighlight the tiles and then call the moveUnit method.*/
+		
+		/*Scenario 2&3 : if the player is clicking on a redTile and the not yet moved before, 
+		 * the unit will move and attack.
+		 */
+		if(!(gameState.getUnitClicked()==null)) {
+		if(gameState.getUnitClicked().isMoved()==false&&gameState.getUnitClicked().isAttacked()==false) {		
+			if
+			//((!(gameState.getUnitClicked().getId()==99))&&...rangeAttack unit doesnt do moveandattack...
+				(checkTile(currentTileClicked, gameState.getBoard().getHighlightedRedTiles())){
+				
+				//The below loop is to find the first tile that is in the whiteTiles
+				int x = currentTileClicked.getTilex()-1;
+				int y = currentTileClicked.getTiley()-1;
+				Tile moveTile = null;
+				
+				//Finding the first white tile around the red tile 
+				for(int i=x;i<= x+2;i++) {
+					for(int j=y;j<= y+2; j++) {
+							Tile tile = gameState.getBoard().getTile(i, j) ;
+							if(checkTile(tile,gameState.getBoard().getHighlightedWhiteTiles())){
+								moveTile = tile;
+							}	
+						if(!(moveTile==null)) {break;}	
+						}
+					if(!(moveTile==null)) {break;}	
+				}
+				GroupsCommands.moveUnit(out, gameState,gameState.getUnitClicked(),moveTile);
+				GroupsCommands.attackUnitWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
+			}
+			
+		}
+		
+		/*Scenario 2: if the player is clicking on a whiteTile, the unit will move
+		 */
+		if((gameState.getUnitClicked().isMoved()==false)&& ((checkTile(currentTileClicked ,gameState.getBoard().getHighlightedWhiteTiles())))){
+				gameState.getBoard().unhighlightWhiteTiles(out);
+				gameState.getBoard().unhighlightRedTiles(out);
+				GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
+			}
+		
+		
+		/*Scenario 3: if the player is clicking on a redTile, the unit will attack
+		 */
+		
+		if(gameState.getUnitClicked().isAttacked()==false) {
+			if((checkTile(currentTileClicked ,gameState.getBoard().getHighlightedRedTiles())))
+					//&&if((gameState.getUnitClicked().getId()==99))..
+					//Range attack only apply on fire spitter, and no counter attack....
+					{
+				gameState.getBoard().unhighlightWhiteTiles(out);
+				gameState.getBoard().unhighlightRedTiles(out);
+				GroupsCommands.attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
+			}
 
-		if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())){
+			else if(checkTile(currentTileClicked, gameState.getBoard().getHighlightedRedTiles())){
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
-			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
+			GroupsCommands.attackUnitWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
+			}	
 		}
-
-		if(checkTile(currentTileClicked, gameState.getBoard().getHighlightedRedTiles())){
-			gameState.getBoard().unhighlightWhiteTiles(out);
-			gameState.getBoard().unhighlightRedTiles(out);
-			GroupsCommands.attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
-		}	
-
+		}
 		//Setting the gameState's TileClicked with the current tile clicked at the end.
 		gameState.setTileClicked(currentTileClicked);
 	}
+	
+	
+	
+	
+	
 
 	//Helper method
-	public boolean checkTile (Tile tile, ArrayList<Tile> a) {//check whether the tile is in a arraylist.
-		if(a.contains(tile)) {return true;}
+	public boolean checkTile (Tile tile, HashSet<Tile> hashSet) {//check whether the tile is in a arraylist.
+		if(hashSet.contains(tile)) {return true;}
 		return false;
 	}
 
