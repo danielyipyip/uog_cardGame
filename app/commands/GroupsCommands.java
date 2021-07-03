@@ -96,11 +96,11 @@ public class GroupsCommands {
 	public static void playUnitCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
 		int n;
 		String[] nameWord = card.getCardname().split(" ");
-		String unitConfigName = "StaticConfFiles.u_"+nameWord[0]+"_"+nameWord[1];
+		String unitConfigName = "conf/gameconfs/units/"+nameWord[0].toLowerCase()+"_"+nameWord[1].toLowerCase()+".json";
 		Unit unit = null;
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
 		else {n=2;}
-		unit = BasicObjectBuilders.loadUnit(StaticConfFiles.u_comodo_charger, Unit.newid(n), Unit.class);
+		unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
 		unit.setup(card); //do anything needed to init a unit
 
 		//Add the unit to the relevant array

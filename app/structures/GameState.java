@@ -98,7 +98,7 @@ public class GameState {
 				//(6) just redraw empty tile?
 				BasicCommands.drawTile(out, board.unit2Tile(unit), 0);
 				try {Thread.sleep(EventProcessor.sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			}//avatar died
+			} //avatar died
 			else{
 				//add win/lose logic
 			}
