@@ -116,6 +116,22 @@ public class GroupsCommands {
 		BasicCommands.setUnitHealth(out, unit , unit.getHealth());
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
+		//Unit ability on summon
+		if(unit.getName().equals("Azure Herald")) {
+			azureHeraldPassive(out,gameState);
+		} 
+		if(unit.getName().equals("Blaze Hound")) {
+			blazeHoundPassive(out,gameState);
+		}
+		
+		/*
+		Can we do something like unit.skillOnSummon();
+		Then, Azure Herald and Blaze Hound are extended from unit.
+		And our code will call their own skill method?
+		
+		Or other ways, such that we do not need to hard code the abilities on summon like the above.
+		*/
+		
 		//Unhighlight Tiles and Delete Cards
 		gameState.getBoard().unhighlightWhiteTiles(out);
 		deleteCard(out, gameState, gameState.getcardPos());
@@ -168,6 +184,21 @@ public class GroupsCommands {
 			ArrayList<Tile> occupiedTiles = gameState.getBoard().getUnitOccupiedTiles();
 			ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
 			ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
+			
+			//Flying ability
+			if(gameState.getBoard().getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
+				for(int i=0; i<gameState.getBoard().getX(); i++) {
+					for(int j=0; j<gameState.getBoard().getY();j++) {
+						Tile tile = gameState.getBoard().getTile(i, j);
+						if(occupiedTiles.contains(tile)) continue;
+						if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+							BasicCommands.drawTile(out, tile, 1); //only draw for player1
+						}
+						gameState.getBoard().addHighlightWhiteTiles(tile);
+						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+					}			
+				} return;
+			}
 			
 			//Highlighted the valid move tiles surrounding the unit first.
 			int x = positionX-1;
@@ -360,6 +391,7 @@ public class GroupsCommands {
 		}
 	}
 	
+	//works for player1 only for now
 	public static void azureHeraldPassive(ActorRef out, GameState gameState) {
 		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
 		int value = 0;
@@ -376,6 +408,12 @@ public class GroupsCommands {
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 	
+	public static void blazeHoundPassive(ActorRef out, GameState gameState) {
+		gameState.getPlayer1().cardDraw();
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		gameState.getPlayer2().cardDraw();
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	}
 	
 	public static void rangeAttackHighLight(ActorRef out,GameState gameState) {
 		
