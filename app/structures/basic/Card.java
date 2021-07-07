@@ -31,21 +31,11 @@ public class Card {
 		this.bigCard = bigCard;
 	}
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getCardname() {
-		return cardname;
-	}
-	public void setCardname(String cardname) {
-		this.cardname = cardname;
-	}
-	public int getManacost() {
-		return manacost;
-	}
+	public int getId() {return id;}
+	public void setId(int id) {this.id = id;}
+	public String getCardname() {return cardname;}
+	public void setCardname(String cardname) {this.cardname = cardname;}
+	public int getManacost() {return manacost;}
 	public void setManacost(int manacost) {
 		this.manacost = manacost;
 	}

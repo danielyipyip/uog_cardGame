@@ -53,7 +53,7 @@ public class EndTurnClicked implements EventProcessor{
 		//draw card
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 			gameState.getPlayer1().getMydeck().drawCard();
-			GroupsCommands.drawHand(out, gameState);
+			gameState.drawHand(out);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}else {gameState.getPlayer2().getMydeck().drawCard();}//player 2 no need draw on screen hand
 		

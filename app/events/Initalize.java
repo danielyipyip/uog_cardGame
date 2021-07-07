@@ -37,7 +37,7 @@ public class Initalize implements EventProcessor{
 		
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 		
-		//set up player 1 & 2 initial health and mana
+		//initial set up player 1 & 2 initial health and mana
 		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
@@ -48,7 +48,7 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		displayTiles(out,gameState.getBoard()); //draw the board
-		GroupsCommands.drawHand(out, gameState); //draw the hand only for player 1
+		gameState.drawHand(out);//draw the hand only for player 1
 		gameState.getBoard().addPlayer1Avatar(1,2,gameState); //Construct player1
 		displayPlayerAvatar(out,gameState,gameState.getBoard().getPlayer1Avatar()); //display player 1
 		gameState.getBoard().addPlayer2Avatar(7,2,gameState); //Construct player2

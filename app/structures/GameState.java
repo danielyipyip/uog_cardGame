@@ -33,6 +33,8 @@ public class GameState {
 	Unit unitClicked;
 	Player currentPlayer;
 	
+	int middleSleepTime = EventProcessor.middleSleepTime;
+	
 	//constructor
 	public GameState() { //is an object hold by GameActor
 		this.turn=1; //start of game, turn =1
@@ -54,8 +56,7 @@ public class GameState {
 	//helper method
 	//just to group 2 steps in once
 	public void unSelectCard() {this.setcardPos(-1); this.setCardSelected(null);} //unselect the card
-	public void deleteCard(int n) {	this.unSelectCard(); this.currentPlayer.getMyhand().removeCard(n); }//also delete the card
-
+	
 	//Getter and Setter Method
 	public int getTurn() {return turn;}
 	public void setTurn(int turn) {this.turn = turn;}
@@ -66,13 +67,8 @@ public class GameState {
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
 	
-	public Tile getTileClicked() {
-		return tileClicked;
-	}
-
-	public void setTileClicked(Tile tileClicked) {
-		this.tileClicked = tileClicked;
-	}
+	public Tile getTileClicked() {return tileClicked;}
+	public void setTileClicked(Tile tileClicked) {this.tileClicked = tileClicked;}
 
 	public int getcardPos() {return cardPos;}	
 	public Unit getUnitClicked() {return unitClicked;}
@@ -80,6 +76,20 @@ public class GameState {
 	public Player getCurrentPlayer() {return currentPlayer;}
 	public void setCurrentPlayer(Player currentPlayer) {this.currentPlayer = currentPlayer;}
 
+	////////////// cards related /////////////////
+	//draw hand (of cards) on display
+	public void drawHand(ActorRef out) {currentPlayer.drawHand(out);}
+
+	//delete a card both in front-end (display) and back-end (Hand)
+	//few things it does: (1)unselect cards: gameState.cardPos=-1 gameState.CardSelected=null
+	//(2) delete card from player's Hand (back-end)
+	//(3) delect card from front-end display and shift the remaining cards to the left
+	public void deleteCard(ActorRef out) {
+			this.unSelectCard(); //(1)
+			this.currentPlayer.removeCard(out, cardPos); //(2,3)
+		}
+	} 
+	
 	//other than 4 things to remove when a unit died, 2 more things
 	//(5)show dead animation (6)remove from front end display 
 	public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {

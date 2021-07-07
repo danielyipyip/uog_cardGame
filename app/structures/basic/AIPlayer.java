@@ -1,5 +1,7 @@
 package structures.basic;
 
+import akka.actor.ActorRef;
+
 /**
  * AI player
  * planning to put AI move methods in here
@@ -24,5 +26,13 @@ public class AIPlayer extends Player{
 		//draw 3 cards when deck is created
 		for (int i=0; i<3; i++) {this.cardDraw();}
 	}
+	
+	@Override
+	//no draw hand on dislplay
+	public void drawHand(ActorRef out) {;}
+	
+	@Override
+	//card only delete from Hand, not display
+	public void removeCard(ActorRef out, int n) {myhand.removeCard(n);}
 	
 }

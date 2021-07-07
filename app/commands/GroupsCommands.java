@@ -35,15 +35,6 @@ public class GroupsCommands {
 		//(2) change player1/2UnitTiles & unitOccupiedTiles
 		gameState.getBoard().removeUnit(previousTile);
 		gameState.getBoard().addUnit(targetTile, player);
-		//prev implementation, may remove
-//		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
-//			gameState.getBoard().getPlayer1UnitTiles().remove(previousTile);
-//			gameState.getBoard().getPlayer1UnitTiles().add(targetTile);
-//		}else {gameState.getBoard().getPlayer2UnitTiles().remove(previousTile);
-//			gameState.getBoard().getPlayer2UnitTiles().add(targetTile);
-//		}
-//		gameState.getBoard().getUnitOccupiedTiles().remove(previousTile);
-//		gameState.getBoard().getUnitOccupiedTiles().add(targetTile);
 		//(3) un-hightlight tiles
 		gameState.getBoard().unhighlightWhiteTiles(out);
 		gameState.getBoard().unhighlightRedTiles(out);
@@ -74,26 +65,26 @@ public class GroupsCommands {
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
-	//draw the hand in display
-	public static void drawHand(ActorRef out, GameState gameState) {
-		int pos=0;	
-		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
-		for (Card i:currHand) {
-			BasicCommands.drawCard(out, i, pos++, 0);
-			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-	}
+//	//draw the hand in display
+//	public static void drawHand(ActorRef out, GameState gameState) {
+//		int pos=0;	
+//		ArrayList<Card> currHand = gameState.getPlayer1().getMyhand().getMyhand();
+//		for (Card i:currHand) {
+//			BasicCommands.drawCard(out, i, pos++, 0);
+//			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		}
+//	}
 
-	//delete a card both in front-end (display) and back-end (Hand)
-	//few things it does: (1)unselect cards: gameState.cardPos=-1 gameState.CardSelected=null
-	//(2) delete card from player's Hand (back-end)
-	//(3) delect card from front-end display and shift the remaining cards to the left
-	public static void deleteCard(ActorRef out, GameState gameState, int n) {gameState.deleteCard(n);
-		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {drawHand(out, gameState);//change the displays:redraw previous card
-			BasicCommands.deleteCard(out, gameState.getCurrentPlayer().getMyhand().getMyhand().size());//change the displays: remove last card (will not be redraw)
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-	} 
+//	//delete a card both in front-end (display) and back-end (Hand)
+//	//few things it does: (1)unselect cards: gameState.cardPos=-1 gameState.CardSelected=null
+//	//(2) delete card from player's Hand (back-end)
+//	//(3) delect card from front-end display and shift the remaining cards to the left
+//	public static void deleteCard(ActorRef out, GameState gameState, int n) {gameState.deleteCard(n);
+//		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {gameState.drawHand(out);;//change the displays:redraw previous card
+//			BasicCommands.deleteCard(out, gameState.getCurrentPlayer().getMyhand().getMyhand().size());//change the displays: remove last card (will not be redraw)
+//			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		}
+//	} 
 
 	//play unit cards
 	public static void playUnitCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
@@ -102,6 +93,7 @@ public class GroupsCommands {
 		Unit unit = null;
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
 		else {n=2;}
+		String unitConfigName = "conf/gameconfs/cards/"+n+"_c_s_"+nameWord[0]+"_"+nameWord[1]+".json";
 		unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
 		unit.setup(card); //do anything needed to init a unit
 
@@ -134,7 +126,7 @@ public class GroupsCommands {
 		
 		//Unhighlight Tiles and Delete Cards
 		gameState.getBoard().unhighlightWhiteTiles(out);
-		deleteCard(out, gameState, gameState.getcardPos());
+		gameState.deleteCard(out);
 	}
 	
 	//play spell cards

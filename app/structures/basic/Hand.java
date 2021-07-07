@@ -2,6 +2,11 @@ package structures.basic;
 
 import java.util.ArrayList;
 
+import akka.actor.ActorRef;
+import commands.BasicCommands;
+import events.EventProcessor;
+import structures.GameState;
+
 /**
  * hand of cards for the player
  * max hand size =6
@@ -11,6 +16,8 @@ import java.util.ArrayList;
  */
 
 public class Hand {
+	
+	
 	ArrayList<Card> myhand;
 	public Hand() {
 		this.myhand=new ArrayList<>(6);
@@ -22,8 +29,11 @@ public class Hand {
 		//but we decide no exception is needed
 	}
 	public Card getCard(int index) {return myhand.get(index);}
-	public void removeCard(int index) {myhand.remove(index);}
+
 
 	public ArrayList<Card> getMyhand() {return myhand;}
 	public void setMyhand(ArrayList<Card> myhand) {this.myhand = myhand;}
+	
+
+	public void removeCard(int index) {myhand.remove(index);}
 }
