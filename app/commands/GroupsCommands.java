@@ -25,6 +25,7 @@ public class GroupsCommands {
 	//6 steps to move a unit: unit (1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
 	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null
 	public static void moveUnit(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+		//gameState.switchUnitMoving();
 		int player;
 		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
 		else {player=2;}
