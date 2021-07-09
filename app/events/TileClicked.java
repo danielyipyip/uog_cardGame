@@ -44,7 +44,7 @@ public class TileClicked implements EventProcessor{
 	
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		
+		//if(gameState.getUnitMoving()) {return;}
 		
 		//orig code
 		int tilex = message.get("tilex").asInt();
@@ -60,6 +60,32 @@ public class TileClicked implements EventProcessor{
 
 		try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 		
+		//insert here: play spell card
+		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
+		if (gameState.getCardSelected()!=null) {
+			Card currentCard = gameState.getCardSelected();
+			String cardName = currentCard.getCardname();
+			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
+				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())) {
+					gameState.playCard(out, gameState, currentCard, currentTileClicked);
+//					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
+					gameState.setTileClicked(currentTileClicked);
+					return;
+				}
+			}
+			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
+				//if is valid target -> play the card
+				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())) {
+				gameState.playCard(out, gameState, currentCard, currentTileClicked);
+				gameState.setTileClicked(currentTileClicked);
+				return;
+//					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
+				}
+			} 
+			gameState.unHighlightCard(out);
+			gameState.getBoard().unhighlightWhiteTiles(out);
+			gameState.getBoard().unhighlightRedTiles(out);
+		}
 		/*4 Possible Scenarios:
 		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
 		 * 2. Clicking on the WhiteHighlighted tiles--->Player 1 unit will move
@@ -79,8 +105,7 @@ public class TileClicked implements EventProcessor{
 					gameState.getBoard().unhighlightWhiteTiles(out);
 					gameState.getBoard().unhighlightRedTiles(out);
 		}
-							
-		/*Scenario 1: if the player is clicking on a player1 unit tile, setting the unitClick of gameState.
+									/*Scenario 1: if the player is clicking on a player1 unit tile, setting the unitClick of gameState.
 		 * The tiles will get highlighted
 		 */
 		if(gameState.getBoard().getPlayer1UnitTiles().contains(currentTileClicked)) {
@@ -171,7 +196,6 @@ public class TileClicked implements EventProcessor{
 		}
 		gameState.setTileClicked(currentTileClicked);
 		return;
-		}
 		
 		//insert here: play spell card
 		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
@@ -190,14 +214,14 @@ public class TileClicked implements EventProcessor{
 					gameState.playCard(out, gameState, currentCard, currentTileClicked);
 //					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
 				}
-			} 
+			}
 			gameState.unHighlightCard(out);
 			gameState.setTileClicked(currentTileClicked);
 			return;
 		}
 				
-	}
 
+	
 	//Helper method
 	public boolean checkTile (Tile tile, HashSet<Tile> hashSet) {//check whether the tile is in a arraylist.
 		if(hashSet.contains(tile)) {return true;}

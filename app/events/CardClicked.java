@@ -30,9 +30,10 @@ import utils.BasicObjectBuilders;
  *
  */
 public class CardClicked implements EventProcessor{
-
+	
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
+		//if(gameState.getUnitMoving()) {return;}
 		int handPosition = message.get("position").asInt();
 		gameState.getBoard().unhighlightRedTiles(out);
 		gameState.getBoard().unhighlightWhiteTiles(out);

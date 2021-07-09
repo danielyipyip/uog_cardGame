@@ -35,6 +35,8 @@ public class GameState {
 	Tile tileClicked; //to store the previous clicked tile;
 	Unit unitClicked;
 	Player currentPlayer;
+	//Boolean unitMoving;
+	
 	
 	int middleSleepTime = EventProcessor.middleSleepTime;
 	
@@ -54,6 +56,8 @@ public class GameState {
 
 		//start from player 1
 		currentPlayer=player1;
+		
+		//unitMoving = false;
 	}
 	
 	//helper method
@@ -73,6 +77,13 @@ public class GameState {
 	public Tile getTileClicked() {return tileClicked;}
 	public void setTileClicked(Tile tileClicked) {this.tileClicked = tileClicked;}
 
+	/*public void switchUnitMoving() {
+		this.unitMoving = !this.unitMoving;
+	}
+	public boolean getUnitMoving() {
+		return this.unitMoving;
+	}*/
+	
 	public int getcardPos() {return cardPos;}	
 	public Unit getUnitClicked() {return unitClicked;}
 	public void setUnitClicked(Unit unitClicked) {this.unitClicked = unitClicked;}
@@ -149,6 +160,7 @@ public class GameState {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
 		unSelectCard();
 	}
+		
 	
 	//to be implemented
 	//when end turn, turn +=1 OR change player
