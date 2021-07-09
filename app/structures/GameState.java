@@ -98,6 +98,8 @@ public class GameState {
 		//after card played, 
 		//un-hightlight
 		gameState.getBoard().unhighlightRedTiles(out);
+		//Unhighlight Tiles and Delete Cards
+		gameState.getBoard().unhighlightWhiteTiles(out);
 		//remove the card from hand (& update display)
 		gameState.deleteCard(out);
 	}

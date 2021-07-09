@@ -51,55 +51,73 @@ public class GroupsCommands {
 		unit.setMoved(true);
 	} 
 
-//	//method that do both front-end display & back-end unit attack
-//	public static void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
-//		targetUnit.setHealth(attack, out);
-//		BasicCommands.setUnitAttack(out, targetUnit, attack);
-//		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//	}
 
 	//play unit cards
-	public static void playUnitCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
-		int n;
-		String[] nameWord = card.getCardname().split(" ");
-		Unit unit = null;
-		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
-		else {n=2;}
-		String unitConfigName = "conf/gameconfs/cards/"+n+"_c_s_"+nameWord[0]+"_"+nameWord[1]+".json";
-		unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
-		unit.setup(card, out); //do anything needed to init a unit
-
-		//Add the unit to the relevant array
-		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, unit, gameState);
-		
-		//Draw out Unit and it's stats on the browser
-		BasicCommands.drawUnit(out, unit, currentTileClicked);
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setUnitAttack(out, unit, unit.getAttack());
-		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setUnitHealth(out, unit , unit.getHealth());
-		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		
-		//Unit ability on summon
-		if(unit.getName().equals("Azure Herald")) {
-			azureHeraldPassive(out,gameState);
-		} 
-		if(unit.getName().equals("Blaze Hound")) {
-			blazeHoundPassive(out,gameState);
-		}
-		
-		/*
-		Can we do something like unit.skillOnSummon();
-		Then, Azure Herald and Blaze Hound are extended from unit.
-		And our code will call their own skill method?
-		
-		Or other ways, such that we do not need to hard code the abilities on summon like the above.
-		*/
-		
-		//Unhighlight Tiles and Delete Cards
-		gameState.getBoard().unhighlightWhiteTiles(out);
-		gameState.deleteCard(out);
-	}
+//	public static void playUnitCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
+//		int n;
+//		String[] nameWord = card.getCardname().split(" ");
+//		Unit unit = null;
+//		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
+//		else {n=2;}
+//		String unitConfigName = "conf/gameconfs/cards/"+n+"_c_s_"+nameWord[0]+"_"+nameWord[1]+".json";
+//		unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
+//		unit.setup(card, out); //do anything needed to init a unit
+//
+//		//Add the unit to the relevant array
+//		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, unit, gameState);
+//		
+//		//Draw out Unit and it's stats on the browser
+//		BasicCommands.drawUnit(out, unit, currentTileClicked);
+//		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		BasicCommands.setUnitAttack(out, unit, unit.getAttack());
+//		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		BasicCommands.setUnitHealth(out, unit , unit.getHealth());
+//		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		
+//		//Unit ability on summon
+//		if(unit.getName().equals("Azure Herald")) {
+//			azureHeraldPassive(out,gameState);
+//		} 
+//		if(unit.getName().equals("Blaze Hound")) {
+//			blazeHoundPassive(out,gameState);
+//		}
+//		
+//		/*
+//		Can we do something like unit.skillOnSummon();
+//		Then, Azure Herald and Blaze Hound are extended from unit.
+//		And our code will call their own skill method?
+//		
+//		Or other ways, such that we do not need to hard code the abilities on summon like the above.
+//		*/
+//		
+//		//Unhighlight Tiles and Delete Cards
+//		gameState.getBoard().unhighlightWhiteTiles(out);
+//		gameState.deleteCard(out);
+//	}
+	
+//	//works for player1 only for now
+//	public static void azureHeraldPassive(ActorRef out, GameState gameState) {
+//		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
+//		int value = 0;
+//		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
+//			value = player1Avatar.getMaxHealth();
+//		} else {
+//			value = player1Avatar.getHealth() + 3;
+//		}
+//		player1Avatar.setHealth(value, out);
+//		gameState.getPlayer1().setHealth(value);
+//		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		BasicCommands.setUnitHealth(out, player1Avatar, player1Avatar.getHealth());
+//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//	}
+//	
+//	public static void blazeHoundPassive(ActorRef out, GameState gameState) {
+//		gameState.getPlayer1().cardDraw();
+//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		gameState.getPlayer2().cardDraw();
+//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//	}
 	
 	//Below is the method to highlight the tiles in white for move
 		public static void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
@@ -293,29 +311,7 @@ public class GroupsCommands {
 		}
 	}
 		
-	//works for player1 only for now
-	public static void azureHeraldPassive(ActorRef out, GameState gameState) {
-		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
-		int value = 0;
-		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
-			value = player1Avatar.getMaxHealth();
-		} else {
-			value = player1Avatar.getHealth() + 3;
-		}
-		player1Avatar.setHealth(value, out);
-		gameState.getPlayer1().setHealth(value);
-		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setUnitHealth(out, player1Avatar, player1Avatar.getHealth());
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-	}
-	
-	public static void blazeHoundPassive(ActorRef out, GameState gameState) {
-		gameState.getPlayer1().cardDraw();
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		gameState.getPlayer2().cardDraw();
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-	}
+
 	
 	public static void rangeAttackHighLight(ActorRef out,GameState gameState) {
 		
@@ -439,6 +435,14 @@ public class GroupsCommands {
 //			} 
 //		}
 //	}
+
+////method that do both front-end display & back-end unit attack
+//public static void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
+//	targetUnit.setHealth(attack, out);
+//	BasicCommands.setUnitAttack(out, targetUnit, attack);
+//	try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//}
+
 
 
 

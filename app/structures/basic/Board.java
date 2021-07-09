@@ -15,6 +15,7 @@ import utils.StaticConfFiles;
 public class Board {//This Class is used to store all the variables related to units and tiles
 
 	int sleepTime = EventProcessor.sleepTime;
+	int middleSleepTime = EventProcessor.middleSleepTime;
 	
 	private HashMap<String, Tile> tileMap; // to store the tiles in HashMap. xy is the key, value stored is Tile.
 	private int x=9; // x = number of square of a row
@@ -88,7 +89,7 @@ public class Board {//This Class is used to store all the variables related to u
 	public void unhighlightRedTiles(ActorRef out) {
 		for(Tile tile: highlightedRedTiles) {
 			BasicCommands.drawTile(out, tile, 0);
-			try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 		highlightedRedTiles.clear();
 	}

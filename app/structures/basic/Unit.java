@@ -144,7 +144,7 @@ public class Unit {
 	
 	//For ability
 	public void setName(String name) {this.name = name;}
-	public String getName() {return name;}
+	public String getName() {return this.name;}
 
 	//getter setter
 	public void initSetAttack(int atk) {this.attack=atk;}

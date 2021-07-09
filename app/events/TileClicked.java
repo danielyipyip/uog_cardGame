@@ -180,7 +180,8 @@ public class TileClicked implements EventProcessor{
 			String cardName = currentCard.getCardname();
 			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
 				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())) {
-					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
+					gameState.playCard(out, gameState, currentCard, currentTileClicked);
+//					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
 				}
 			}
 			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
