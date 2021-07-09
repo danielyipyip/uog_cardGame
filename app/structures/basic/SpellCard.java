@@ -22,7 +22,6 @@ public class SpellCard extends Card{
 	}
 	
 	@Override
-//	Unit targetUnit = currentTileClicked.getUnit();
 	public void playCard(ActorRef out, GameState gameState, Tile currentTileClicked) {
 		Unit targetUnit = currentTileClicked.getUnit();
 		//play the card: separated by which card is played
@@ -42,7 +41,7 @@ public class SpellCard extends Card{
 		if(this.getCardname().equals("Staff of Y'Kir'")) { //avatar attack +=2
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
 			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
+			gameState.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
 			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
 		if(this.getCardname().equals("Entropic Decay")) {  //unit health -> 0
@@ -63,12 +62,8 @@ public class SpellCard extends Card{
 			String name = unit.getName();
 			if(name == null) {continue;} //For now, some units do not have name, so use this line to prevent error first
 			if(name.equals("Pureblade Enforcer")) {
-				unit.setAttack(unit.getAttack() + 1);
-				BasicCommands.setUnitAttack(out, unit, unit.getAttack());
-				try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+				unit.setAttack(unit.getAttack() + 1, out);
 				unit.setHealth(unit.getHealth() + 1, out);
-				BasicCommands.setUnitHealth(out, unit, unit.getHealth());
-				try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			} 
 		}
 	}

@@ -111,6 +111,10 @@ public class GameState {
 		catch(UnitDieException e) {this.getBoard().removeUnit(unit);}
 	}
 	
+	public void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
+		targetUnit.setAttack(attack, out);
+	}
+	
 	//other than 4 things to remove when a unit died, 2 more things
 	//(5)show dead animation (6)remove from front end display 
 //	public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
