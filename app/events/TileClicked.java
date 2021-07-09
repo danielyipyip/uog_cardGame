@@ -64,25 +64,26 @@ public class TileClicked implements EventProcessor{
 		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
 		if (gameState.getCardSelected()!=null) {
 			Card currentCard = gameState.getCardSelected();
-				String cardName = currentCard.getCardname();
-				if(currentCard instanceof UnitCard) { //if a unit card is selected previously
-					if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())) {
-						GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
-						gameState.setTileClicked(currentTileClicked);
-						return;
-					}
+			String cardName = currentCard.getCardname();
+			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
+				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())) {
+					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
+					gameState.setTileClicked(currentTileClicked);
+					return;
 				}
-				if(currentCard instanceof SpellCard) { //if a spell card is selected previously
-					//if is valid target -> play the card
-					if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())) {
-						GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
-						gameState.setTileClicked(currentTileClicked);
-						return;
-					}
-				} 
-				gameState.getBoard().unhighlightWhiteTiles(out);
-				gameState.getBoard().unhighlightRedTiles(out);
-				gameState.unHighlightCard(out);
+			}
+			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
+				//if is valid target -> play the card
+				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())) {
+				gameState.playCard(out, gameState, currentCard, currentTileClicked);
+				gameState.setTileClicked(currentTileClicked);
+				return;
+//					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
+				}
+			} 
+			gameState.unHighlightCard(out);
+			gameState.getBoard().unhighlightWhiteTiles(out);
+			gameState.getBoard().unhighlightRedTiles(out);
 		}
 		/*4 Possible Scenarios:
 		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
@@ -195,8 +196,8 @@ public class TileClicked implements EventProcessor{
 		gameState.setTileClicked(currentTileClicked);
 		return;
 		}			
+	
 	}
-
 	//Helper method
 	public boolean checkTile (Tile tile, HashSet<Tile> hashSet) {//check whether the tile is in a arraylist.
 		if(hashSet.contains(tile)) {return true;}

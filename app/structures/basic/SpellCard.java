@@ -21,40 +21,35 @@ public class SpellCard extends Card{
 		super(id, cardname, manacost, miniCard, bigCard);
 	}
 	
-//	Unit targetUnit = currentTileClicked.getUnit();
-	public void playCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
+	@Override
+	public void playCard(ActorRef out, GameState gameState, Tile currentTileClicked) {
 		Unit targetUnit = currentTileClicked.getUnit();
 		//play the card: separated by which card is played
-		if(cardName.equals("Truestrike")) {//deal 2 damage to a unit
-			GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getHealth()-2);
+		if(this.getCardname().equals("Truestrike")) {//deal 2 damage to a unit
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
 			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			gameState.setUnitHealth(out, targetUnit, targetUnit.getHealth()-2);
 		}
-		if(cardName.equals("Sundrop Elixir")) { //heal a unit by 5
+		if(this.getCardname().equals("Sundrop Elixir")) { //heal a unit by 5
 			int newHealth = targetUnit.getHealth()+5;
-			if (newHealth>targetUnit.getMaxHealth()) { //if >max, set to max
-				GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getMaxHealth());
-			}else {GroupsCommands.setUnitHealth(out, targetUnit, newHealth);} //if NOT > max, set to health+5
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_buff) , currentTileClicked);
 			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			if (newHealth>targetUnit.getMaxHealth()) { //if >max, set to max
+				gameState.setUnitHealth(out, targetUnit, targetUnit.getMaxHealth());
+			}else {gameState.setUnitHealth(out, targetUnit, newHealth);} //if NOT > max, set to health+5
 		}
-		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
-			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
+		if(this.getCardname().equals("Staff of Y'Kir'")) { //avatar attack +=2
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
 			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			gameState.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
 			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
-		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
-			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
+		if(this.getCardname().equals("Entropic Decay")) {  //unit health -> 0
 			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_martyrdom) , currentTileClicked);
 			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			gameState.setUnitHealth(out, targetUnit, 0);
 			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
 		}
-		//after card played, 
-		//un-hightlight
-		gameState.getBoard().unhighlightRedTiles(out);
-		//remove the card from hand (& update display)
-		gameState.deleteCard(out);
 	}
 	
 	//Only works on player1 (when player2 play a spell, buff player1 unit)
@@ -67,12 +62,8 @@ public class SpellCard extends Card{
 			String name = unit.getName();
 			if(name == null) {continue;} //For now, some units do not have name, so use this line to prevent error first
 			if(name.equals("Pureblade Enforcer")) {
-				unit.setAttack(unit.getAttack() + 1);
-				BasicCommands.setUnitAttack(out, unit, unit.getAttack());
-				try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+				unit.setAttack(unit.getAttack() + 1, out);
 				unit.setHealth(unit.getHealth() + 1, out);
-				BasicCommands.setUnitHealth(out, unit, unit.getHealth());
-				try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			} 
 		}
 	}

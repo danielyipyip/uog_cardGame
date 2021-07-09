@@ -87,14 +87,12 @@ public class Unit {
 		this.correction = correction;
 	}
 
-	public void setAttack(int attack) {
+	public void setAttack(int attack, ActorRef out) {
 		if (attack<0) {this.attack = 0;} else {this.attack = attack;}
+		BasicCommands.setUnitAttack(out, this, attack);
+		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
-//	public void setHealth(int health) {
-//		if (health<0) {this.health = 0;} else {this.health = health;}
-//	}
 
-	
 	//(1) set unit health, front-end, back-end
 	public void setHealth(int health, ActorRef out) throws UnitDieException{
 		//back-end
@@ -127,8 +125,8 @@ public class Unit {
 	//parameter: (1)attack (2)health (3)maxHealth (4)cardName
 	//(5)Attacked=true (6)moved=True (so cannot move/attack the turn summoned)
 	public void setup(Card card, ActorRef out) {
-		this.setAttack(card.getBigCard().getAttack());
-		this.setHealth(card.getBigCard().getHealth(), out);
+		this.initSetAttack(card.getBigCard().getAttack());
+		this.initSetHealth(card.getBigCard().getHealth());
 		this.setMaxHealth(this.health);
 		this.setName(card.getCardname());
 		this.setAttacked(true);
@@ -149,6 +147,8 @@ public class Unit {
 	public String getName() {return name;}
 
 	//getter setter
+	public void initSetAttack(int atk) {this.attack=atk;}
+	public void initSetHealth(int health) {this.health=health;}
 	public int getId() {return id;}
 	public void setId(int id) {this.id = id;}
 	public UnitAnimationType getAnimation() {return animation;}
