@@ -70,7 +70,7 @@ public class SpellCard extends Card{
 				unit.setAttack(unit.getAttack() + 1);
 				BasicCommands.setUnitAttack(out, unit, unit.getAttack());
 				try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-				unit.setHealth(unit.getHealth() + 1);
+				unit.setHealth(unit.getHealth() + 1, out);
 				BasicCommands.setUnitHealth(out, unit, unit.getHealth());
 				try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			} 

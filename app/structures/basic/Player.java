@@ -51,33 +51,11 @@ public class Player {
 			myhand.addCard(tempCard);
 		}
 	}
-	
-	//draw the hand in display
-	public void drawHand(ActorRef out) {
-		int pos=0;	
-		for (Card i:myhand.getMyhand()) {
-			BasicCommands.drawCard(out, i, pos++, 0);
-			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-	}
-	//delete a card both in front-end (display) and back-end (Hand)
-	//(2) delete card from player's Hand (back-end)
-	//(3) delete card from front-end display and shift the remaining cards to the left
-	public void removeCard(ActorRef out, int n) {
-		myhand.removeCard(n);
-		this.drawHand(out);//change the displays:redraw previous card
-		BasicCommands.deleteCard(out, myhand.getMyhand().size());//change the displays: remove last card (will not be redraw)
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-	}
-	
-	public void lose(ActorRef out) {
-		BasicCommands.addPlayer1Notification(out, "I lost", 2);
-		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-	}
+	public void drawHand(ActorRef out) {;}
+	public void removeCard(ActorRef out, int n) {}
+	public void lose(ActorRef out) {}
 	
 	public void setHealth(int health) {this.health = health;}
-	
-	
 
 	public int getHealth() {return health;}
 	public int getMana() {return mana;}
