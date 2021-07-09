@@ -2,6 +2,7 @@ package structures.basic;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import structures.GameState;
 
 /**
  * AI player
@@ -35,6 +36,11 @@ public class AIPlayer extends Player{
 	@Override
 	//card only delete from Hand, not display
 	public void removeCard(ActorRef out, int n) {myhand.removeCard(n);}
+	
+	@Override
+	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
+		
+	}
 	
 	@Override
 	public void lose(ActorRef out) {
