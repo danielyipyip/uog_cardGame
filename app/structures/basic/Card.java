@@ -49,7 +49,7 @@ public class Card {
 		else {n=2;}
 		String unitConfigName = "conf/gameconfs/units/"+nameWord[0]+"_"+nameWord[1]+".json";
 		unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
-		unit.setup(this, out); //do anything needed to init a unit
+		unit.setup(this); //do anything needed to init a unit
 
 		//Add the unit to the relevant array
 		gameState.getBoard().addTileAndAvatarToPlayerArray(currentTileClicked, unit, gameState);

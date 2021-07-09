@@ -56,6 +56,8 @@ public class Initalize implements EventProcessor{
 		//delete later
 		//Player 1 Unit
 		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 99, Unit.class);
+		fire_spitter.setup(BasicObjectBuilders.loadCard(StaticConfFiles.c_fire_spitter, 99, Card.class));
+		fire_spitter.initSetHealth(2);
 		Tile tile = gameState.getBoard().getTile(2, 0);
 		fire_spitter.setHealth(2, out);
 		fire_spitter.initSetAttack(2);
@@ -69,6 +71,8 @@ public class Initalize implements EventProcessor{
 
 		//Player2 Unit
 		Unit fire_spitter1 = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, -99, Unit.class);
+		fire_spitter1.setup(BasicObjectBuilders.loadCard(StaticConfFiles.c_fire_spitter, -99, Card.class));
+		fire_spitter1.initSetHealth(2);
 		Tile tile1 = gameState.getBoard().getTile(2, 2);
 		fire_spitter1.setHealth(2, out);
 		fire_spitter1.initSetAttack(2);

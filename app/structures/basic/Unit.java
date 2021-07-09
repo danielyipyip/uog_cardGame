@@ -124,7 +124,7 @@ public class Unit {
 	//set up initial parameter for a card
 	//parameter: (1)attack (2)health (3)maxHealth (4)cardName
 	//(5)Attacked=true (6)moved=True (so cannot move/attack the turn summoned)
-	public void setup(Card card, ActorRef out) {
+	public void setup(Card card) {
 		this.initSetAttack(card.getBigCard().getAttack());
 		this.initSetHealth(card.getBigCard().getHealth());
 		this.setMaxHealth(this.health);
