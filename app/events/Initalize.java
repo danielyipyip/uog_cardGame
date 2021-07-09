@@ -31,10 +31,8 @@ import structures.basic.Position;
  *
  */
 public class Initalize implements EventProcessor{
-
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 		
 		//initial set up player 1 & 2 initial health and mana
@@ -54,7 +52,7 @@ public class Initalize implements EventProcessor{
 		gameState.getBoard().addPlayer2Avatar(7,2,gameState); //Construct player2
 		displayPlayerAvatar(out,gameState,gameState.getBoard().getPlayer2Avatar());//display player2
 
-		//==========================Below units is just for testing purpose===================================================//
+		/*==========================Below units is just for testing purpose===================================================//
 		//delete later
 		//Player 1 Unit
 		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 99, Unit.class);
@@ -86,10 +84,10 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.setUnitHealth(out, fire_spitter1 , fire_spitter1.getHealth());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}}
-
-		//================================Testing purpose end===================================================//	
-
-//helper methods	
+		//================================Testing purpose end===================================================*/	
+	}
+	
+	//helper methods	
 	
 	//Method to draw all Tiles
 	//max x, y is stored in board class
@@ -118,7 +116,7 @@ public class Initalize implements EventProcessor{
 		BasicCommands.setUnitHealth(out, player1Avatar, health);
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
-	
+		
 		public void displayPlayer2Avatar(ActorRef out, GameState gameState) {
 			int player2XPosition = gameState.getBoard().getPlayer2Avatar().getPosition().getTilex();
 			int player2YPosition = gameState.getBoard().getPlayer2Avatar().getPosition().getTiley();
@@ -132,24 +130,23 @@ public class Initalize implements EventProcessor{
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			BasicCommands.setUnitHealth(out, player2Avatar, health);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}*/
+	}*/
 		
-		public void displayPlayerAvatar(ActorRef out, GameState gameState, Avatar avatar) {
-			int x  = avatar.getPosition().getTilex();
-			int y = avatar.getPosition().getTiley();
-			int health = avatar.getHealth();
-			int attack = avatar.getAttack();
-			Tile avatarTile = gameState.getBoard().getTile(x, y);
-			BasicCommands.drawUnit(out,avatar,avatarTile);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			BasicCommands.setUnitAttack(out, avatar, attack);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			BasicCommands.setUnitHealth(out, avatar, health);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-			
-			
-		}
+	public void displayPlayerAvatar(ActorRef out, GameState gameState, Avatar avatar) {
+		int x  = avatar.getPosition().getTilex();
+		int y = avatar.getPosition().getTiley();
+		int health = avatar.getHealth();
+		int attack = avatar.getAttack();
+		Tile avatarTile = gameState.getBoard().getTile(x, y);
+		BasicCommands.drawUnit(out,avatar,avatarTile);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitAttack(out, avatar, attack);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.setUnitHealth(out, avatar, health);
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+				
+}
 		
 
 

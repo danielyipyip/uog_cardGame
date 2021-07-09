@@ -53,14 +53,14 @@ public class GroupsCommands {
 
 	//method that do both front-end display & back-end unit health
 	public static void setUnitHealth(ActorRef out, Unit targetUnit, int health) {
-		targetUnit.setHealth(health);
+		targetUnit.setHealth(health, out);
 		BasicCommands.setUnitHealth(out, targetUnit, health);
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
 
 	//method that do both front-end display & back-end unit attack
 	public static void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
-		targetUnit.setHealth(attack);
+		targetUnit.setHealth(attack, out);
 		BasicCommands.setUnitAttack(out, targetUnit, attack);
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
@@ -326,7 +326,7 @@ public class GroupsCommands {
 			setUnitHealth(out, attackTarget, targetNewHealth);
 			if(attackTarget instanceof Avatar) {
 				Avatar avatar = (Avatar)attackTarget;
-				avatar.setHealth(targetNewHealth);
+				avatar.setHealth(targetNewHealth, out);
 				if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
 				BasicCommands.setPlayer2Health(out, gameState.getPlayer2());	
 				}else {
@@ -354,7 +354,7 @@ public class GroupsCommands {
 		setUnitHealth(out, unit, attackerNewHealth);
 		if(unit instanceof Avatar) {
 			Avatar avatar = (Avatar) unit;
-			avatar.setHealth(attackerNewHealth);
+			avatar.setHealth(attackerNewHealth, out);
 			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
 			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());	
 			}else {
@@ -363,25 +363,25 @@ public class GroupsCommands {
 		}
 	}
 		
-	//Only works on player1 (when player2 play a spell, buff player1 unit)
-	//Better to modify it to check "does enemy has PureBlade Enforcer" instead of player1 only
-	//(Can it exceed maximum health??)
-	public static void spellThief(ActorRef out, GameState gameState) {
-		ArrayList<Unit> player1Units = gameState.getBoard().getPlayer1Units(); 
-		
-		for(Unit unit: player1Units) {
-			String name = unit.getName();
-			if(name == null) {continue;} //For now, some units do not have name, so use this line to prevent error first
-			if(name.equals("Pureblade Enforcer")) {
-				unit.setAttack(unit.getAttack() + 1);
-				BasicCommands.setUnitAttack(out, unit, unit.getAttack());
-				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-				unit.setHealth(unit.getHealth() + 1);
-				BasicCommands.setUnitHealth(out, unit, unit.getHealth());
-				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			} 
-		}
-	}
+//	//Only works on player1 (when player2 play a spell, buff player1 unit)
+//	//Better to modify it to check "does enemy has PureBlade Enforcer" instead of player1 only
+//	//(Can it exceed maximum health??)
+//	public static void spellThief(ActorRef out, GameState gameState) {
+//		ArrayList<Unit> player1Units = gameState.getBoard().getPlayer1Units(); 
+//		
+//		for(Unit unit: player1Units) {
+//			String name = unit.getName();
+//			if(name == null) {continue;} //For now, some units do not have name, so use this line to prevent error first
+//			if(name.equals("Pureblade Enforcer")) {
+//				unit.setAttack(unit.getAttack() + 1);
+//				BasicCommands.setUnitAttack(out, unit, unit.getAttack());
+//				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//				unit.setHealth(unit.getHealth() + 1);
+//				BasicCommands.setUnitHealth(out, unit, unit.getHealth());
+//				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//			} 
+//		}
+//	}
 	
 	//works for player1 only for now
 	public static void azureHeraldPassive(ActorRef out, GameState gameState) {
@@ -392,7 +392,7 @@ public class GroupsCommands {
 		} else {
 			value = player1Avatar.getHealth() + 3;
 		}
-		player1Avatar.setHealth(value);
+		player1Avatar.setHealth(value, out);
 		gameState.getPlayer1().setHealth(value);
 		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}

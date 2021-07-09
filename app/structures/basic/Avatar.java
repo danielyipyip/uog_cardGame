@@ -17,8 +17,9 @@ public class Avatar extends Unit{
 		this.attack = 2;
 		this.health = 20;
 		this.maxHealth = 20;
-		}
+	}
 	
+	//If new health < previous health, trigger Silverguard Knight's passive
 	public void setHealth(int health, ActorRef out) {
 		if (health<=0) {this.health = 0;
 			player.lose(out); //player lost
@@ -32,5 +33,6 @@ public class Avatar extends Unit{
 
 	public Player getPlayer() {return player;}
 	public void setPlayer(Player player) {this.player = player;}
+
 	
 }
