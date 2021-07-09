@@ -8,4 +8,8 @@ public class SpellCard extends Card{
 	public SpellCard(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard) {
 		super(id, cardname, manacost, miniCard, bigCard);
 	}
+	
+	public void playCard() {
+		
+	}
 }

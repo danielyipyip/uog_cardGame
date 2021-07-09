@@ -13,15 +13,12 @@ package structures.basic;
 public class Card {
 	
 	int id;
-	
 	String cardname;
 	int manacost;
-	
 	MiniCard miniCard;
 	BigCard bigCard;
 	
 	public Card() {};
-	
 	public Card(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard) {
 		super();
 		this.id = id;
@@ -36,21 +33,13 @@ public class Card {
 	public String getCardname() {return cardname;}
 	public void setCardname(String cardname) {this.cardname = cardname;}
 	public int getManacost() {return manacost;}
-	public void setManacost(int manacost) {
-		this.manacost = manacost;
-	}
-	public MiniCard getMiniCard() {
-		return miniCard;
-	}
-	public void setMiniCard(MiniCard miniCard) {
-		this.miniCard = miniCard;
-	}
-	public BigCard getBigCard() {
-		return bigCard;
-	}
-	public void setBigCard(BigCard bigCard) {
-		this.bigCard = bigCard;
-	}
+	public void setManacost(int manacost) {this.manacost = manacost;}
+	public MiniCard getMiniCard() {return miniCard;}
+	public void setMiniCard(MiniCard miniCard) {this.miniCard = miniCard;}
+	public BigCard getBigCard() {return bigCard;}
+	public void setBigCard(BigCard bigCard) {this.bigCard = bigCard;}
 
-	
+	public void playCard() {
+		
+	}
 }

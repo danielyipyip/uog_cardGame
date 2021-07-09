@@ -164,7 +164,7 @@ public class GroupsCommands {
 		//un-hightlight
 		gameState.getBoard().unhighlightRedTiles(out);
 		//remove the card from hand (& update display)
-		deleteCard(out, gameState, gameState.getcardPos());
+		gameState.deleteCard(out);
 	}
 
 

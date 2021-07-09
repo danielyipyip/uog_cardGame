@@ -87,7 +87,6 @@ public class GameState {
 	public void deleteCard(ActorRef out) {
 			this.unSelectCard(); //(1)
 			this.currentPlayer.removeCard(out, cardPos); //(2,3)
-		}
 	} 
 	
 	//other than 4 things to remove when a unit died, 2 more things
