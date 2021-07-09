@@ -1,5 +1,7 @@
 package structures.basic;
 
+import akka.actor.ActorRef;
+import structures.GameState;
 
 /**
  * This is the base representation of a Card which is rendered in the player's hand.
@@ -28,7 +30,7 @@ public class Card {
 		this.bigCard = bigCard;
 	}
 	
-	public void playCard() {
+	public void playCard(ActorRef out, GameState gameState, Tile currentTileClicked) {
 		
 	}
 	
