@@ -50,8 +50,6 @@ public class CardClicked implements EventProcessor{
 		BasicCommands.drawCard(out, cardSelected, handPosition, 1);
 		gameState.setCardSelected(cardSelected);
 		gameState.setcardPos(handPosition);
-		BasicCommands.addPlayer1Notification(out, ""+handPosition, 2);
-		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		//------------------------------------Highlight Card(END)------------------------------------//
 
 		//------------------------------------Highlight Tiles(START)------------------------------------//

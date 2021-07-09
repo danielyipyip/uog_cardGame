@@ -47,13 +47,10 @@ public class HumanPlayer extends Player{
 	//(3) delete card from front-end display and shift the remaining cards to the left
 	public void removeCard(ActorRef out, int n) {
 		myhand.removeCard(n);
-//		BasicCommands.addPlayer1Notification(out, "removing la", 2);
-//		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		this.drawHand(out);//change the displays:redraw previous card
 		BasicCommands.deleteCard(out, myhand.getMyhand().size());//change the displays: remove last card (will not be redraw)
 		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//		BasicCommands.addPlayer1Notification(out, "removed", 2);
-//		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+
 	}
 	
 	@Override

@@ -88,8 +88,8 @@ public class GameState {
 	//(2) delete card from player's Hand (back-end)
 	//(3) delect card from front-end display and shift the remaining cards to the left
 	public void deleteCard(ActorRef out) {
-			this.unSelectCard(); //(1)
-			this.currentPlayer.removeCard(out, cardPos); //(2,3)
+		this.currentPlayer.removeCard(out, cardPos); //(2,3)
+		this.unSelectCard(); //(1)
 	} 
 	
 	//other than 4 things to remove when a unit died, 2 more things
