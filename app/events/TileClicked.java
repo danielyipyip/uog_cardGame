@@ -51,7 +51,7 @@ public class TileClicked implements EventProcessor{
 		int tiley = message.get("tiley").asInt();
 		
 		//Get the tile with the clicked position
-		currentTileClicked= gameState.getBoard().getTile(tilex, tiley);
+		currentTileClicked = gameState.getBoard().getTile(tilex, tiley);
 	
 		//Set gameState.setTileClicked() = currentTile for the first round
 		if(gameState.getTileClicked()==null){		
@@ -103,6 +103,7 @@ public class TileClicked implements EventProcessor{
 			else if(gameState.getUnitClicked().isMoved()==false){
 				GroupsCommands.highlightMoveTile(out,gameState,currentTileClicked);
 			}
+			gameState.setTileClicked(currentTileClicked);
 			return;
 		}
 		
@@ -142,6 +143,7 @@ public class TileClicked implements EventProcessor{
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
 			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
+			gameState.setTileClicked(currentTileClicked);
 			return;
 		}
 		
@@ -164,8 +166,10 @@ public class TileClicked implements EventProcessor{
 			gameState.getBoard().unhighlightRedTiles(out);
 			GroupsCommands.attackUnitWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}	
+			gameState.setTileClicked(currentTileClicked);
 			return;
 		}
+		gameState.setTileClicked(currentTileClicked);
 		return;
 		}
 		
@@ -186,15 +190,11 @@ public class TileClicked implements EventProcessor{
 				}
 			} 
 			gameState.unHighlightCard(out);
+			gameState.setTileClicked(currentTileClicked);
 			return;
 		}
 				
 	}
-	
-	
-	
-	
-	
 
 	//Helper method
 	public boolean checkTile (Tile tile, HashSet<Tile> hashSet) {//check whether the tile is in a arraylist.
