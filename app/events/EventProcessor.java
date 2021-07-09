@@ -28,6 +28,7 @@ public interface EventProcessor {
 	int sleepTime=50;
 	int shortSleepTime=20;
 	int middleSleepTime=30;
+	int longSleepTime=200;
 	int drawTileSleepTime=10; //for drawtile
 	
 }

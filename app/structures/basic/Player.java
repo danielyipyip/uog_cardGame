@@ -62,16 +62,24 @@ public class Player {
 	}
 	//delete a card both in front-end (display) and back-end (Hand)
 	//(2) delete card from player's Hand (back-end)
-	//(3) delect card from front-end display and shift the remaining cards to the left
+	//(3) delete card from front-end display and shift the remaining cards to the left
 	public void removeCard(ActorRef out, int n) {
 		myhand.removeCard(n);
 		this.drawHand(out);//change the displays:redraw previous card
 		BasicCommands.deleteCard(out, myhand.getMyhand().size());//change the displays: remove last card (will not be redraw)
 		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
+	
+	public void lose(ActorRef out) {
+		BasicCommands.addPlayer1Notification(out, "I lost", 2);
+		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+	}
+	
+	public void setHealth(int health) {this.health = health;}
+	
+	
 
 	public int getHealth() {return health;}
-	public void setHealth(int health) {this.health = health;}
 	public int getMana() {return mana;}
 	public void setMana(int mana) {this.mana = mana;}
 	public Deck getMydeck() {return mydeck;}

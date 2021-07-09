@@ -188,26 +188,14 @@ public class Board {//This Class is used to store all the variables related to u
 	public HashSet<Tile> getHighlightedWhiteTiles() {return highlightedWhiteTiles;}
 	public Avatar getPlayer1Avatar() {
 		for(Unit i: player1Units) {
-			if(i.getId()==1) {
-				
-				if(i instanceof Avatar) {
-					Avatar avatar = (Avatar) i;
-					return avatar;
-				}
-			}	
+			if(i.getId()==1) {if(i instanceof Avatar) {return (Avatar) i;}}	
 		}return null;
 	}	
-	
 	public Avatar getPlayer2Avatar() {
 		for(Unit i: player2Units) {
-			if(i.getId()==-1) {
-			
-				if(i instanceof Avatar) {
-					Avatar avatar = (Avatar) i;
-					return avatar;
-				}
-			}	
-	}return null;}	
+			if(i.getId()==-1) {if(i instanceof Avatar) {return (Avatar) i;}}	
+		}return null;
+	}	
 	
 }		
 

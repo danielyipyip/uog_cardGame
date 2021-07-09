@@ -3,7 +3,10 @@ package structures.basic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import Exceptions.UnitDieException;
+import akka.actor.ActorRef;
 import commands.BasicCommands;
+import events.EventProcessor;
 
 /**
  * This is a representation of a Unit on the game board.
@@ -26,15 +29,31 @@ public class Unit {
 	Position position;
 	UnitAnimationSet animations;
 	ImageCorrection correction;
+
+	//we added
+	@JsonIgnore
 	int attack;
+	@JsonIgnore
 	int health;
+	@JsonIgnore
 	boolean attacked = false; 
+	@JsonIgnore
 	boolean moved = false; 
+	@JsonIgnore
 	int maxHealth;
+	@JsonIgnore
 	static int player1index = 2;
+	@JsonIgnore
 	static int player2index = -2;
 	//For ability
+	@JsonIgnore
 	String name;
+	@JsonIgnore
+	int shortSleepTime = EventProcessor.shortSleepTime;
+	@JsonIgnore
+	int middleSleepTime= EventProcessor.middleSleepTime;
+	@JsonIgnore
+	int longSleepTime= EventProcessor.longSleepTime;
 	
 	//different constructors
 	public Unit() {}
@@ -68,33 +87,39 @@ public class Unit {
 		this.correction = correction;
 	}
 
-	public int getId() {return id;}
-	public void setId(int id) {this.id = id;}
-	public UnitAnimationType getAnimation() {return animation;}
-	public void setAnimation(UnitAnimationType animation) {this.animation = animation;}
-	public ImageCorrection getCorrection() {return correction;}
-	public void setCorrection(ImageCorrection correction) {this.correction = correction;}
-	public Position getPosition() {return position;}
-	public void setPosition(Position position) {this.position = position;}
-	public UnitAnimationSet getAnimations() {return animations;}
-	public void setAnimations(UnitAnimationSet animations) {this.animations = animations;}
-	public int getAttack() {return attack;}
 	public void setAttack(int attack) {
 		if (attack<0) {this.attack = 0;} else {this.attack = attack;}
 	}
-	public int getHealth() {return health;}
-	public void setHealth(int health) {
-		if (health<0) {this.health = 0;} else {this.health = health;}
+//	public void setHealth(int health) {
+//		if (health<0) {this.health = 0;} else {this.health = health;}
+//	}
+
+	
+	//(1) set unit health, front-end, back-end
+	public void setHealth(int health, ActorRef out) throws UnitDieException{
+		//back-end
+		if (health<=0) {this.health = 0; this.die(out);
+		}else {this.health = health;}
+		//front-end
+		BasicCommands.setUnitHealth(out, this, health);
+		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
-
-	public boolean isAttacked() {return attacked;}
-	public void setAttacked(boolean attacked) {this.attacked = attacked;}
-	public boolean isMoved() {return moved;}
-	public void setMoved(boolean moved) {this.moved = moved;}
-
-	public int getMaxHealth() {return maxHealth;}
-	public void setMaxHealth(int maxHealth) {this.maxHealth = maxHealth;}
-
+	
+	//handle what happens when a unit dies
+	//(1) dead animation
+	//(2)remove: front-end, 
+	//(3)remove: back-end by throwing exception (handle in gameState)
+	public void die(ActorRef out) throws UnitDieException{
+		//play animation
+		BasicCommands.playUnitAnimation(out, this, UnitAnimationType.death);
+		try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//remove it (front-end)
+		BasicCommands.deleteUnit(out, this);
+		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//remove it (back-end)
+		throw new UnitDieException("");
+	}
+	
 	//get a new unit id for object builder
 	public static int newid(int n){if (n==1)return player1index++; else return player2index--;}
 	
@@ -123,4 +148,23 @@ public class Unit {
 	public void setName(String name) {this.name = name;}
 	public String getName() {return name;}
 
+	//getter setter
+	public int getId() {return id;}
+	public void setId(int id) {this.id = id;}
+	public UnitAnimationType getAnimation() {return animation;}
+	public void setAnimation(UnitAnimationType animation) {this.animation = animation;}
+	public ImageCorrection getCorrection() {return correction;}
+	public void setCorrection(ImageCorrection correction) {this.correction = correction;}
+	public Position getPosition() {return position;}
+	public void setPosition(Position position) {this.position = position;}
+	public UnitAnimationSet getAnimations() {return animations;}
+	public void setAnimations(UnitAnimationSet animations) {this.animations = animations;}
+	public int getAttack() {return attack;}
+	public int getHealth() {return health;}
+	public boolean isAttacked() {return attacked;}
+	public void setAttacked(boolean attacked) {this.attacked = attacked;}
+	public boolean isMoved() {return moved;}
+	public void setMoved(boolean moved) {this.moved = moved;}
+	public int getMaxHealth() {return maxHealth;}
+	public void setMaxHealth(int maxHealth) {this.maxHealth = maxHealth;}
 }

@@ -1,6 +1,7 @@
 package structures.basic;
 
 import akka.actor.ActorRef;
+import commands.BasicCommands;
 
 /**
  * AI player
@@ -34,5 +35,11 @@ public class AIPlayer extends Player{
 	@Override
 	//card only delete from Hand, not display
 	public void removeCard(ActorRef out, int n) {myhand.removeCard(n);}
+	
+	@Override
+	public void lose(ActorRef out) {
+		BasicCommands.addPlayer1Notification(out, "I Win", 2);
+		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+	}
 	
 }

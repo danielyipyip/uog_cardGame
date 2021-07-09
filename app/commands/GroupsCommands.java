@@ -131,41 +131,41 @@ public class GroupsCommands {
 	
 	//play spell cards
 	//////////////without animation///////////////////
-	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
-		//Unit that the spell act on
-		Unit targetUnit = currentTileClicked.getUnit();
-		//play the card: separated by which card is played
-		if(cardName.equals("Truestrike")) {//deal 2 damage to a unit
-			GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getHealth()-2);
-			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
-			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-		if(cardName.equals("Sundrop Elixir")) { //heal a unit by 5
-			int newHealth = targetUnit.getHealth()+5;
-			if (newHealth>targetUnit.getMaxHealth()) { //if >max, set to max
-				GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getMaxHealth());
-			}else {GroupsCommands.setUnitHealth(out, targetUnit, newHealth);} //if NOT > max, set to health+5
-			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_buff) , currentTileClicked);
-			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
-			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
-			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
-			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
-		}
-		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
-			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
-			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_martyrdom) , currentTileClicked);
-			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
-		}
-		//after card played, 
-		//un-hightlight
-		gameState.getBoard().unhighlightRedTiles(out);
-		//remove the card from hand (& update display)
-		gameState.deleteCard(out);
-	}
+//	public static void playSpellCard(ActorRef out, GameState gameState, String cardName, Tile currentTileClicked) {
+//		//Unit that the spell act on
+//		Unit targetUnit = currentTileClicked.getUnit();
+//		//play the card: separated by which card is played
+//		if(cardName.equals("Truestrike")) {//deal 2 damage to a unit
+//			GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getHealth()-2);
+//			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
+//			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		}
+//		if(cardName.equals("Sundrop Elixir")) { //heal a unit by 5
+//			int newHealth = targetUnit.getHealth()+5;
+//			if (newHealth>targetUnit.getMaxHealth()) { //if >max, set to max
+//				GroupsCommands.setUnitHealth(out, targetUnit, targetUnit.getMaxHealth());
+//			}else {GroupsCommands.setUnitHealth(out, targetUnit, newHealth);} //if NOT > max, set to health+5
+//			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_buff) , currentTileClicked);
+//			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		}
+//		if(cardName.equals("Staff of Y'Kir'")) { //avatar attack +=2
+//			GroupsCommands.setUnitAttack(out, targetUnit, targetUnit.getAttack()+2);
+//			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_inmolation) , currentTileClicked);
+//			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
+//		}
+//		if(cardName.equals("Entropic Decay")) {  //unit health -> 0
+//			GroupsCommands.setUnitHealth(out, targetUnit,0); //need other story: trigger death
+//			BasicCommands.playEffectAnimation(out , BasicObjectBuilders.loadEffect(StaticConfFiles.f1_martyrdom) , currentTileClicked);
+//			try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//			spellThief(out, gameState); //Only when player2 plays a spell card, check if opponent(player1) has a Pureblade Enforcer
+//		}
+//		//after card played, 
+//		//un-hightlight
+//		gameState.getBoard().unhighlightRedTiles(out);
+//		//remove the card from hand (& update display)
+//		gameState.deleteCard(out);
+//	}
 
 
 	//Below is the method to highlight the tiles in white for move

@@ -28,6 +28,12 @@ public class Card {
 		this.bigCard = bigCard;
 	}
 	
+	public void playCard() {
+		
+	}
+	
+	
+	//getter setter
 	public int getId() {return id;}
 	public void setId(int id) {this.id = id;}
 	public String getCardname() {return cardname;}
@@ -38,8 +44,4 @@ public class Card {
 	public void setMiniCard(MiniCard miniCard) {this.miniCard = miniCard;}
 	public BigCard getBigCard() {return bigCard;}
 	public void setBigCard(BigCard bigCard) {this.bigCard = bigCard;}
-
-	public void playCard() {
-		
-	}
 }
