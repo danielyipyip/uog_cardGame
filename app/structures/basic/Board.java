@@ -49,7 +49,7 @@ public class Board {//This Class is used to store all the variables related to u
 		}
 	}
 
-	public Tile getTile(int x, int y){ // use the x and y index to get the tile with xy key
+	public Tile getTile(int x, int y) { // use the x and y index to get the tile with xy key
 		Tile tile = tileMap.get(Integer.toString(x)+Integer.toString(y));
 		return tile;
 	}
@@ -60,8 +60,8 @@ public class Board {//This Class is used to store all the variables related to u
 	 * Add the unit to player1Units 
 	 */
 	
-	public void addPlayer1Avatar (int x, int y,GameState gameState) {
-		Avatar player1Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 1, Avatar.class);
+	public void addPlayer1Avatar (int x, int y, GameState gameState) {
+		Avatar player1Avatar = (Avatar)BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 1, Avatar.class);
 		Tile tile = this.getTile(x,y);
 		player1Avatar.setPositionByTile(tile);
 		tile.setUnit(player1Avatar);
@@ -69,10 +69,11 @@ public class Board {//This Class is used to store all the variables related to u
 		unitOccupiedTiles.add(tile);
 		player1Units.add(player1Avatar);
 		player1Avatar.setPlayer(gameState.getPlayer1());
+		player1Avatar.setName("player1Avatar");
 	}
 	
 	public void addPlayer2Avatar (int x, int y,GameState gameState) {
-		Avatar player2Avatar = (Avatar) BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, -1, Avatar.class);
+		Avatar player2Avatar = (Avatar)BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, -1, Avatar.class);
 		Tile tile = getTile(x,y);
 		player2Avatar.setPositionByTile(tile); 	
 		tile.setUnit(player2Avatar);
@@ -80,6 +81,7 @@ public class Board {//This Class is used to store all the variables related to u
 		unitOccupiedTiles.add(tile);
 		player2Units.add(player2Avatar);
 		player2Avatar.setPlayer(gameState.getPlayer2());
+		player2Avatar.setName("player2Avatar");
 	}
 
 	//Method to unhighlight tiles in Red Color
@@ -99,9 +101,7 @@ public class Board {//This Class is used to store all the variables related to u
 		}
 		highlightedWhiteTiles.clear();
 	}
-	
-	
-	
+		
 	/*Below is to add the unit and tile to player unit and player tiles and occuiped tile array.
 	 * If player 1 is calling the method.The playerTileArray will be player1TileArray.
 	 * Tile will be the tile the unit is going to occupy.
@@ -120,9 +120,7 @@ public class Board {//This Class is used to store all the variables related to u
 			 else {player2Units.add(unit);
 			 	  player2UnitTiles.add(tile);}
 	}
-	
-
-	
+		
 	//things to remove when a unit died: (1)PlayerNUnit (2)playerNUnitTile 
 	//(3)unitOccupiedTiles (4) unit from the title
 	public void removeUnit(Unit unit) {
@@ -169,12 +167,10 @@ public class Board {//This Class is used to store all the variables related to u
 		Tile tile = this.getTile(x, y);
 		return tile;
 	}
-	
-	
+		
 	public void addHighlightWhiteTiles(Tile tile) {highlightedWhiteTiles.add(tile);}
 	public void addHighlightRedTiles(Tile tile) {highlightedRedTiles.add(tile);}
-	
-	
+		
 	//Getter and setter method for Board Class;
 	public ArrayList<Tile> getPlayer1UnitTiles() {return player1UnitTiles;}
 	public ArrayList<Tile> getPlayer2UnitTiles() {return player2UnitTiles;}
@@ -186,33 +182,37 @@ public class Board {//This Class is used to store all the variables related to u
 	public ArrayList<Tile> getUnitOccupiedTiles() {return unitOccupiedTiles;}
 	public HashSet<Tile> getHighlightedRedTiles() {return highlightedRedTiles;}
 	public HashSet<Tile> getHighlightedWhiteTiles() {return highlightedWhiteTiles;}
-	public Avatar getPlayer1Avatar() {
-		for(Unit i: player1Units) {
-			if(i.getId()==1) {
-				
-				if(i instanceof Avatar) {
-					Avatar avatar = (Avatar) i;
-					return avatar;
-				}
-			}	
-		}return null;
+	
+	public Avatar getPlayer1Avatar() { 
+		return (Avatar)player1Units.get(0); 
+	}
+	public Avatar getPlayer2Avatar() { 
+		return (Avatar)player2Units.get(0); 
 	}	
-	
-	public Avatar getPlayer2Avatar() {
-		for(Unit i: player2Units) {
-			if(i.getId()==-1) {
-			
-				if(i instanceof Avatar) {
-					Avatar avatar = (Avatar) i;
-					return avatar;
-				}
-			}	
-	}return null;}	
-	
 }		
 
+/*public Avatar getPlayer1Avatar() {
+for(Unit i: player1Units) {
+	if(i.getId()==1) {
+		if(i instanceof Avatar) {
+			Avatar avatar = (Avatar) i;
+			return avatar;
+		}
+	}	
+}return null;
+return (Avatar)player1Units.get(0);
+}*/
 
-
+/*public Avatar getPlayer2Avatar() {
+for(Unit i: player2Units) {
+	if(i.getId()==-1) {
+		if(i instanceof Avatar) {
+			Avatar avatar = (Avatar) i;
+			return avatar;
+		}
+	}	
+}return null;
+}*/		
 
 
 

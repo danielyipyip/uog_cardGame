@@ -93,8 +93,9 @@ public class GroupsCommands {
 		Unit unit = null;
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
 		else {n=2;}
-		String unitConfigName = "conf/gameconfs/cards/"+n+"_c_s_"+nameWord[0]+"_"+nameWord[1]+".json";
+		String unitConfigName = "conf/gameconfs/cards/"+n+"_c_u_"+nameWord[0].toLowerCase()+"_"+nameWord[1].toLowerCase()+".json";
 		unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
+		if(unit == null) return;
 		unit.setup(card); //do anything needed to init a unit
 
 		//Add the unit to the relevant array
@@ -371,7 +372,6 @@ public class GroupsCommands {
 		
 		for(Unit unit: player1Units) {
 			String name = unit.getName();
-			if(name == null) {continue;} //For now, some units do not have name, so use this line to prevent error first
 			if(name.equals("Pureblade Enforcer")) {
 				unit.setAttack(unit.getAttack() + 1);
 				BasicCommands.setUnitAttack(out, unit, unit.getAttack());

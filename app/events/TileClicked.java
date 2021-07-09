@@ -41,14 +41,15 @@ import utils.StaticConfFiles;
  */
 public class TileClicked implements EventProcessor{
 	Tile currentTileClicked;
-
+	
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-
+		
+		
 		//orig code
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
-
+		
 		//Get the tile with the clicked position
 		currentTileClicked= gameState.getBoard().getTile(tilex, tiley);
 	
@@ -56,34 +57,8 @@ public class TileClicked implements EventProcessor{
 		if(gameState.getTileClicked()==null){		
 			gameState.setTileClicked(currentTileClicked);
 		}
-		
 
-		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-		
-		
-		//insert here: play spell card
-		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
-		if (gameState.getCardSelected()!=null) {
-			Card currentCard = gameState.getCardSelected();
-			String cardName = currentCard.getCardname();
-			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
-				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())) {
-					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
-				}
-			}
-			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
-				//if is valid target -> play the card
-				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())) {
-					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
-				}
-			}
-			return; 
-			//needs to return here, otherwise the remaining code will run as well and create error
-			//e.g. If I summon a player1unit on an empty tile clicked here, 
-			//the following code (line 100) will detect this tile as a player1UnitTile and run the code inside...
-		}
-		
-		
+		try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		/*4 Possible Scenarios:
 		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
@@ -99,14 +74,19 @@ public class TileClicked implements EventProcessor{
 		 */
 
 		if(!(currentTileClicked.equals(gameState.getTileClicked())) &&
-				(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles()))) &&
-					(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())))){
-							gameState.getBoard().unhighlightRedTiles(out);
-							gameState.getBoard().unhighlightWhiteTiles(out);}
+			(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles()))) &&
+				(!(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())))){
+					gameState.getBoard().unhighlightWhiteTiles(out);
+					gameState.getBoard().unhighlightRedTiles(out);
+		}
+							
 		/*Scenario 1: if the player is clicking on a player1 unit tile, setting the unitClick of gameState.
 		 * The tiles will get highlighted
 		 */
 		if(gameState.getBoard().getPlayer1UnitTiles().contains(currentTileClicked)) {
+			gameState.unHighlightCard(out);
+			gameState.getBoard().unhighlightWhiteTiles(out);
+			gameState.getBoard().unhighlightRedTiles(out);
 			gameState.setUnitClicked(currentTileClicked.getUnit());
 			
 			if((gameState.getUnitClicked().isAttacked()==false)&&(gameState.getUnitClicked().isMoved()==false)) {
@@ -117,24 +97,24 @@ public class TileClicked implements EventProcessor{
 				//if(gameState.getUnitClicked()== fireSpritter.id) {..I dont know where to find the ID of the unit
 					//GroupsCommands.rangeAttackHighLight(out,gameState);
 				//}else
-			
 				GroupsCommands.highlightAttackTile(out,gameState,currentTileClicked);
 			}
 				
 			else if(gameState.getUnitClicked().isMoved()==false){
 				GroupsCommands.highlightMoveTile(out,gameState,currentTileClicked);
 			}
+			return;
 		}
 		
 		/*Scenario 2&3 : if the player is clicking on a redTile and the not yet moved before, 
 		 * the unit will move and attack.
 		 */
 		if(!(gameState.getUnitClicked()==null)) {
+			gameState.unHighlightCard(out);
 		if(gameState.getUnitClicked().isMoved()==false&&gameState.getUnitClicked().isAttacked()==false) {		
 			if
 			//((!(gameState.getUnitClicked().getId()==99))&&...rangeAttack unit doesnt do moveandattack...
 				(checkTile(currentTileClicked, gameState.getBoard().getHighlightedRedTiles())){
-				
 				//The below loop is to find the first tile that is in the whiteTiles
 				int x = currentTileClicked.getTilex()-1;
 				int y = currentTileClicked.getTiley()-1;
@@ -154,16 +134,16 @@ public class TileClicked implements EventProcessor{
 				GroupsCommands.moveUnit(out, gameState,gameState.getUnitClicked(),moveTile);
 				GroupsCommands.attackUnitWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}
-			
 		}
 		
 		/*Scenario 2: if the player is clicking on a whiteTile, the unit will move
 		 */
 		if((gameState.getUnitClicked().isMoved()==false)&& ((checkTile(currentTileClicked ,gameState.getBoard().getHighlightedWhiteTiles())))){
-				gameState.getBoard().unhighlightWhiteTiles(out);
-				gameState.getBoard().unhighlightRedTiles(out);
-				GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
-			}
+			gameState.getBoard().unhighlightWhiteTiles(out);
+			gameState.getBoard().unhighlightRedTiles(out);
+			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
+			return;
+		}
 		
 		
 		/*Scenario 3: if the player is clicking on a redTile, the unit will attack
@@ -184,10 +164,31 @@ public class TileClicked implements EventProcessor{
 			gameState.getBoard().unhighlightRedTiles(out);
 			GroupsCommands.attackUnitWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}	
+			return;
 		}
+		return;
 		}
-		//Setting the gameState's TileClicked with the current tile clicked at the end.
-		gameState.setTileClicked(currentTileClicked);
+		
+		//insert here: play spell card
+		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
+		if (gameState.getCardSelected()!=null) {
+			Card currentCard = gameState.getCardSelected();
+			String cardName = currentCard.getCardname();
+			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
+				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedWhiteTiles())) {
+					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
+				}
+			}
+			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
+				//if is valid target -> play the card
+				if(checkTile(currentTileClicked,gameState.getBoard().getHighlightedRedTiles())) {
+					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
+				}
+			} 
+			gameState.unHighlightCard(out);
+			return;
+		}
+				
 	}
 	
 	

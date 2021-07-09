@@ -36,7 +36,8 @@ public class CardClicked implements EventProcessor{
 		int handPosition = message.get("position").asInt();
 		gameState.getBoard().unhighlightRedTiles(out);
 		gameState.getBoard().unhighlightWhiteTiles(out);
-
+		gameState.setUnitClicked(null);
+		
 		//------------------------------------Highlight Card(START)------------------------------------//
 		Card cardSelected = gameState.getPlayer1().getMyhand().getCard(handPosition);
 
