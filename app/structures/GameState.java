@@ -141,22 +141,22 @@ public class GameState {
 	}
 	
 	/////////////////unit action related (unit move/attack) ///////////////////
-	public void unitMove(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+	public void moveUnit(ActorRef out,  Unit unit, Tile targetTile) {
 		int player;
-		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
+		if (this.getCurrentPlayer().equals(this.getPlayer1())){player=1;}
 		else {player=2;}
 		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
-		Tile previousTile = gameState.getTileClicked();
+		Tile previousTile = this.getTileClicked();
 		previousTile.setUnit(null);
 		targetTile.setUnit(unit);
 		//(2) change player1/2UnitTiles & unitOccupiedTiles
-		gameState.getBoard().removeUnit(previousTile);
-		gameState.getBoard().addUnit(targetTile, player);
+		this.getBoard().removeUnit(previousTile);
+		this.getBoard().addUnit(targetTile, player);
 		//(3) un-hightlight tiles
-		gameState.getBoard().unhighlightWhiteTiles(out);
-		gameState.getBoard().unhighlightRedTiles(out);
+		this.getBoard().unhighlightWhiteTiles(out);
+		this.getBoard().unhighlightRedTiles(out);
 		//(6) set seleted unit to null & pos to -1
-		gameState.unSelectCard();
+		this.unSelectCard();
 	}
 	
 	

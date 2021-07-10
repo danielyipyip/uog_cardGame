@@ -137,19 +137,21 @@ public class Unit {
 	
 
 	//////////////////move ///////////////////
-	//6 steps to move a unit: (1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
-	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null; (7)set moved to true
-	public void moveUnit(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+	//6 steps to move a unit: 
+	//(1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
+	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null; 
+	//(7)set moved to true
+	public void moveUnit(ActorRef out, Tile targetTile) {
 		//gameState.switchUnitMoving();
 		//(4) move animation
-		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.move);
+		BasicCommands.playUnitAnimation(out, this, UnitAnimationType.move);
 		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		//(5) moveUnitToTile
-		BasicCommands.moveUnitToTile(out, unit, targetTile);
-		unit.setPositionByTile(targetTile); 
+		BasicCommands.moveUnitToTile(out, this, targetTile);
+		this.setPositionByTile(targetTile); 
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		//(7) set move to true
-		unit.setMoved(true);
+		this.setMoved(true);
 	}
 	
 	/**
@@ -172,7 +174,6 @@ public class Unit {
 	
 	public void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {
 		//unit = attacker, target = being attacked
-		
 		Unit attackTarget = target.getUnit();
 		int targetNewHealth = attackTarget.getHealth() - unit.getAttack();
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);

@@ -59,8 +59,8 @@ public class Player {
 	}
 	public void cardDraw(ActorRef out) {;}
 	
-	public void unitMove(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
-		
+	public void moveUnit(ActorRef out, Unit unit, Tile targetTile) {
+		unit.moveUnit(out, targetTile);
 	}
 	
 	public void displayWhiteTile (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles) {
