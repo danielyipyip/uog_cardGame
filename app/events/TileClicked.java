@@ -72,9 +72,9 @@ public class TileClicked implements EventProcessor{
 				return;
 				}
 			}
-//			gameState.unHighlightCard(out);
-//			gameState.getBoard().unhighlightWhiteTiles(out);
-//			gameState.getBoard().unhighlightRedTiles(out);
+			gameState.unHighlightCard(out);
+			gameState.getBoard().unhighlightWhiteTiles(out);
+			gameState.getBoard().unhighlightRedTiles(out);
 		}
 		/*4 Possible Scenarios:
 		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
@@ -126,10 +126,9 @@ public class TileClicked implements EventProcessor{
 		}
 
 		if(!(gameState.getUnitClicked()==null)) {
-			gameState.unHighlightCard(out);}
+			gameState.unHighlightCard(out);} else {return;}	
 
 		
-
 		/*Scenario 2&3 : if the player is clicking on a redTile and the not yet moved before, 
 		 * the unit will move and attack.
 		 */
