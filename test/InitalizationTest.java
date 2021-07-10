@@ -20,6 +20,9 @@ import utils.BasicObjectBuilders;
 /**
  * Test for story: 
  * 
+ * 
+ * @author daniel
+ * 
  * reminder for format: #x (y)
  * x= story from refernece story document (from teacher)
  * y= story from our story list (handed in version in phase 1)

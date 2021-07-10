@@ -396,6 +396,10 @@ public class Board {//This Class is used to store all the variables related to u
 	public HashSet<Tile> getHighlightedWhiteTiles() {return highlightedWhiteTiles;}
 	public Avatar getPlayer1Avatar() { return (Avatar)player1Units.get(0); }
 	public Avatar getPlayer2Avatar() { return (Avatar)player2Units.get(0); }	
+//	public Avatar getAvatar(Player player) {
+//		if () {}
+//		else{}
+//	}
 }		
 
 /*public Avatar getPlayer1Avatar() {

@@ -22,35 +22,35 @@ public class GroupsCommands {
 	static int middleSleepTime = EventProcessor.middleSleepTime;	
 	static int shortSleepTime = EventProcessor.shortSleepTime;
 
-	//6 steps to move a unit: unit (1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
-	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null
-	public static void moveUnit(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
-		//gameState.switchUnitMoving();
-		int player;
-		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
-		else {player=2;}
-		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
-		Tile previousTile = gameState.getTileClicked();
-		previousTile.setUnit(null);
-		targetTile.setUnit(unit);
-		//(2) change player1/2UnitTiles & unitOccupiedTiles
-		gameState.getBoard().removeUnit(previousTile);
-		gameState.getBoard().addUnit(targetTile, player);
-		//(3) un-hightlight tiles
-		gameState.getBoard().unhighlightWhiteTiles(out);
-		gameState.getBoard().unhighlightRedTiles(out);
-		//(4) move animation
-		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.move);
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		//(5) moveUnitToTile
-		BasicCommands.moveUnitToTile(out, unit, targetTile);
-		unit.setPositionByTile(targetTile); 
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		//(6) set seleted unit to null & pos to -1
-		gameState.unSelectCard();
-		//(7) set move to false
-		unit.setMoved(true);
-	} 
+//	//6 steps to move a unit: unit (1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
+//	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null
+//	public static void moveUnit(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+//		//gameState.switchUnitMoving();
+//		int player;
+//		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
+//		else {player=2;}
+//		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
+//		Tile previousTile = gameState.getTileClicked();
+//		previousTile.setUnit(null);
+//		targetTile.setUnit(unit);
+//		//(2) change player1/2UnitTiles & unitOccupiedTiles
+//		gameState.getBoard().removeUnit(previousTile);
+//		gameState.getBoard().addUnit(targetTile, player);
+//		//(3) un-hightlight tiles
+//		gameState.getBoard().unhighlightWhiteTiles(out);
+//		gameState.getBoard().unhighlightRedTiles(out);
+//		//(4) move animation
+//		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.move);
+//		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		//(5) moveUnitToTile
+//		BasicCommands.moveUnitToTile(out, unit, targetTile);
+//		unit.setPositionByTile(targetTile); 
+//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		//(6) set seleted unit to null & pos to -1
+//		gameState.unSelectCard();
+//		//(7) set move to false
+//		unit.setMoved(true);
+//	}
 	
 	//Below is the method to highlight the tiles in white for move
 		//public static void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
@@ -62,19 +62,19 @@ public class GroupsCommands {
 			//ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
 			
 			//Flying ability
-			//if(gameState.getBoard().getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
-				//for(int i=0; i<gameState.getBoard().getX(); i++) {
-					//for(int j=0; j<gameState.getBoard().getY();j++) {
-						//Tile tile = gameState.getBoard().getTile(i, j);
-						//if(occupiedTiles.contains(tile)) continue;
-						//if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
-							//BasicCommands.drawTile(out, tile, 1); //only draw for player1
-						//}
-						//gameState.getBoard().addHighlightWhiteTiles(tile);
-						//try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
-					//}			
-				//} return;
-			//}
+//			if(gameState.getBoard().getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
+//				for(int i=0; i<gameState.getBoard().getX(); i++) {
+//					for(int j=0; j<gameState.getBoard().getY();j++) {
+//						Tile tile = gameState.getBoard().getTile(i, j);
+//						if(occupiedTiles.contains(tile)) continue;
+//						if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+//							BasicCommands.drawTile(out, tile, 1); //only draw for player1
+//						}
+//						gameState.getBoard().addHighlightWhiteTiles(tile);
+//						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+//					}
+//				} return;
+//			}
 			
 			//Highlighted the valid move tiles surrounding the unit first.
 			//int x = positionX-1;

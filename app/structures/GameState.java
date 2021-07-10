@@ -4,6 +4,7 @@ package structures;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Exceptions.AvatarException;
 import Exceptions.UnitDieException;
 
 import java.util.*;
@@ -39,6 +40,7 @@ public class GameState {
 	
 	
 	int middleSleepTime = EventProcessor.middleSleepTime;
+	int shortSleepTime = EventProcessor.shortSleepTime;
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -122,46 +124,79 @@ public class GameState {
 	public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
 		try{unit.setHealth(newHealth, out);} //will 
 		catch(UnitDieException e) {this.getBoard().removeUnit(unit);}
+		catch(AvatarException f) {
+			Avatar avatar = (Avatar) unit; 
+			if(avatar.getPlayer()==this.getPlayer1()) {
+				BasicCommands.setPlayer1Health(out, this.getPlayer1());
+				try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			}else {
+				BasicCommands.setPlayer2Health(out, this.getPlayer2());
+				try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			}
+		}
 	}
 	
 	public void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
 		targetUnit.setAttack(attack, out);
 	}
 	
-	//other than 4 things to remove when a unit died, 2 more things
-	//(5)show dead animation (6)remove from front end display 
-//	public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
-//		int pos;
-//		//unit died
-//		if (newHealth<=0) {
-//			//only one of the indexOf will find
-//			pos=board.getPlayer1Units().indexOf(unit); 
-//			pos=board.getPlayer2Units().indexOf(unit);
-//			//unit died
-//			if (pos!=-1) {
-//				board.removeUnit(unit); //(1-4)
-//				//(5)
-//				BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.death); 
-//				try {Thread.sleep(EventProcessor.sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//				//(6) just redraw empty tile?
-//				BasicCommands.drawTile(out, board.unit2Tile(unit), 0);
-//				try {Thread.sleep(EventProcessor.sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//			} //avatar died
-//			else{
-//				//add win/lose logic
-//			}
-//		}
-//		//unit NOT died, just do normally
-//		else {unit.setHealth(newHealth);} 
-//	}
+	/////////////////unit action related (unit move/attack) ///////////////////
+	public void moveUnit(ActorRef out,  Unit unit, Tile targetTile) {
+		int player;
+		if (this.getCurrentPlayer().equals(this.getPlayer1())){player=1;}
+		else {player=2;}
+		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
+		Tile previousTile = this.getTileClicked();
+		previousTile.setUnit(null);
+		targetTile.setUnit(unit);
+		//(2) change player1/2UnitTiles & unitOccupiedTiles
+		this.getBoard().removeUnit(previousTile);
+		this.getBoard().addUnit(targetTile, player);
+		//(3) un-hightlight tiles
+		this.getBoard().unhighlightWhiteTiles(out);
+		this.getBoard().unhighlightRedTiles(out);
+		
+		this.getCurrentPlayer().moveUnit(out, unit, targetTile);
+		//(6) set seleted unit to null & pos to -1
+		this.unSelectCard();
+	}
+	
 	
 	//unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
 		unSelectCard();
 	}
-		
-	
-	//to be implemented
-	//when end turn, turn +=1 OR change player
+		public int currentPlayer() {
+			if (this.getCurrentPlayer()==this.getPlayer1()) {return 1;}
+			else {return 2;}
+		}
 }
+
+
+//other than 4 things to remove when a unit died, 2 more things
+//(5)show dead animation (6)remove from front end display 
+//public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
+//	int pos;
+//	//unit died
+//	if (newHealth<=0) {
+//		//only one of the indexOf will find
+//		pos=board.getPlayer1Units().indexOf(unit); 
+//		pos=board.getPlayer2Units().indexOf(unit);
+//		//unit died
+//		if (pos!=-1) {
+//			board.removeUnit(unit); //(1-4)
+//			//(5)
+//			BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.death); 
+//			try {Thread.sleep(EventProcessor.sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//			//(6) just redraw empty tile?
+//			BasicCommands.drawTile(out, board.unit2Tile(unit), 0);
+//			try {Thread.sleep(EventProcessor.sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		} //avatar died
+//		else{
+//			//add win/lose logic
+//		}
+//	}
+//	//unit NOT died, just do normally
+//	else {unit.setHealth(newHealth);} 
+//}

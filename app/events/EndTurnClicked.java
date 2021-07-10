@@ -38,8 +38,12 @@ public class EndTurnClicked implements EventProcessor{
 		//change player control (1->2; 2->1)
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 			gameState.setCurrentPlayer(gameState.getPlayer2());
-		}else {gameState.setCurrentPlayer(gameState.getPlayer1());}
-		
+			BasicCommands.addPlayer1Notification(out, "Your turn now!", 2);
+			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		}else {gameState.setCurrentPlayer(gameState.getPlayer1());
+			BasicCommands.addPlayer1Notification(out, "My turn now!", 2);
+			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		}
 		
 		//////////////////after change current player///////////////
 		//refill mana
@@ -52,11 +56,8 @@ public class EndTurnClicked implements EventProcessor{
 		}try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		//draw card
-		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
-			gameState.getPlayer1().getMydeck().drawCard();
-			gameState.drawHand(out);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}else {gameState.getPlayer2().getMydeck().drawCard();}//player 2 no need draw on screen hand
+		gameState.getCurrentPlayer().cardDraw(out);
+		//player 2 no need draw on screen hand (by polymorphism now)
 		
 		//reset attacked OR moved for all units
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {

@@ -48,12 +48,12 @@ public class TileClicked implements EventProcessor{
 		
 		//Get the tile with the clicked position
 		currentTileClicked = gameState.getBoard().getTile(tilex, tiley);
-		
+		//Set gameState.setTileClicked() = currentTile for the first round
 		if(gameState.getTileClicked()==null){		
 			gameState.setTileClicked(currentTileClicked);	
 		}
 		
-		//Set gameState.setTileClicked() = currentTile for the first round
+
 		
 		try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 		
@@ -65,7 +65,6 @@ public class TileClicked implements EventProcessor{
 			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
 				if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
 					gameState.playCard(out, gameState, currentCard, currentTileClicked);
-//					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
 					gameState.setTileClicked(currentTileClicked);
 					return;
 				}
@@ -168,34 +167,22 @@ public class TileClicked implements EventProcessor{
 							}
 							if(!(moveTile==null)) {break;}	
 						}			
-					GroupsCommands.moveUnit(out, gameState,gameState.getUnitClicked(),moveTile);
+					gameState.moveUnit(out, gameState.getUnitClicked(), moveTile);
 					gameState.getUnitClicked().attackWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 					}
 				}
 			}
-		}
-		/*Scenario 2: if the player is clicking on a whiteTile, the unit will move
+		/*Scenario 2: if the player is clicking on a redTile, but not in move and attack range, only adjacent attack
 		 */
 		else if	(gameState.getUnitClicked().isAttacked()==false)  {
-			
-			if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)){
 				gameState.getBoard().unhighlightWhiteTiles(out);
 				gameState.getBoard().unhighlightRedTiles(out);
 				gameState.getUnitClicked().attackWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}
+			gameState.setTileClicked(currentTileClicked);
+			return;
 		}	
-		
-		/*Scenario 3: if the player is clicking on a redTile, the unit will attack
-		 */
-		
-		//if((gameState.getUnitClicked().isAttacked()==false)&&(tilex-x<2||x-tilex<2||tiley-y<2||y-tiley<2))  {
-			//if((checkTile(currentTileClicked ,gameState.getBoard().getHighlightedRedTiles())))
-					//&&if((gameState.getUnitClicked().getId()==99))..
-					//Range attack only apply on fire spitter, and no counter attack....
-				//gameState.getBoard().unhighlightWhiteTiles(out);
-				//gameState.getBoard().unhighlightRedTiles(out);
-				//GroupsCommands.attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
-			//}
+
 		/*Scenario 3: if the player is clicking on a whiteTile, the unit will move
 		 */
 
@@ -203,7 +190,7 @@ public class TileClicked implements EventProcessor{
 		if((gameState.getUnitClicked().isMoved()==false) && (gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked))){
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
-			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
+			gameState.moveUnit(out, gameState.getUnitClicked(),currentTileClicked);
 			gameState.setTileClicked(currentTileClicked);
 			return;
 			}

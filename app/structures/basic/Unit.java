@@ -55,6 +55,9 @@ public class Unit {
 	int middleSleepTime= EventProcessor.middleSleepTime;
 	@JsonIgnore
 	int longSleepTime= EventProcessor.longSleepTime;
+	@JsonIgnore
+	int sleepTime = EventProcessor.sleepTime;
+	
 	
 	//different constructors
 	public Unit() {}
@@ -88,6 +91,19 @@ public class Unit {
 		this.correction = correction;
 	}
 
+	//set up initial parameter for a card
+	//parameter: (1)attack (2)health (3)maxHealth (4)cardName
+	//(5)Attacked=true (6)moved=True (so cannot move/attack the turn summoned)
+	public void setup(Card card) {
+		this.initSetAttack(card.getBigCard().getAttack());
+		this.initSetHealth(card.getBigCard().getHealth());
+		this.setMaxHealth(this.health);
+		this.setName(card.getCardname());
+		this.setAttacked(true);
+		this.setMoved(true);
+	}
+	
+	///////////////set atk, set health///////////
 	public void setAttack(int attack, ActorRef out) {
 		if (attack<0) {this.attack = 0;} else {this.attack = attack;}
 		BasicCommands.setUnitAttack(out, this, attack);
@@ -119,20 +135,25 @@ public class Unit {
 		throw new UnitDieException("");
 	}
 	
-	//get a new unit id for object builder
-	public static int newid(int n){if (n==1)return player1index++; else return player2index--;}
-	
-	//set up initial parameter for a card
-	//parameter: (1)attack (2)health (3)maxHealth (4)cardName
-	//(5)Attacked=true (6)moved=True (so cannot move/attack the turn summoned)
-	public void setup(Card card) {
-		this.initSetAttack(card.getBigCard().getAttack());
-		this.initSetHealth(card.getBigCard().getHealth());
-		this.setMaxHealth(this.health);
-		this.setName(card.getCardname());
-		this.setAttacked(true);
+
+	//////////////////move ///////////////////
+	//6 steps to move a unit: 
+	//(1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
+	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null; 
+	//(7)set moved to true
+	public void moveUnit(ActorRef out, Tile targetTile) {
+		//gameState.switchUnitMoving();
+		//(4) move animation
+		BasicCommands.playUnitAnimation(out, this, UnitAnimationType.move);
+		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//(5) moveUnitToTile
+		BasicCommands.moveUnitToTile(out, this, targetTile);
+		this.setPositionByTile(targetTile); 
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//(7) set move to true
 		this.setMoved(true);
 	}
+	
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.
@@ -142,6 +163,9 @@ public class Unit {
 	public void setPositionByTile(Tile tile) {
 		position = new Position(tile.getXpos(),tile.getYpos(),tile.getTilex(),tile.getTiley());
 	}
+	
+	//get a new unit id for object builder
+	public static int newid(int n){if (n==1)return player1index++; else return player2index--;}
 	
 	//For ability
 	public void setName(String name) {this.name = name;}
@@ -155,16 +179,6 @@ public class Unit {
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		gameState.setUnitHealth(out, attackTarget, targetNewHealth);
-		
-		if(attackTarget instanceof Avatar) {
-			Avatar avatar = (Avatar)attackTarget;
-			avatar.setHealth(targetNewHealth, out);
-			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
-			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());	
-			}else {
-			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
-			}
-		}
 		unit.setAttacked(true);
 	}
 	
@@ -174,15 +188,6 @@ public class Unit {
 		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		gameState.setUnitHealth(out, unit, attackerNewHealth);
-		if(unit instanceof Avatar) {
-			Avatar avatar = (Avatar) unit;
-			avatar.setHealth(attackerNewHealth, out);
-			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
-			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());	
-			}else {
-			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
-			}
-		}
 	}
 	//combine attack with counter attack
 	public void attackWithCounter (ActorRef out, GameState gameState,Unit unit, Tile target) {

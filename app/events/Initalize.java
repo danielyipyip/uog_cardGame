@@ -88,6 +88,7 @@ public class Initalize implements EventProcessor{
 		//BasicCommands.setUnitHealth(out, fire_spitter1 , fire_spitter1.getHealth());
 		//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		//================================Testing purpose end===================================================
+
 	}
 	//helper methods	
 	
