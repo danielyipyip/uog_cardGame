@@ -38,7 +38,7 @@ public class Card {
 	@JsonIgnore
 	int middleSleepTime = EventProcessor.middleSleepTime;
 	@JsonIgnore
-	Map<String, Class<?>> classMap= Map.of("AzureHerald", summonHeal.class, 
+	Map<String, Class<? extends Unit>> classMap= Map.of("AzureHerald", summonHeal.class, 
 			"BlazeHound", summonDraw.class);
 	
 	public Card() {};
@@ -58,7 +58,11 @@ public class Card {
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
 		else {n=2;}
 		String unitConfigName = "conf/gameconfs/units/"+nameWord[0]+"_"+nameWord[1]+".json";
-		unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
+		if (classMap.get(nameWord[0]+nameWord[1])!=null) {
+			unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), classMap.get(nameWord[0]+nameWord[1]));
+		}else {
+			unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
+		}
 		unit.setup(this); //do anything needed to init a unit
 
 		//Add the unit to the relevant array
