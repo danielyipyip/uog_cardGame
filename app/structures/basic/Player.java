@@ -58,6 +58,10 @@ public class Player {
 	}
 	public void cardDraw(ActorRef out) {;}
 	
+	public void unitMove(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+		
+	}
+	
 	public void drawHand(ActorRef out) {;}
 	public void removeCard(ActorRef out, int n) {}
 	public void lose(ActorRef out) {}

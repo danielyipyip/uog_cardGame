@@ -141,19 +141,6 @@ public class Unit {
 	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null; (7)set moved to true
 	public void moveUnit(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
 		//gameState.switchUnitMoving();
-		int player;
-		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
-		else {player=2;}
-		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
-		Tile previousTile = gameState.getTileClicked();
-		previousTile.setUnit(null);
-		targetTile.setUnit(unit);
-		//(2) change player1/2UnitTiles & unitOccupiedTiles
-		gameState.getBoard().removeUnit(previousTile);
-		gameState.getBoard().addUnit(targetTile, player);
-		//(3) un-hightlight tiles
-		gameState.getBoard().unhighlightWhiteTiles(out);
-		gameState.getBoard().unhighlightRedTiles(out);
 		//(4) move animation
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.move);
 		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -161,9 +148,7 @@ public class Unit {
 		BasicCommands.moveUnitToTile(out, unit, targetTile);
 		unit.setPositionByTile(targetTile); 
 		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		//(6) set seleted unit to null & pos to -1
-		gameState.unSelectCard();
-		//(7) set move to false
+		//(7) set move to true
 		unit.setMoved(true);
 	}
 	

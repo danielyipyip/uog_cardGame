@@ -4,6 +4,7 @@ package structures;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Exceptions.AvatarException;
 import Exceptions.UnitDieException;
 
 import java.util.*;
@@ -122,14 +123,37 @@ public class GameState {
 	public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
 		try{unit.setHealth(newHealth, out);} //will 
 		catch(UnitDieException e) {this.getBoard().removeUnit(unit);}
+		catch(AvatarException f) {
+			if(this.getCurrentPlayer()==this.getPlayer1()) {
+				BasicCommands.setPlayer1Health(out, this.getCurrentPlayer());
+			}else {
+				BasicCommands.setPlayer2Health(out, this.getCurrentPlayer());
+			}
+		}
 	}
 	
 	public void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
 		targetUnit.setAttack(attack, out);
 	}
 	
-	/////////////////action related (move/attack) ///////////////////
-	
+	/////////////////unit action related (unit move/attack) ///////////////////
+	public void unitMove(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+		int player;
+		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
+		else {player=2;}
+		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
+		Tile previousTile = gameState.getTileClicked();
+		previousTile.setUnit(null);
+		targetTile.setUnit(unit);
+		//(2) change player1/2UnitTiles & unitOccupiedTiles
+		gameState.getBoard().removeUnit(previousTile);
+		gameState.getBoard().addUnit(targetTile, player);
+		//(3) un-hightlight tiles
+		gameState.getBoard().unhighlightWhiteTiles(out);
+		gameState.getBoard().unhighlightRedTiles(out);
+		//(6) set seleted unit to null & pos to -1
+		gameState.unSelectCard();
+	}
 	
 	
 	//unhighlight card and set instance variables to default value
