@@ -172,7 +172,6 @@ public class TileClicked implements EventProcessor{
 		else if	(gameState.getUnitClicked().isAttacked()==false)  {
 				gameState.getBoard().unhighlightWhiteTiles(out);
 				gameState.getBoard().unhighlightRedTiles(out);
-				BasicCommands.addPlayer1Notification(out, "attack", 2);
 				gameState.getUnitClicked().attackWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}
 			gameState.setTileClicked(currentTileClicked);
