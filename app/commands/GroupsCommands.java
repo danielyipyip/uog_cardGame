@@ -50,7 +50,7 @@ public class GroupsCommands {
 		gameState.unSelectCard();
 		//(7) set move to false
 		unit.setMoved(true);
-	} 
+	}
 	
 	//Below is the method to highlight the tiles in white for move
 		public static void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
@@ -72,7 +72,7 @@ public class GroupsCommands {
 						}
 						gameState.getBoard().addHighlightWhiteTiles(tile);
 						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
-					}			
+					}
 				} return;
 			}
 			

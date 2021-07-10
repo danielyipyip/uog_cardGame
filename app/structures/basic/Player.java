@@ -41,6 +41,11 @@ public class Player {
 		
 	}
 	
+
+	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
+		card.playCard(out, gameState, currentTileClicked);
+	}
+	
 	//draw a card
 	public void cardDraw() {
 		Card tempCard;
@@ -51,9 +56,7 @@ public class Player {
 			myhand.addCard(tempCard);
 		}
 	}
-	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
-		card.playCard(out, gameState, currentTileClicked);
-	}
+	public void cardDraw(ActorRef out) {;}
 	
 	public void drawHand(ActorRef out) {;}
 	public void removeCard(ActorRef out, int n) {}

@@ -90,7 +90,7 @@ public class Initalize implements EventProcessor{
 //		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}}
 		//================================Testing purpose end===================================================
 	
-	
+	}
 	//helper methods	
 	
 	//Method to draw all Tiles

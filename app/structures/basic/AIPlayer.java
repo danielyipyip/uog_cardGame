@@ -30,6 +30,10 @@ public class AIPlayer extends Player{
 	}
 	
 	@Override
+	//no need to draw on dislplay
+	public void cardDraw(ActorRef out) {super.cardDraw();}
+	
+	@Override
 	//no draw hand on dislplay
 	public void drawHand(ActorRef out) {;}
 	

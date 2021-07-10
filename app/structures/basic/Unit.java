@@ -7,6 +7,7 @@ import Exceptions.UnitDieException;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import events.EventProcessor;
+import structures.GameState;
 
 /**
  * This is a representation of a Unit on the game board.
@@ -54,6 +55,9 @@ public class Unit {
 	int middleSleepTime= EventProcessor.middleSleepTime;
 	@JsonIgnore
 	int longSleepTime= EventProcessor.longSleepTime;
+	@JsonIgnore
+	int sleepTime = EventProcessor.sleepTime;
+	
 	
 	//different constructors
 	public Unit() {}
@@ -87,6 +91,19 @@ public class Unit {
 		this.correction = correction;
 	}
 
+	//set up initial parameter for a card
+	//parameter: (1)attack (2)health (3)maxHealth (4)cardName
+	//(5)Attacked=true (6)moved=True (so cannot move/attack the turn summoned)
+	public void setup(Card card) {
+		this.initSetAttack(card.getBigCard().getAttack());
+		this.initSetHealth(card.getBigCard().getHealth());
+		this.setMaxHealth(this.health);
+		this.setName(card.getCardname());
+		this.setAttacked(true);
+		this.setMoved(true);
+	}
+	
+	///////////////set atk, set health///////////
 	public void setAttack(int attack, ActorRef out) {
 		if (attack<0) {this.attack = 0;} else {this.attack = attack;}
 		BasicCommands.setUnitAttack(out, this, attack);
@@ -118,20 +135,38 @@ public class Unit {
 		throw new UnitDieException("");
 	}
 	
-	//get a new unit id for object builder
-	public static int newid(int n){if (n==1)return player1index++; else return player2index--;}
-	
-	//set up initial parameter for a card
-	//parameter: (1)attack (2)health (3)maxHealth (4)cardName
-	//(5)Attacked=true (6)moved=True (so cannot move/attack the turn summoned)
-	public void setup(Card card) {
-		this.initSetAttack(card.getBigCard().getAttack());
-		this.initSetHealth(card.getBigCard().getHealth());
-		this.setMaxHealth(this.health);
-		this.setName(card.getCardname());
-		this.setAttacked(true);
-		this.setMoved(true);
+
+	//////////////////move ///////////////////
+	//6 steps to move a unit: (1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
+	//(3) unhightlight (4) move animation; (5) actual moving (6) set UnitClicked to null; (7)set moved to true
+	public void moveUnit(ActorRef out, GameState gameState, Unit unit, Tile targetTile) {
+		//gameState.switchUnitMoving();
+		int player;
+		if (gameState.getCurrentPlayer().equals(gameState.getPlayer1())){player=1;}
+		else {player=2;}
+		//(1) get unit's tile b4 moving; swap unit's associated tile to new tile
+		Tile previousTile = gameState.getTileClicked();
+		previousTile.setUnit(null);
+		targetTile.setUnit(unit);
+		//(2) change player1/2UnitTiles & unitOccupiedTiles
+		gameState.getBoard().removeUnit(previousTile);
+		gameState.getBoard().addUnit(targetTile, player);
+		//(3) un-hightlight tiles
+		gameState.getBoard().unhighlightWhiteTiles(out);
+		gameState.getBoard().unhighlightRedTiles(out);
+		//(4) move animation
+		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.move);
+		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//(5) moveUnitToTile
+		BasicCommands.moveUnitToTile(out, unit, targetTile);
+		unit.setPositionByTile(targetTile); 
+		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//(6) set seleted unit to null & pos to -1
+		gameState.unSelectCard();
+		//(7) set move to false
+		unit.setMoved(true);
 	}
+	
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.
@@ -141,6 +176,9 @@ public class Unit {
 	public void setPositionByTile(Tile tile) {
 		position = new Position(tile.getXpos(),tile.getYpos(),tile.getTilex(),tile.getTiley());
 	}
+	
+	//get a new unit id for object builder
+	public static int newid(int n){if (n==1)return player1index++; else return player2index--;}
 	
 	//For ability
 	public void setName(String name) {this.name = name;}

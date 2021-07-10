@@ -52,11 +52,8 @@ public class EndTurnClicked implements EventProcessor{
 		}try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		//draw card
-		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
-			gameState.getPlayer1().getMydeck().drawCard();
-			gameState.drawHand(out);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}else {gameState.getPlayer2().getMydeck().drawCard();}//player 2 no need draw on screen hand
+		gameState.getCurrentPlayer().cardDraw(out);
+		//player 2 no need draw on screen hand (by polymorphism now)
 		
 		//reset attacked OR moved for all units
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {

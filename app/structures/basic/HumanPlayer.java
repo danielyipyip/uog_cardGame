@@ -32,6 +32,12 @@ public class HumanPlayer extends Player{
 	}
 	
 	@Override
+	public void cardDraw(ActorRef out) {
+		super.cardDraw();
+		this.drawHand(out);
+	}
+	
+	@Override
 	//draw the hand in display
 	public void drawHand(ActorRef out) {
 		int pos=0;	
