@@ -135,14 +135,14 @@ public class TileClicked implements EventProcessor{
 		 */
 		if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)) {
 
-			int x = gameState.getUnitClicked().getPosition().getTiley();
+			int x = gameState.getUnitClicked().getPosition().getTilex();
 			int y = gameState.getUnitClicked().getPosition().getTiley();
 		
-			if (tilex-x>2||x-tilex>2||tiley-y>2||y-tiley>2) {
+			if ((tilex-x>=2)||(x-tilex>=2)||(tiley-y>=2)||(y-tiley>=2)&&
+					(gameState.getUnitClicked().isMoved()==false && gameState.getUnitClicked().isAttacked()==false)) {
 		
-				if(gameState.getUnitClicked().isMoved()==false && gameState.getUnitClicked().isAttacked()==false) {
 
-					if(gameState.getUnitClicked() instanceof RangedUnits == false) {//Ranged units does not have move and attack methods
+				if(gameState.getUnitClicked() instanceof RangedUnits == false) {//Ranged units does not have move and attack methods
 					
 				//The below loop is to find the first tile that is in the whiteTiles
 						int x1 = currentTileClicked.getTilex()-1;
@@ -151,8 +151,8 @@ public class TileClicked implements EventProcessor{
 						Tile moveTile = null;
 				
 				//Finding the first white tile around the red tile 
-						for(int i=x1;i<= x+2;i++) {
-							for(int j=y1;j<= y+2; j++) {
+						for(int i=x1;i<=x1+2;i++) {
+							for(int j=y1;j<= y1+2; j++) {
 								Tile tile = gameState.getBoard().getTile(i, j) ;
 								if(gameState.getBoard().getHighlightedWhiteTiles().contains(tile)){
 									moveTile = tile;
@@ -160,12 +160,13 @@ public class TileClicked implements EventProcessor{
 								if(!(moveTile==null)) {break;}	
 							}
 							if(!(moveTile==null)) {break;}	
-						}			
+						}	
+
 					gameState.moveUnit(out, gameState.getUnitClicked(), moveTile);
 					gameState.getUnitClicked().attackWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 					}
 				}
-			}
+			
 		/*Scenario 2: if the player is clicking on a redTile, but not in move and attack range, only adjacent attack
 		 */
 		else if	(gameState.getUnitClicked().isAttacked()==false)  {
