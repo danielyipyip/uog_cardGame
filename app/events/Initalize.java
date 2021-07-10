@@ -51,46 +51,44 @@ public class Initalize implements EventProcessor{
 		displayPlayerAvatar(out,gameState,gameState.getBoard().getPlayer1Avatar()); //display player 1
 		gameState.getBoard().addPlayer2Avatar(7,2,gameState); //Construct player2
 		displayPlayerAvatar(out,gameState,gameState.getBoard().getPlayer2Avatar());//display player2
-
+	
 		//==========================Below units is just for testing purpose===================================================//
 		//delete later
 		//Player 1 Unit
-//		Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 99, Unit.class);
-//		fire_spitter.setup(BasicObjectBuilders.loadCard(StaticConfFiles.c_fire_spitter, 99, Card.class));
-//		fire_spitter.initSetHealth(2);
-//		Tile tile = gameState.getBoard().getTile(2, 0);
-//		fire_spitter.setHealth(2, out);
-//		fire_spitter.initSetAttack(2);
-//		gameState.getBoard().addTileAndAvatarToPlayerArray(tile, fire_spitter, gameState);
-//		BasicCommands.drawUnit(out, fire_spitter, tile);
-//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//		BasicCommands.setUnitAttack(out, fire_spitter, 2);
-//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//		BasicCommands.setUnitHealth(out, fire_spitter , fire_spitter.getHealth());
-//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//
-//		//Player2 Unit
-//		Unit fire_spitter1 = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, -99, Unit.class);
-//		fire_spitter1.setup(BasicObjectBuilders.loadCard(StaticConfFiles.c_fire_spitter, -99, Card.class));
-//		fire_spitter1.initSetHealth(2);
-//		Tile tile1 = gameState.getBoard().getTile(2, 2);
-//		fire_spitter1.setHealth(2, out);
-//		fire_spitter1.initSetAttack(2);
-//		fire_spitter1.setPositionByTile(tile1);
-//		tile1.setUnit(fire_spitter1);
-//		gameState.getBoard().getUnitOccupiedTiles().add(tile1);	
-//		gameState.getBoard().getPlayer2Units().add(fire_spitter1);
-//		gameState.getBoard().getPlayer2UnitTiles().add(tile1);
-//	
-//		BasicCommands.drawUnit(out, fire_spitter1, tile1);
-//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//		BasicCommands.setUnitAttack(out, fire_spitter1, 2);
-//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//		BasicCommands.setUnitHealth(out, fire_spitter1 , fire_spitter1.getHealth());
-//		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}}
+		//Unit fire_spitter = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, 99, Unit.class);
+		//fire_spitter.setup(BasicObjectBuilders.loadCard(StaticConfFiles.c_fire_spitter, 99, Card.class));
+		//fire_spitter.initSetHealth(2);
+		//Tile tile = gameState.getBoard().getTile(2, 0);
+		//fire_spitter.setHealth(2, out);
+		//fire_spitter.initSetAttack(2);
+		//gameState.getBoard().addTileAndAvatarToPlayerArray(tile, fire_spitter, gameState);
+		//BasicCommands.drawUnit(out, fire_spitter, tile);
+		//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//BasicCommands.setUnitAttack(out, fire_spitter, 2);
+		//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//BasicCommands.setUnitHealth(out, fire_spitter , fire_spitter.getHealth());
+		//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+
+		//Player2 Unit
+		//Unit fire_spitter1 = BasicObjectBuilders.loadUnit(StaticConfFiles.u_fire_spitter, -99, Unit.class);
+		//fire_spitter1.setup(BasicObjectBuilders.loadCard(StaticConfFiles.c_fire_spitter, -99, Card.class));
+		//fire_spitter1.initSetHealth(2);
+		//Tile tile1 = gameState.getBoard().getTile(2, 2);
+		//fire_spitter1.setHealth(2, out);
+		//fire_spitter1.initSetAttack(2);
+		//fire_spitter1.setPositionByTile(tile1);
+		//tile1.setUnit(fire_spitter1);
+		//gameState.getBoard().getUnitOccupiedTiles().add(tile1);	
+		//gameState.getBoard().getPlayer2Units().add(fire_spitter1);
+		//gameState.getBoard().getPlayer2UnitTiles().add(tile1);
+		//BasicCommands.drawUnit(out, fire_spitter1, tile1);
+		//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//BasicCommands.setUnitAttack(out, fire_spitter1, 2);
+		//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//BasicCommands.setUnitHealth(out, fire_spitter1 , fire_spitter1.getHealth());
+		//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		//================================Testing purpose end===================================================
-	
-	
+	}
 	//helper methods	
 	
 	//Method to draw all Tiles

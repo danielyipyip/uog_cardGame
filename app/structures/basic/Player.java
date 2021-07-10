@@ -1,6 +1,7 @@
 package structures.basic;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import Exceptions.NotEnoughCardException;
 import akka.actor.ActorRef;
@@ -54,6 +55,28 @@ public class Player {
 	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
 		card.playCard(out, gameState, currentTileClicked);
 	}
+	
+	public void displayWhiteTile (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles) {
+		
+		for(Tile i : gameState.getBoard().getHighlightedWhiteTiles()) {
+			BasicCommands.drawTile(out, i, 1);
+			try {Thread.sleep(50);} catch (InterruptedException e) {e.printStackTrace();}
+		}
+	}
+	public void displayRedTile (ActorRef out,GameState gameState, HashSet<Tile> redTiles) {
+			
+			for(Tile i : gameState.getBoard().getHighlightedRedTiles()) {
+				BasicCommands.drawTile(out, i, 2);
+				try {Thread.sleep(50);} catch (InterruptedException e) {e.printStackTrace();}
+		}
+		
+	}
+	
+	public void displayAllTiles (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles,HashSet<Tile> redTiles) {
+		displayWhiteTile(out,gameState,whiteTiles);
+		displayRedTile(out,gameState,redTiles);
+}
+
 	
 	public void drawHand(ActorRef out) {;}
 	public void removeCard(ActorRef out, int n) {}

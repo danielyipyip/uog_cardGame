@@ -7,6 +7,7 @@ import Exceptions.UnitDieException;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import events.EventProcessor;
+import structures.GameState;
 
 /**
  * This is a representation of a Unit on the game board.
@@ -146,6 +147,68 @@ public class Unit {
 	public void setName(String name) {this.name = name;}
 	public String getName() {return this.name;}
 
+	
+	public void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {
+		//unit = attacker, target = being attacked
+		
+		Unit attackTarget = target.getUnit();
+		int targetNewHealth = attackTarget.getHealth() - unit.getAttack();
+		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
+		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		gameState.setUnitHealth(out, attackTarget, targetNewHealth);
+		
+		if(attackTarget instanceof Avatar) {
+			Avatar avatar = (Avatar)attackTarget;
+			avatar.setHealth(targetNewHealth, out);
+			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
+			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());	
+			}else {
+			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+			}
+		}
+		unit.setAttacked(true);
+	}
+	
+	public void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){
+		int attackerNewHealth = unit.getHealth() - target.getUnit().getAttack();
+		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
+		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		gameState.setUnitHealth(out, unit, attackerNewHealth);
+		if(unit instanceof Avatar) {
+			Avatar avatar = (Avatar) unit;
+			avatar.setHealth(attackerNewHealth, out);
+			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
+			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());	
+			}else {
+			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
+			}
+		}
+	}
+	//combine attack with counter attack
+	public void attackWithCounter (ActorRef out, GameState gameState,Unit unit, Tile target) {
+		attackUnit(out,gameState,unit,target);
+		if(target.getUnit().getHealth()>=0) {counterAttack(out,gameState,unit,target);}
+		unit.setAttacked(true);
+}
+	
+	public void rangeAttackHighLight(ActorRef out,GameState gameState) {
+		
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {	
+			for(Tile i : gameState.getBoard().getPlayer2UnitTiles()) {
+				gameState.getBoard().addHighlightRedTiles(i);
+			}
+			gameState.getCurrentPlayer().displayRedTile(out,gameState, gameState.getBoard().getHighlightedRedTiles());
+		}else {
+			for(Tile i : gameState.getBoard().getPlayer1UnitTiles()) {
+				gameState.getBoard().addHighlightRedTiles(i);
+		}
+	}
+}
+	
+	
+	
+	
+	
 	//getter setter
 	public void initSetAttack(int atk) {this.attack=atk;}
 	public void initSetHealth(int health) {this.health=health;}
