@@ -158,7 +158,8 @@ public class TileClicked implements EventProcessor{
 						}
 					if(!(moveTile==null)) {break;}	
 				}
-				GroupsCommands.moveUnit(out, gameState,gameState.getUnitClicked(),moveTile);
+				gameState.moveUnit(out, gameState.getUnitClicked(), moveTile);
+//				GroupsCommands.moveUnit(out, gameState,gameState.getUnitClicked(),moveTile);
 				gameState.getUnitClicked().attackWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}
 		}
@@ -168,7 +169,8 @@ public class TileClicked implements EventProcessor{
 		if((gameState.getUnitClicked().isMoved()==false)&& (gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked))){
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
-			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
+			gameState.moveUnit(out, gameState.getUnitClicked(), currentTileClicked);
+//			GroupsCommands.moveUnit(out, gameState, gameState.getUnitClicked(),currentTileClicked);
 			gameState.setTileClicked(currentTileClicked);
 			//return;
 		}

@@ -155,6 +155,8 @@ public class GameState {
 		//(3) un-hightlight tiles
 		this.getBoard().unhighlightWhiteTiles(out);
 		this.getBoard().unhighlightRedTiles(out);
+		
+		this.getCurrentPlayer().moveUnit(out, unit, targetTile);
 		//(6) set seleted unit to null & pos to -1
 		this.unSelectCard();
 	}
