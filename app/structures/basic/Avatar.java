@@ -30,7 +30,10 @@ public class Avatar extends Unit{
 		BasicCommands.setUnitHealth(out, this, health);
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 	}
-
+	
+	
+	
+	
 	public Player getPlayer() {return player;}
 	public void setPlayer(Player player) {this.player = player;}
 
