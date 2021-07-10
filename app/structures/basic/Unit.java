@@ -178,16 +178,6 @@ public class Unit {
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		gameState.setUnitHealth(out, attackTarget, targetNewHealth);
-		
-		if(attackTarget instanceof Avatar) {
-			Avatar avatar = (Avatar)attackTarget;
-			avatar.setHealth(targetNewHealth, out);
-			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
-			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());	
-			}else {
-			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
-			}
-		}
 		unit.setAttacked(true);
 	}
 	
@@ -196,15 +186,6 @@ public class Unit {
 		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		gameState.setUnitHealth(out, unit, attackerNewHealth);
-		if(unit instanceof Avatar) {
-			Avatar avatar = (Avatar) unit;
-			avatar.setHealth(attackerNewHealth, out);
-			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
-			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());	
-			}else {
-			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
-			}
-		}
 	}
 	//combine attack with counter attack
 	public void attackWithCounter (ActorRef out, GameState gameState,Unit unit, Tile target) {

@@ -32,12 +32,8 @@ public class Avatar extends Unit{
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 
 		//also update health in player status
-		this.player.setHealth(this.health);
-
+		this.player.setHealth(health);
 		throw new AvatarException("");
-		//do outside
-//		if (playerIndex==1) {BasicCommands.setPlayer1Health(out, player);}
-//		else {BasicCommands.setPlayer2Health(out, player);}
 	}
 
 	public Player getPlayer() {return player;}

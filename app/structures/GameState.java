@@ -40,6 +40,7 @@ public class GameState {
 	
 	
 	int middleSleepTime = EventProcessor.middleSleepTime;
+	int shortSleepTime = EventProcessor.shortSleepTime;
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -124,10 +125,13 @@ public class GameState {
 		try{unit.setHealth(newHealth, out);} //will 
 		catch(UnitDieException e) {this.getBoard().removeUnit(unit);}
 		catch(AvatarException f) {
-			if(this.getCurrentPlayer()==this.getPlayer1()) {
-				BasicCommands.setPlayer1Health(out, this.getCurrentPlayer());
+			Avatar avatar = (Avatar) unit; 
+			if(avatar.getPlayer()==this.getPlayer1()) {
+				BasicCommands.setPlayer1Health(out, this.getPlayer1());
+				try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			}else {
-				BasicCommands.setPlayer2Health(out, this.getCurrentPlayer());
+				BasicCommands.setPlayer2Health(out, this.getPlayer2());
+				try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			}
 		}
 	}
