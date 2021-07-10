@@ -11,8 +11,8 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import events.EventProcessor;
 import structures.GameState;
-import structures.basic.unit.AzureHerald;
-import structures.basic.unit.BlazeHound;
+import structures.basic.unit.summonDraw;
+import structures.basic.unit.summonHeal;
 import utils.BasicObjectBuilders;
 
 /**
@@ -38,8 +38,8 @@ public class Card {
 	@JsonIgnore
 	int middleSleepTime = EventProcessor.middleSleepTime;
 	@JsonIgnore
-	Map<String, Class<?>> classMap= Map.of("AzureHerald", AzureHerald.class, 
-			"BlazeHound", BlazeHound.class);
+	Map<String, Class<?>> classMap= Map.of("AzureHerald", summonHeal.class, 
+			"BlazeHound", summonDraw.class);
 	
 	public Card() {};
 	public Card(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard) {
@@ -72,13 +72,14 @@ public class Card {
 		BasicCommands.setUnitHealth(out, unit , unit.getHealth());
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
-		//Unit ability on summon
-		if(unit.getName().equals("Azure Herald")) {
-			azureHeraldPassive(out,gameState);
-		} 
-		if(unit.getName().equals("Blaze Hound")) {
-			blazeHoundPassive(out,gameState);
-		}
+		unit.summonEffect(out, gameState);
+//		//Unit ability on summon
+//		if(unit.getName().equals("Azure Herald")) {
+//			azureHeraldPassive(out,gameState);
+//		}
+//		if(unit.getName().equals("Blaze Hound")) {
+//			blazeHoundPassive(out,gameState);
+//		}
 	}
 	
 	/*
@@ -89,21 +90,22 @@ public class Card {
 	Or other ways, such that we do not need to hard code the abilities on summon like the above.
 	*/
 	//works for player1 only for now
-	public void azureHeraldPassive(ActorRef out, GameState gameState) {
-		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
-		int value = 0;
-		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
-			value = player1Avatar.getMaxHealth();
-		} else {value = player1Avatar.getHealth() + 3;}
-		gameState.setUnitHealth(out, gameState.getBoard().getPlayer1Units().get(0), value);
-	}
+//	public void azureHeraldPassive(ActorRef out, GameState gameState) {
+//		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
+//		int value = 0;
+//		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
+//			value = player1Avatar.getMaxHealth();
+//		} else {value = player1Avatar.getHealth() + 3;}
+//		gameState.setUnitHealth(out, gameState.getBoard().getPlayer1Units().get(0), value);
+//	}
+//	
+//	public void blazeHoundPassive(ActorRef out, GameState gameState) {
+//		gameState.getPlayer1().cardDraw();
+//		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//		gameState.getPlayer2().cardDraw();
+//		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+//	}
 	
-	public void blazeHoundPassive(ActorRef out, GameState gameState) {
-		gameState.getPlayer1().cardDraw();
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		gameState.getPlayer2().cardDraw();
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-	}
 	
 	
 	//getter setter

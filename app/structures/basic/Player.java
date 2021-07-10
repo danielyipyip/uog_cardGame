@@ -57,7 +57,7 @@ public class Player {
 			myhand.addCard(tempCard);
 		}
 	}
-	public void cardDraw(ActorRef out) {;}
+	public void cardDraw(ActorRef out) {cardDraw();}
 	
 	public void moveUnit(ActorRef out, Unit unit, Tile targetTile) {
 		unit.moveUnit(out, targetTile);

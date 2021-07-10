@@ -158,6 +158,9 @@ public class Unit {
 		this.setMoved(true);
 	}
 	
+	//for sub-class
+	public void summonEffect(ActorRef out, GameState gameState) {;}
+	
 	/**
 	 * This command sets the position of the Unit to a specified
 	 * tile.
