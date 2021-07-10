@@ -83,6 +83,7 @@ public class Card {
 	
 	//works for player1 only for now
 	public void azureHeraldPassive(ActorRef out, GameState gameState) {
+//		int player=gameState.currentPlayer();
 		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
 		int value = 0;
 		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
@@ -90,12 +91,7 @@ public class Card {
 		} else {
 			value = player1Avatar.getHealth() + 3;
 		}
-		player1Avatar.setHealth(value, out);
-		gameState.getPlayer1().setHealth(value);
-		BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		BasicCommands.setUnitHealth(out, player1Avatar, player1Avatar.getHealth());
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		gameState.setUnitHealth(out, gameState.getBoard().getPlayer1Units().get(0), value);
 	}
 	
 	public void blazeHoundPassive(ActorRef out, GameState gameState) {

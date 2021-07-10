@@ -161,7 +161,10 @@ public class GameState {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
 		unSelectCard();
 	}
-		
+		public int currentPlayer() {
+			if (this.getCurrentPlayer()==this.getPlayer1()) {return 1;}
+			else {return 2;}
+		}
 }
 
 
