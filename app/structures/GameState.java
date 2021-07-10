@@ -162,6 +162,14 @@ public class GameState {
 	}
 	
 	
+	//////////////highlight related/////////////////
+	public boolean ablePlayOrMove(Tile tile) {
+		return this.getBoard().getHighlightedWhiteTiles().contains(tile);
+	}
+	
+	
+	
+	
 	//unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);

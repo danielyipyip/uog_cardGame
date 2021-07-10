@@ -37,6 +37,7 @@ import utils.StaticConfFiles;
  */
 public class TileClicked implements EventProcessor{
 	Tile currentTileClicked;
+	int middleSleepTime = EventProcessor.middleSleepTime;
 	
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
@@ -44,26 +45,21 @@ public class TileClicked implements EventProcessor{
 	//orig code
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
-		
 		//Get the tile with the clicked position
 		currentTileClicked = gameState.getBoard().getTile(tilex, tiley);
 		
 		//Set gameState.setTileClicked() = currentTile for the first round
-		if(gameState.getTileClicked()==null){		
-			gameState.setTileClicked(currentTileClicked);
-		}
+		if(gameState.getTileClicked()==null){gameState.setTileClicked(currentTileClicked);}
 
-		try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+//		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		//insert here: play spell card
 		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
 		if (gameState.getCardSelected()!=null) {
 			Card currentCard = gameState.getCardSelected();
-			String cardName = currentCard.getCardname();
 			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
 				if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
 					gameState.playCard(out, gameState, currentCard, currentTileClicked);
-//					GroupsCommands.playUnitCard(out, gameState, currentCard, currentTileClicked);
 					gameState.setTileClicked(currentTileClicked);
 					return;
 				}
@@ -74,12 +70,11 @@ public class TileClicked implements EventProcessor{
 				gameState.playCard(out, gameState, currentCard, currentTileClicked);
 				gameState.setTileClicked(currentTileClicked);
 				return;
-//					GroupsCommands.playSpellCard(out, gameState, cardName, currentTileClicked); //see GroupsCommands...
 				}
-			} 
-			gameState.unHighlightCard(out);
-			gameState.getBoard().unhighlightWhiteTiles(out);
-			gameState.getBoard().unhighlightRedTiles(out);
+			}
+//			gameState.unHighlightCard(out);
+//			gameState.getBoard().unhighlightWhiteTiles(out);
+//			gameState.getBoard().unhighlightRedTiles(out);
 		}
 		/*4 Possible Scenarios:
 		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
