@@ -1,11 +1,18 @@
 package structures.basic;
 
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import events.EventProcessor;
 import structures.GameState;
+import structures.basic.unit.AzureHerald;
+import structures.basic.unit.BlazeHound;
 import utils.BasicObjectBuilders;
 
 /**
@@ -30,6 +37,9 @@ public class Card {
 	int shortSleepTime = EventProcessor.shortSleepTime;
 	@JsonIgnore
 	int middleSleepTime = EventProcessor.middleSleepTime;
+	@JsonIgnore
+	Map<String, Class<?>> classMap= Map.of("AzureHerald", AzureHerald.class, 
+			"BlazeHound", BlazeHound.class);
 	
 	public Card() {};
 	public Card(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard) {
@@ -69,28 +79,22 @@ public class Card {
 		if(unit.getName().equals("Blaze Hound")) {
 			blazeHoundPassive(out,gameState);
 		}
-		
-		/*
-		Can we do something like unit.skillOnSummon();
-		Then, Azure Herald and Blaze Hound are extended from unit.
-		And our code will call their own skill method?
-		
-		Or other ways, such that we do not need to hard code the abilities on summon like the above.
-		*/
-		
-
 	}
 	
+	/*
+	Can we do something like unit.skillOnSummon();
+	Then, Azure Herald and Blaze Hound are extended from unit.
+	And our code will call their own skill method?
+	
+	Or other ways, such that we do not need to hard code the abilities on summon like the above.
+	*/
 	//works for player1 only for now
 	public void azureHeraldPassive(ActorRef out, GameState gameState) {
-//		int player=gameState.currentPlayer();
 		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
 		int value = 0;
 		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
 			value = player1Avatar.getMaxHealth();
-		} else {
-			value = player1Avatar.getHealth() + 3;
-		}
+		} else {value = player1Avatar.getHealth() + 3;}
 		gameState.setUnitHealth(out, gameState.getBoard().getPlayer1Units().get(0), value);
 	}
 	

@@ -135,6 +135,10 @@ public class Unit {
 		throw new UnitDieException("");
 	}
 	
+	
+	public void windShrikeAbility() {
+		
+	}
 
 	//////////////////move ///////////////////
 	//6 steps to move a unit: 
