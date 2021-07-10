@@ -187,6 +187,7 @@ public class Unit {
 	}
 	
 	public void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){
+		
 		int attackerNewHealth = unit.getHealth() - target.getUnit().getAttack();
 		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
@@ -199,19 +200,19 @@ public class Unit {
 		unit.setAttacked(true);
 }
 	
-	public void rangeAttackHighLight(ActorRef out,GameState gameState) {
+	//public void rangeAttackHighLight(ActorRef out,GameState gameState) {
 		
-		if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {	
-			for(Tile i : gameState.getBoard().getPlayer2UnitTiles()) {
-				gameState.getBoard().addHighlightRedTiles(i);
-			}
-			gameState.getCurrentPlayer().displayRedTile(out,gameState, gameState.getBoard().getHighlightedRedTiles());
-		}else {
-			for(Tile i : gameState.getBoard().getPlayer1UnitTiles()) {
-				gameState.getBoard().addHighlightRedTiles(i);
-		}
-	}
-}
+		//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {	
+			//for(Tile i : gameState.getBoard().getPlayer2UnitTiles()) {
+				//gameState.getBoard().addHighlightRedTiles(i);
+			//}
+			//gameState.getCurrentPlayer().displayRedTile(out,gameState, gameState.getBoard().getHighlightedRedTiles());
+		//}else {
+			//for(Tile i : gameState.getBoard().getPlayer1UnitTiles()) {
+				//gameState.getBoard().addHighlightRedTiles(i);
+		//}
+	//}
+//}
 	
 	
 	

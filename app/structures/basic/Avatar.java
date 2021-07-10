@@ -35,7 +35,10 @@ public class Avatar extends Unit{
 		this.player.setHealth(health);
 		throw new AvatarException("");
 	}
-
+	
+	
+	
+	
 	public Player getPlayer() {return player;}
 	public void setPlayer(Player player) {this.player = player;}
 
