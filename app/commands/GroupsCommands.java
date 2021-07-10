@@ -53,193 +53,193 @@ public class GroupsCommands {
 	}
 	
 	//Below is the method to highlight the tiles in white for move
-		public static void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
+		//public static void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
 		
-			int positionX = tileClicked.getTilex();
-			int positionY = tileClicked.getTiley();
-			ArrayList<Tile> occupiedTiles = gameState.getBoard().getUnitOccupiedTiles();
-			ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
-			ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
+			//int positionX = tileClicked.getTilex();
+			//int positionY = tileClicked.getTiley();
+			//ArrayList<Tile> occupiedTiles = gameState.getBoard().getUnitOccupiedTiles();
+			//ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
+			//ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
 			
 			//Flying ability
-			if(gameState.getBoard().getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
-				for(int i=0; i<gameState.getBoard().getX(); i++) {
-					for(int j=0; j<gameState.getBoard().getY();j++) {
-						Tile tile = gameState.getBoard().getTile(i, j);
-						if(occupiedTiles.contains(tile)) continue;
-						if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
-							BasicCommands.drawTile(out, tile, 1); //only draw for player1
-						}
-						gameState.getBoard().addHighlightWhiteTiles(tile);
-						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
-					}
-				} return;
-			}
+//			if(gameState.getBoard().getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
+//				for(int i=0; i<gameState.getBoard().getX(); i++) {
+//					for(int j=0; j<gameState.getBoard().getY();j++) {
+//						Tile tile = gameState.getBoard().getTile(i, j);
+//						if(occupiedTiles.contains(tile)) continue;
+//						if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+//							BasicCommands.drawTile(out, tile, 1); //only draw for player1
+//						}
+//						gameState.getBoard().addHighlightWhiteTiles(tile);
+//						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+//					}
+//				} return;
+//			}
 			
 			//Highlighted the valid move tiles surrounding the unit first.
-			int x = positionX-1;
-			int y = positionY-1;
+			//int x = positionX-1;
+			//int y = positionY-1;
 
-			for(int i=x;i<= positionX+1;i++) {
-				for(int j=y;j<=positionY+1;j++) {
-					Tile tile = gameState.getBoard().getTile(i, j) ;
+			//for(int i=x;i<= positionX+1;i++) {
+				//for(int j=y;j<=positionY+1;j++) {
+					//Tile tile = gameState.getBoard().getTile(i, j) ;
 						//if the tile does not have any unit and is not null. It will be in white tile
-						if(!(tile==null)&& (checkTile(tile, occupiedTiles)==false)) {
+						//if(!(tile==null)&& (checkTile(tile, occupiedTiles)==false)) {
 							//adding the tile to the white tile list
-							gameState.getBoard().addHighlightWhiteTiles(tile);
-						}
-			}
-		}
+							//gameState.getBoard().addHighlightWhiteTiles(tile);
+						//}
+			//}
+		//}
 		/* drawing the x+2,y and x-2,y and x,y+2 and x,y-2 tile
 		 * It will only be highlighted when it is null and if x+1,y and x-1,y is not occupied by the opponent unit.
 		 * If x+1,y and x-1,y contains opponent units..x+2,y and x-2,y will not be highlighted.
 		 * Only player 1 will display the tiles.
 		 */
-			Tile tileXPlus1Y = gameState.getBoard().getTile(positionX+1, positionY);
-			Tile tileXPlus2Y = gameState.getBoard().getTile(positionX+2, positionY);
-			Tile tileXYPlus1 = gameState.getBoard().getTile(positionX, positionY+1);
-			Tile tileXYPlus2 = gameState.getBoard().getTile(positionX, positionY+2);
-			Tile tileXMinus1Y = gameState.getBoard().getTile(positionX-1, positionY);
-			Tile tileXMinus2Y = gameState.getBoard().getTile(positionX-2, positionY);
-			Tile tileXYMinus1 = gameState.getBoard().getTile(positionX, positionY-1);
-			Tile tileXYMinus2 = gameState.getBoard().getTile(positionX, positionY-2);
+			//Tile tileXPlus1Y = gameState.getBoard().getTile(positionX+1, positionY);
+			//Tile tileXPlus2Y = gameState.getBoard().getTile(positionX+2, positionY);
+			//Tile tileXYPlus1 = gameState.getBoard().getTile(positionX, positionY+1);
+			//Tile tileXYPlus2 = gameState.getBoard().getTile(positionX, positionY+2);
+			//Tile tileXMinus1Y = gameState.getBoard().getTile(positionX-1, positionY);
+			//Tile tileXMinus2Y = gameState.getBoard().getTile(positionX-2, positionY);
+			//Tile tileXYMinus1 = gameState.getBoard().getTile(positionX, positionY-1);
+			//Tile tileXYMinus2 = gameState.getBoard().getTile(positionX, positionY-2);
 	
-			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
-				if((checkTile(tileXPlus1Y, player2UnitTiles)==false)&&(checkTile(tileXPlus2Y, occupiedTiles)==false)&&		
-					(!(tileXPlus1Y==null))&& (!(tileXPlus2Y==null))){
-						gameState.getBoard().addHighlightWhiteTiles(tileXPlus2Y);
-				}
-				if((checkTile(tileXMinus1Y, player2UnitTiles)==false)&&(checkTile(tileXMinus2Y, occupiedTiles)==false)&&
-					(!(tileXMinus1Y==null))&& (!(tileXMinus2Y==null))){
-					gameState.getBoard().addHighlightWhiteTiles(tileXMinus2Y);
-				}
-				if((checkTile(tileXYMinus1, player2UnitTiles)==false)&&(checkTile(tileXYMinus2, occupiedTiles)==false)&&
-					(!(tileXYMinus1==null))&& (!(tileXYMinus2==null))){
-					BasicCommands.drawTile(out,tileXYMinus2, 1);
-					gameState.getBoard().addHighlightWhiteTiles(tileXYMinus2);
-				}	
-				if((checkTile(tileXYPlus1, player2UnitTiles)==false)&&(checkTile(tileXYPlus2, occupiedTiles)==false)&&
-					(!(tileXYPlus1==null))&& (!(tileXYPlus2==null))){
-					gameState.getBoard().addHighlightWhiteTiles(tileXYPlus2);
-				}
-			}else{//If player2.if the tile does not contain player 1 unit..add the tile to the valid move tile array.
+			//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+				//if((checkTile(tileXPlus1Y, player2UnitTiles)==false)&&(checkTile(tileXPlus2Y, occupiedTiles)==false)&&		
+					//(!(tileXPlus1Y==null))&& (!(tileXPlus2Y==null))){
+						//gameState.getBoard().addHighlightWhiteTiles(tileXPlus2Y);
+				//}
+				//if((checkTile(tileXMinus1Y, player2UnitTiles)==false)&&(checkTile(tileXMinus2Y, occupiedTiles)==false)&&
+					//(!(tileXMinus1Y==null))&& (!(tileXMinus2Y==null))){
+					//gameState.getBoard().addHighlightWhiteTiles(tileXMinus2Y);
+				//}
+				//if((checkTile(tileXYMinus1, player2UnitTiles)==false)&&(checkTile(tileXYMinus2, occupiedTiles)==false)&&
+					//(!(tileXYMinus1==null))&& (!(tileXYMinus2==null))){
+					//BasicCommands.drawTile(out,tileXYMinus2, 1);
+					//gameState.getBoard().addHighlightWhiteTiles(tileXYMinus2);
+				//}	
+				//if((checkTile(tileXYPlus1, player2UnitTiles)==false)&&(checkTile(tileXYPlus2, occupiedTiles)==false)&&
+					//(!(tileXYPlus1==null))&& (!(tileXYPlus2==null))){
+					//gameState.getBoard().addHighlightWhiteTiles(tileXYPlus2);
+				//}
+			//}else{//If player2.if the tile does not contain player 1 unit..add the tile to the valid move tile array.
 				
-				if((checkTile(tileXPlus1Y, player1UnitTiles)==false)&&(checkTile(tileXPlus2Y, occupiedTiles)==false)&&		
-						(!(tileXPlus1Y==null))&& (!(tileXPlus2Y==null))){
-							gameState.getBoard().addHighlightWhiteTiles(tileXPlus2Y);
-					}
-					if((checkTile(tileXMinus1Y, player1UnitTiles)==false)&&(checkTile(tileXMinus2Y, occupiedTiles)==false)&&
-							(!(tileXMinus1Y==null))&& (!(tileXMinus2Y==null))){
-						gameState.getBoard().addHighlightWhiteTiles(tileXMinus2Y);
-					}
-					if((checkTile(tileXYMinus1, player1UnitTiles)==false)&&(checkTile(tileXYMinus2, occupiedTiles)==false)&&
-						(!(tileXYMinus1==null))&& (!(tileXYMinus2==null))){
-						gameState.getBoard().addHighlightWhiteTiles(tileXYMinus2);
-					}	
-					if((checkTile(tileXYPlus1, player1UnitTiles)==false)&&(checkTile(tileXYPlus2, occupiedTiles)==false)&&
-						(!(tileXYPlus1==null))&& (!(tileXYPlus2==null))){
-						gameState.getBoard().addHighlightWhiteTiles(tileXYPlus2);
-					}
+				//if((checkTile(tileXPlus1Y, player1UnitTiles)==false)&&(checkTile(tileXPlus2Y, occupiedTiles)==false)&&		
+						//(!(tileXPlus1Y==null))&& (!(tileXPlus2Y==null))){
+							//gameState.getBoard().addHighlightWhiteTiles(tileXPlus2Y);
+					//}
+					//if((checkTile(tileXMinus1Y, player1UnitTiles)==false)&&(checkTile(tileXMinus2Y, occupiedTiles)==false)&&
+							//(!(tileXMinus1Y==null))&& (!(tileXMinus2Y==null))){
+						//gameState.getBoard().addHighlightWhiteTiles(tileXMinus2Y);
+					//}
+					//if((checkTile(tileXYMinus1, player1UnitTiles)==false)&&(checkTile(tileXYMinus2, occupiedTiles)==false)&&
+						//(!(tileXYMinus1==null))&& (!(tileXYMinus2==null))){
+						//gameState.getBoard().addHighlightWhiteTiles(tileXYMinus2);
+					//}	
+					//if((checkTile(tileXYPlus1, player1UnitTiles)==false)&&(checkTile(tileXYPlus2, occupiedTiles)==false)&&
+						//(!(tileXYPlus1==null))&& (!(tileXYPlus2==null))){
+						//gameState.getBoard().addHighlightWhiteTiles(tileXYPlus2);
+					//}
 			
-				}
-			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
-				displayWhiteTile (out,gameState.getBoard().getHighlightedWhiteTiles());
-			}
-}
+				//}
+			//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+				//displayWhiteTile (out,gameState.getBoard().getHighlightedWhiteTiles());
+			//}
+//}
 	//Below is the method to highlight the adjacent tiles in red for attack
-	public static void highlightAttackTile (ActorRef out,GameState gameState ,Tile tileClicked) {
+	//public static void highlightAttackTile (ActorRef out,GameState gameState ,Tile tileClicked) {
 			
-			int positionX = tileClicked.getTilex();
-			int positionY = tileClicked.getTiley();
+			//int positionX = tileClicked.getTilex();
+			//int positionY = tileClicked.getTiley();
 			//Highlighted the tiles surrounding the unit first.
-			int x = positionX-1;
-			int y = positionY-1;
+			//int x = positionX-1;
+			//int y = positionY-1;
 			//Get the opponent unit list
-			ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
-			ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
+			//ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
+			//ArrayList<Tile> player2UnitTiles = gameState.getBoard().getPlayer2UnitTiles();
 			//Checking whether the surrounding tile contains opponent unit. if yes, it will be red highlighted
-			if(gameState.getUnitClicked().isAttacked()==false) {
-				if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
-					for(int i=x;i<= positionX+1;i++) {
-						for(int j=y;j<=positionY+1;j++) {
-							Tile tile = gameState.getBoard().getTile(i, j) ;
-								if(player2UnitTiles.contains(tile)&&(!(tile==null))){
-									gameState.getBoard().addHighlightRedTiles(tile);
-								}
-						}
-					}
-					displayRedTile (out,gameState.getBoard().getHighlightedRedTiles());
-				}				
-				}else {
+			//if(gameState.getUnitClicked().isAttacked()==false) {
+				//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+					//for(int i=x;i<= positionX+1;i++) {
+						//for(int j=y;j<=positionY+1;j++) {
+							//Tile tile = gameState.getBoard().getTile(i, j) ;
+								//if(player2UnitTiles.contains(tile)&&(!(tile==null))){
+									//gameState.getBoard().addHighlightRedTiles(tile);
+								//}
+						//}
+					//}
+					//displayRedTile (out,gameState.getBoard().getHighlightedRedTiles());
+				//}				
+				//}else {
 					//for player2..only add tile..no display
-					for(int i=x;i<= positionX+1;i++) {
-						for(int j=y;j<=positionY+1;j++) {
-							Tile tile = gameState.getBoard().getTile(i, j) ;
-								if((player1UnitTiles.contains(tile)&&(!(tile==null)))){
-									gameState.getBoard().addHighlightRedTiles(tile);
-								}
-						}
-					}			
-				}
-			}			
+					//for(int i=x;i<= positionX+1;i++) {
+						//for(int j=y;j<=positionY+1;j++) {
+							//Tile tile = gameState.getBoard().getTile(i, j) ;
+								//if((player1UnitTiles.contains(tile)&&(!(tile==null)))){
+									//gameState.getBoard().addHighlightRedTiles(tile);
+								//}
+						//}
+					//}			
+				//}
+			//}			
 	
-	public static void highlightMoveAndAttackTile (ActorRef out,GameState gameState ,Tile tile) {
+	//public static void highlightMoveAndAttackTile (ActorRef out,GameState gameState ,Tile tile) {
 		
 		/*First, add the possible valid move Tile.
 		 * Then run through the hashset and call the highlightattacktile for each element
 		 * to add the possible valid attack tiles.
 		 */
-		highlightMoveTile(out,gameState,tile);
-		for(Tile i: gameState.getBoard().getHighlightedWhiteTiles()) {	
-			highlightAttackTile(out,gameState,i);
-		}
+		//highlightMoveTile(out,gameState,tile);
+		//for(Tile i: gameState.getBoard().getHighlightedWhiteTiles()) {	
+			//highlightAttackTile(out,gameState,i);
+		//}
 	
-		displayWhiteTile (out,gameState.getBoard().getHighlightedWhiteTiles());
-		displayRedTile (out,gameState.getBoard().getHighlightedRedTiles());
-	}
+		//displayWhiteTile (out,gameState.getBoard().getHighlightedWhiteTiles());
+		//displayRedTile (out,gameState.getBoard().getHighlightedRedTiles());
+	//}
 	
 	//attack, without counterattack
-	public static void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {
+	//public static void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {
 
-			Unit attackTarget = target.getUnit();
-			int targetNewHealth = attackTarget.getHealth() - unit.getAttack();
-			BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
-			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
-			gameState.setUnitHealth(out, attackTarget, targetNewHealth);
-			if(attackTarget instanceof Avatar) {
-				Avatar avatar = (Avatar)attackTarget;
-				avatar.setHealth(targetNewHealth, out);
-				if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
-				BasicCommands.setPlayer2Health(out, gameState.getPlayer2());	
-				}else {
-				BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
-				}
-			}
-			unit.setAttacked(true);
-	}
+			//Unit attackTarget = target.getUnit();
+			//int targetNewHealth = attackTarget.getHealth() - unit.getAttack();
+			//BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
+			//try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+			//gameState.setUnitHealth(out, attackTarget, targetNewHealth);
+			//if(attackTarget instanceof Avatar) {
+				//Avatar avatar = (Avatar)attackTarget;
+				//avatar.setHealth(targetNewHealth, out);
+				//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
+				//BasicCommands.setPlayer2Health(out, gameState.getPlayer2());	
+				//}else {
+				//BasicCommands.setPlayer1Health(out, gameState.getPlayer1());
+				//}
+			//}
+			//unit.setAttacked(true);
+	//}
 	
 	//attack, with counterattack
-	public static void attackUnitWithCounter (ActorRef out, GameState gameState,Unit unit, Tile target) {
-		attackUnit(out,gameState,unit,target);
-		if(target.getUnit().getHealth()>=0) {counterAttack(out,gameState,unit,target);}
-		unit.setAttacked(true);
-}
+//	public static void attackUnitWithCounter (ActorRef out, GameState gameState,Unit unit, Tile target) {
+		//attackUnit(out,gameState,unit,target);
+		//if(target.getUnit().getHealth()>=0) {counterAttack(out,gameState,unit,target);}
+		//unit.setAttacked(true);
+//}
 	
-	public static void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){
-		int attackerNewHealth = unit.getHealth() - target.getUnit().getAttack();
-		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
-		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
-		gameState.setUnitHealth(out, unit, attackerNewHealth);
-		if(unit instanceof Avatar) {
-			Avatar avatar = (Avatar) unit;
-			avatar.setHealth(attackerNewHealth, out);
-			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
-			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());	
-			}else {
-			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
-			}
-		}
-	}
+//	public static void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){
+//		int attackerNewHealth = unit.getHealth() - target.getUnit().getAttack();
+//		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
+//		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+//		gameState.setUnitHealth(out, unit, attackerNewHealth);
+//		if(unit instanceof Avatar) {
+//			Avatar avatar = (Avatar) unit;
+//			avatar.setHealth(attackerNewHealth, out);
+//			if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){
+//			BasicCommands.setPlayer1Health(out, gameState.getPlayer1());	
+//			}else {
+//			BasicCommands.setPlayer2Health(out, gameState.getPlayer2());
+//			}
+//		}
+//	}
 		
 
 	
@@ -249,35 +249,31 @@ public class GroupsCommands {
 			for(Tile i : gameState.getBoard().getPlayer2UnitTiles()) {
 				gameState.getBoard().addHighlightRedTiles(i);
 			}
-			displayRedTile (out,gameState.getBoard().getHighlightedRedTiles());
+			//displayRedTile (out,gameState.getBoard().getHighlightedRedTiles());
 		}else {
 			for(Tile i : gameState.getBoard().getPlayer1UnitTiles()) {
 				gameState.getBoard().addHighlightRedTiles(i);
 		}
 	}
+	}
 }
-	public static boolean checkTile (Tile tile, ArrayList<Tile> a) {//check whether the tile is in an arraylist.
-
-		if(a.contains(tile)) {
-			return true;	
-		}return false;}
 	
-	public static void displayWhiteTile (ActorRef out,HashSet<Tile> whiteTiles) {
+	//public static void displayWhiteTile (ActorRef out,HashSet<Tile> whiteTiles) {
 		
-		for(Tile i : whiteTiles) {
-			BasicCommands.drawTile(out, i, 1);
-			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-	}
-	public static void displayRedTile (ActorRef out,HashSet<Tile> redTiles) {
+		//for(Tile i : whiteTiles) {
+			//BasicCommands.drawTile(out, i, 1);
+			//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		//}
+	//}
+	//public static void displayRedTile (ActorRef out,HashSet<Tile> redTiles) {
 			
-			for(Tile i : redTiles) {
-				BasicCommands.drawTile(out, i, 2);
-				try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			}
+			//for(Tile i : redTiles) {
+				//BasicCommands.drawTile(out, i, 2);
+				//try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			//}
 		
-	}
-}
+	//}
+//}
 
 
 ////method that do both front-end display & back-end unit health

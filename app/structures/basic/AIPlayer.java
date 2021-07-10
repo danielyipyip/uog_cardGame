@@ -1,5 +1,7 @@
 package structures.basic;
 
+import java.util.HashSet;
+
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import structures.GameState;
@@ -45,6 +47,18 @@ public class AIPlayer extends Player{
 	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
 		
 	}
+	@Override
+	public void displayWhiteTile (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles) {
+	
+		}
+	@Override
+	public void displayRedTile(ActorRef out,GameState gameState, HashSet<Tile> redTiles) {
+
+	}
+	@Override
+	public void displayAllTiles (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles,HashSet<Tile> redTiles) {
+
+}
 	
 	@Override
 	public void lose(ActorRef out) {

@@ -168,7 +168,218 @@ public class Board {//This Class is used to store all the variables related to u
 		Tile tile = this.getTile(x, y);
 		return tile;
 	}
+	
+	public void flyAbility (ActorRef out,GameState gameState ,Tile tileClicked) {
 		
+
+		int positionX = tileClicked.getTilex();
+		int positionY = tileClicked.getTiley();
+
+		//Flying ability
+		if(getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
+			for(int i=0; i<getX(); i++) {
+				for(int j=0; j<getY();j++) {
+					Tile tile = gameState.getBoard().getTile(i, j);
+					if(unitOccupiedTiles.contains(tile)) continue;
+					if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+						BasicCommands.drawTile(out, tile, 1); //only draw for player1
+					}
+					gameState.getBoard().addHighlightWhiteTiles(tile);
+					try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+				}			
+			} return;
+		}
+		
+	}
+	
+	//Below is the method to highlight the tiles in white for move, adjacent
+	public void highlightAdjacentTile (Tile tileClicked,ActorRef out) {
+			
+				int positionX = tileClicked.getTilex();
+				int positionY = tileClicked.getTiley();
+
+				//Flying ability
+				//if(getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
+					//for(int i=0; i<getX(); i++) {
+						//for(int j=0; j<getY();j++) {
+							//Tile tile = gameState.getBoard().getTile(i, j);
+							//if(unitOccupiedTiles.contains(tile)) continue;
+							//if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+								//BasicCommands.drawTile(out, tile, 1); //only draw for player1
+							//}
+							//gameState.getBoard().addHighlightWhiteTiles(tile);
+							//try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+						//}			
+					//} return;
+				//}
+				//Normal Unit move, without ability
+				//Highlighted the valid move tiles surrounding the unit first.
+				int x = positionX-1;
+				int y = positionY-1;
+				//BasicCommands.addPlayer1Notification(out,""+positionX + positionY, 2);
+				for(int i=x;i<= positionX+1;i++) {
+					for(int j= y;j<=positionY+1;j++) {
+						Tile tile = getTile(i, j) ;
+							//if the tile does not have any unit and is not null. It will be in white tile
+							if((!(tile==null)) && (unitOccupiedTiles.contains(tile)==false)) {
+								//adding the tile to the white tile list
+								addHighlightWhiteTiles(tile);
+					
+							}
+				}
+			}
+			/* drawing the x+2,y and x-2,y and x,y+2 and x,y-2 tile
+			 * It will only be highlighted when it is null and if x+1,y and x-1,y is not occupied by the opponent unit.
+			 * If x+1,y and x-1,y contains opponent units..x+2,y and x-2,y will not be highlighted.
+			 * Only player 1 will display the tiles.
+			 */
+				//Tile tileXPlus1Y = gameState.getBoard().getTile(positionX+1, positionY);
+				//Tile tileXPlus2Y = gameState.getBoard().getTile(positionX+2, positionY);
+				//Tile tileXYPlus1 = gameState.getBoard().getTile(positionX, positionY+1);
+				//Tile tileXYPlus2 = gameState.getBoard().getTile(positionX, positionY+2);
+				//Tile tileXMinus1Y = gameState.getBoard().getTile(positionX-1, positionY);
+				//Tile tileXMinus2Y = gameState.getBoard().getTile(positionX-2, positionY);
+				//Tile tileXYMinus1 = gameState.getBoard().getTile(positionX, positionY-1);
+				//Tile tileXYMinus2 = gameState.getBoard().getTile(positionX, positionY-2);
+		
+				//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+					//if((checkTile(tileXPlus1Y, player2UnitTiles)==false)&&(checkTile(tileXPlus2Y, unitOccupiedTiles)==false)&&		
+						//(!(tileXPlus1Y==null))&& (!(tileXPlus2Y==null))){
+						//	gameState.getBoard().addHighlightWhiteTiles(tileXPlus2Y);
+					//}
+					//if((checkTile(tileXMinus1Y, player2UnitTiles)==false)&&(checkTile(tileXMinus2Y, unitOccupiedTiles)==false)&&
+						//(!(tileXMinus1Y==null))&& (!(tileXMinus2Y==null))){
+						//gameState.getBoard().addHighlightWhiteTiles(tileXMinus2Y);
+					//}
+					//if((checkTile(tileXYMinus1, player2UnitTiles)==false)&&(checkTile(tileXYMinus2, unitOccupiedTiles)==false)&&
+						//(!(tileXYMinus1==null))&& (!(tileXYMinus2==null))){
+						///BasicCommands.drawTile(out,tileXYMinus2, 1);
+						//gameState.getBoard().addHighlightWhiteTiles(tileXYMinus2);
+					//}	
+					//if((checkTile(tileXYPlus1, player2UnitTiles)==false)&&(checkTile(tileXYPlus2, unitOccupiedTiles)==false)&&
+						//(!(tileXYPlus1==null))&& (!(tileXYPlus2==null))){
+						//gameState.getBoard().addHighlightWhiteTiles(tileXYPlus2);
+					//}
+				//}else{//If player2.if the tile does not contain player 1 unit..add the tile to the valid move tile array.
+					
+					//if((checkTile(tileXPlus1Y, player1UnitTiles)==false)&&(checkTile(tileXPlus2Y, unitOccupiedTiles)==false)&&		
+							//(!(tileXPlus1Y==null))&& (!(tileXPlus2Y==null))){
+								//gameState.getBoard().addHighlightWhiteTiles(tileXPlus2Y);
+						//}
+						//if((checkTile(tileXMinus1Y, player1UnitTiles)==false)&&(checkTile(tileXMinus2Y, unitOccupiedTiles)==false)&&
+								//(!(tileXMinus1Y==null))&& (!(tileXMinus2Y==null))){
+							//gameState.getBoard().addHighlightWhiteTiles(tileXMinus2Y);
+						//}
+						//if((checkTile(tileXYMinus1, player1UnitTiles)==false)&&(checkTile(tileXYMinus2, unitOccupiedTiles)==false)&&
+							//(!(tileXYMinus1==null))&& (!(tileXYMinus2==null))){
+							//gameState.getBoard().addHighlightWhiteTiles(tileXYMinus2);
+						//}	
+						//if((checkTile(tileXYPlus1, player1UnitTiles)==false)&&(checkTile(tileXYPlus2, unitOccupiedTiles)==false)&&
+							//(!(tileXYPlus1==null))&& (!(tileXYPlus2==null))){
+							//gameState.getBoard().addHighlightWhiteTiles(tileXYPlus2);
+						//}
+				
+					//}
+				//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+					//displayWhiteTile (out,gameState.getBoard().getHighlightedWhiteTiles());
+				//}
+	}
+	
+	public void highlightDiagonal (ActorRef out,GameState gameState ,Tile tileClicked) {
+		
+		/* drawing the x+2,y and x-2,y and x,y+2 and x,y-2 tile
+		 * It will only be highlighted when it is null and if x+1,y and x-1,y is not occupied by the opponent unit.
+		 * If x+1,y and x-1,y contains opponent units..x+2,y and x-2,y will not be highlighted.
+		 * Only player 1 will display the tiles.
+		 */
+		int positionX = tileClicked.getTilex();
+		int positionY = tileClicked.getTiley();
+		ArrayList<Tile> opponentUnitTiles = player2UnitTiles;
+		
+		Tile tileXPlus1Y = getTile(positionX+1, positionY);
+		Tile tileXPlus2Y = getTile(positionX+2, positionY);
+		Tile tileXYPlus1 = getTile(positionX, positionY+1);
+		Tile tileXYPlus2 = getTile(positionX, positionY+2);
+		Tile tileXMinus1Y = getTile(positionX-1, positionY);
+		Tile tileXMinus2Y = getTile(positionX-2, positionY);
+		Tile tileXYMinus1 = getTile(positionX, positionY-1);
+		Tile tileXYMinus2 = getTile(positionX, positionY-2);
+		
+
+		//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){opponentUnitTiles = player2UnitTiles;}
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())){opponentUnitTiles = player1UnitTiles;}
+
+		if((opponentUnitTiles.contains(tileXPlus1Y)==false)&&(unitOccupiedTiles.contains(tileXPlus2Y)==false)
+			&& (!(tileXPlus1Y==null))&& (!(tileXPlus2Y==null))){
+			addHighlightWhiteTiles(tileXPlus2Y);}
+		if((opponentUnitTiles.contains(tileXMinus1Y)==false)&&(unitOccupiedTiles.contains(tileXMinus2Y)==false)
+			&& (!(tileXMinus1Y==null))&& (!(tileXMinus2Y==null))){
+			addHighlightWhiteTiles(tileXMinus2Y);}
+		if((opponentUnitTiles.contains(tileXYMinus1)==false)&&(unitOccupiedTiles.contains(tileXYMinus2)==false)
+				&& (!(tileXYMinus1==null))&& (!(tileXYMinus2==null))){
+			addHighlightWhiteTiles(tileXYMinus2);}
+		if((opponentUnitTiles.contains(tileXYPlus1)==false)&&(unitOccupiedTiles.contains(tileXYPlus2)==false)
+				&& (!(tileXYPlus1==null))&& (!(tileXYPlus2==null))){
+			addHighlightWhiteTiles(tileXYPlus2);}}
+	
+	public void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
+		highlightAdjacentTile(tileClicked,out);
+		highlightDiagonal(out,gameState,tileClicked);}
+	
+	
+	//Below is the method to highlight the adjacent tiles in red for attack
+	public void highlightAttackTile (GameState gameState ,Tile tileClicked) {
+		
+		int positionX = tileClicked.getTilex();
+		int positionY = tileClicked.getTiley();
+		//Highlighted the tiles surrounding the unit first.
+		int x = positionX-1;
+		int y = positionY-1;
+		
+		ArrayList<Tile> opponentUnitTiles = null;
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())){opponentUnitTiles = player2UnitTiles;}
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())){opponentUnitTiles = player1UnitTiles;}
+				
+		//Checking whether the surrounding tile contains opponent unit. if yes, it will be red highlighted
+				if(gameState.getUnitClicked().isAttacked()==false) {
+						for(int i=x;i<= positionX+1;i++) {
+							for(int j=y;j<=positionY+1;j++) {
+								Tile tile = gameState.getBoard().getTile(i, j) ;
+									if(opponentUnitTiles.contains(tile)&&(!(tile==null))){
+										gameState.getBoard().addHighlightRedTiles(tile);
+									}
+							}
+						}
+				}			
+	}
+	
+	public void highlightMoveAndAttackTile (ActorRef out, GameState gameState ,Tile tile) {
+		
+		/*First, add the possible valid move Tile.
+		 * Then run through the hashset and call the highlightattacktile for each element
+		 * to add the possible valid attack tiles.
+		 */
+		highlightMoveTile(out, gameState,tile);
+		for(Tile i: getHighlightedWhiteTiles()) {	
+			highlightAttackTile(gameState,i);
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	public void addHighlightWhiteTiles(Tile tile) {highlightedWhiteTiles.add(tile);}
 	public void addHighlightRedTiles(Tile tile) {highlightedRedTiles.add(tile);}
 		
