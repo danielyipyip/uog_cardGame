@@ -210,11 +210,6 @@ public class Unit {
 		}
 	}
 
-	
-	public void windShrikeAbility() {
-		
-	}
-
 	//////////////////move ///////////////////
 	//6 steps to move a unit: 
 	//(1)swap unit's associated tiles (2)change player1/2UnitTiles & unitOccupiedTiles
