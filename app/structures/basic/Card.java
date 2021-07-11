@@ -11,8 +11,11 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import events.EventProcessor;
 import structures.GameState;
+import structures.basic.unit.Attack2;
 import structures.basic.unit.summonDraw;
 import structures.basic.unit.summonHeal;
+import structures.basic.unit.RangedUnit;
+import structures.basic.unit.FlyingUnit;
 import utils.BasicObjectBuilders;
 
 /**
@@ -39,7 +42,9 @@ public class Card {
 	int middleSleepTime = EventProcessor.middleSleepTime;
 	@JsonIgnore
 	Map<String, Class<? extends Unit>> classMap= Map.of("AzureHerald", summonHeal.class, 
-			"BlazeHound", summonDraw.class);
+			"BlazeHound", summonDraw.class,"Serpenti",Attack2.class, "AzuriteLion",Attack2.class,
+			"FireSpitter",RangedUnit.class,"Pyromancer",RangedUnit.class, "WindShrike", FlyingUnit.class
+			);
 	
 	public Card() {};
 	public Card(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard) {

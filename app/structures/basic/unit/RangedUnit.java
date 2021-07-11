@@ -23,14 +23,16 @@ public class RangedUnit extends Unit{
 		super();
 	}
 	
-	
-	public void highlightAttackTile(ActorRef out,GameState gameState) {//Range Attack highlight
+	@Override
+	public void highlightAttackTile(GameState gameState,Tile tileClicked) {//Range Attack highlight
+		
 		ArrayList<Tile> opponentUnitTiles = gameState.getBoard().getPlayer2UnitTiles();
-		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())) {opponentUnitTiles = gameState.getBoard().getPlayer1UnitTiles();}
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())) 
+		{opponentUnitTiles = gameState.getBoard().getPlayer1UnitTiles();}
+		
 		for(Tile i : opponentUnitTiles) {
 			gameState.getBoard().addHighlightRedTiles(i);
 		}
-		gameState.getCurrentPlayer().displayRedTile(out,gameState);
 	}
 	
 	@Override

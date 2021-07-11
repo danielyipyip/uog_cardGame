@@ -186,39 +186,39 @@ public class Board {//This Class is used to store all the variables related to u
 	}
 
 	//Below is the method to highlight the tiles in white for move, adjacent
-	public void highlightAdjacentTile (Tile tileClicked,ActorRef out) {
-		int positionX = tileClicked.getTilex();
-		int positionY = tileClicked.getTiley();
+	//public void highlightAdjacentTile (Tile tileClicked,ActorRef out) {
+		//int positionX = tileClicked.getTilex();
+		//int positionY = tileClicked.getTiley();
 		//Normal Unit move, without ability
 		//Highlighted the valid move tiles surrounding the unit first.
-		for(int i=positionX-1;i<= positionX+1;i++) {
-			for(int j=positionY-1;j<=positionY+1;j++) {
-				addHighlightWhiteTiles(getTile(i, j));//adding the tile to the white tile list
-			}
-		}
-	}
+		//for(int i=positionX-1;i<= positionX+1;i++) {
+			//for(int j=positionY-1;j<=positionY+1;j++) {
+				//addHighlightWhiteTiles(getTile(i, j));//adding the tile to the white tile list
+			//}
+		//}
+	//}
 
 	/* drawing the x+2,y and x-2,y and x,y+2 and x,y-2 tile
 	 * It will only be highlighted when it is null and if x+1,y and x-1,y is not occupied by the opponent unit.
 	 * If x+1,y and x-1,y contains opponent units..x+2,y and x-2,y will not be highlighted.
 	 * Only player 1 will display the tiles.
 	 */
-	public void highlightFarTile (ActorRef out,GameState gameState ,Tile tileClicked) {
-		int x = tileClicked.getTilex();
-		int y = tileClicked.getTiley();
-		ArrayList<Tile> opponentUnitTiles = player2UnitTiles;
-		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())){opponentUnitTiles = player1UnitTiles;}
+	//public void highlightFarTile (ActorRef out,GameState gameState ,Tile tileClicked) {
+		//int x = tileClicked.getTilex();
+		//int y = tileClicked.getTiley();
+		//ArrayList<Tile> opponentUnitTiles = player2UnitTiles;
+		//if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())){opponentUnitTiles = player1UnitTiles;}
 
-		if(!opponentUnitTiles.contains(getTile(x+1, y))){addHighlightWhiteTiles(getTile(x+2, y));}
-		if(!opponentUnitTiles.contains(getTile(x-1, y))){addHighlightWhiteTiles(getTile(x-2, y));}
-		if(!opponentUnitTiles.contains(getTile(x, y-1))){addHighlightWhiteTiles(getTile(x, y-2));}
-		if(!opponentUnitTiles.contains(getTile(x, y+1))){addHighlightWhiteTiles(getTile(x, y+2));}
-	}
+		//if(!opponentUnitTiles.contains(getTile(x+1, y))){addHighlightWhiteTiles(getTile(x+2, y));}
+		//if(!opponentUnitTiles.contains(getTile(x-1, y))){addHighlightWhiteTiles(getTile(x-2, y));}
+		//if(!opponentUnitTiles.contains(getTile(x, y-1))){addHighlightWhiteTiles(getTile(x, y-2));}
+		//if(!opponentUnitTiles.contains(getTile(x, y+1))){addHighlightWhiteTiles(getTile(x, y+2));}
+	//}
 
-	public void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
-		highlightAdjacentTile(tileClicked,out);
-		highlightFarTile(out,gameState,tileClicked);
-	}
+	//public void highlightMoveTile (ActorRef out,GameState gameState ,Tile tileClicked) {
+		//highlightAdjacentTile(tileClicked,out);
+		//highlightFarTile(out,gameState,tileClicked);
+	//}
 
 	//Below is the method to highlight the adjacent tiles in red for attack
 	public void highlightAttackTile (GameState gameState ,Tile tileClicked) {
@@ -245,12 +245,12 @@ public class Board {//This Class is used to store all the variables related to u
 //	First, add the possible valid move Tile.
 //	 Then run through the hashset and call the highlightattacktile for each element
 //	 to add the possible valid attack tiles.
-	public void highlightMoveAndAttackTile (ActorRef out, GameState gameState ,Tile tile) {
-		highlightMoveTile(out, gameState,tile);
-		for(Tile i: getHighlightedWhiteTiles()) {	
-			highlightAttackTile(gameState,i);
-		}
-	}
+	//public void highlightMoveAndAttackTile (ActorRef out, GameState gameState ,Tile tile) {
+		//highlightMoveTile(out, gameState,tile);
+		//for(Tile i: getHighlightedWhiteTiles()) {	
+			//highlightAttackTile(gameState,i);
+		//}
+	//}
 
 	public void addHighlightWhiteTiles(Tile tile) {
 		//if the tile does not have any unit and is not null. It will be in white tile
