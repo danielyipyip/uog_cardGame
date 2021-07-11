@@ -110,7 +110,7 @@ public class GameState {
 	} 
 
 	//play a card: go to player then card
-	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
+	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {	
 		currentPlayer.playCard(out, gameState, card, currentTileClicked);
 		currentPlayer.setMana(currentPlayer.getMana()-card.getManacost());
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
