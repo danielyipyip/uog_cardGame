@@ -271,8 +271,18 @@ public class Board {//This Class is used to store all the variables related to u
 	public ArrayList<Unit> getPlayer1Units() {return player1Units;}
 	public ArrayList<Unit> getPlayer2Units() {return player2Units;}
 	public ArrayList<Tile> getUnitOccupiedTiles() {return unitOccupiedTiles;}
-	public HashSet<Tile> getHighlightedRedTiles() {return highlightedRedTiles;}
-	public HashSet<Tile> getHighlightedWhiteTiles() {return highlightedWhiteTiles;}
+	public HashSet<Tile> getHighlightedRedTiles() {
+		for (Tile i: highlightedRedTiles) {if (i==null) {highlightedRedTiles.remove(i);}}
+		return highlightedRedTiles;
+	}
+	public HashSet<Tile> getHighlightedWhiteTiles() {
+		for (Tile i: highlightedWhiteTiles) {
+			if (i==null) {
+				highlightedWhiteTiles.remove(i);
+			}
+		}
+		return highlightedWhiteTiles;
+	}
 	public Avatar getPlayer1Avatar() { return (Avatar)player1Units.get(0); }
 	public Avatar getPlayer2Avatar() { return (Avatar)player2Units.get(0); }	
 }		

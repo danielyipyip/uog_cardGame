@@ -40,7 +40,7 @@ public class EndTurnClicked implements EventProcessor{
 		//change player control (1->2; 2->1)
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 			gameState.setCurrentPlayer(gameState.getPlayer2());
-			gameState.playAITurn(out);
+
 			BasicCommands.addPlayer1Notification(out, "Your turn now!", 2);
 			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		}else {gameState.setCurrentPlayer(gameState.getPlayer1());
@@ -77,7 +77,9 @@ public class EndTurnClicked implements EventProcessor{
 				//i.setAttacked(false); i.setMoved(false);
 			}
 		}
-		
+		if (gameState.getCurrentPlayer()==gameState.getPlayer2()) {
+			gameState.playAITurn(out);
+		}
 	}
 
 }
