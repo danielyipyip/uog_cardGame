@@ -189,9 +189,9 @@ public class GameState {
 		
 		for(Card i: AICards) {
 			//Check mana
-			if(player2.getMana() < i.getManacost()) {
+			/*if(player2.getMana() < i.getManacost()) {
 				continue;
-			}
+			}*/
 
 			//highlight available tiles
 			CardClicked.cardHighlightTiles(out, this, i);
