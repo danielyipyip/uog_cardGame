@@ -137,17 +137,19 @@ public class TileClicked implements EventProcessor{
 		
 		/*Scenario 2&3 : if the player is clicking on a redTile and the not yet moved before, 
 		 * the unit will move and attack.
-		 * Ranged unit does not have move and attack method and it can attack far away.
 		 */
 		if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)){
+			
+			// Ranged unit does not have move and attack method and it can attack far away.
+			 
+			if(gameState.getUnitClicked() instanceof RangedUnit == false){
 				
 				int x = gameState.getUnitClicked().getPosition().getTilex();
 				int y = gameState.getUnitClicked().getPosition().getTiley();
 		
 				if ((tilex-x>=2)||(x-tilex>=2)||(tiley-y>=2)||(y-tiley>=2)&&
 					(gameState.getUnitClicked().isMoved()==false) && 
-						(gameState.getUnitClicked().getAttacked()<=0)
-						&&(gameState.getUnitClicked() instanceof RangedUnit == false)){
+						(gameState.getUnitClicked().getAttacked()<=0)){
 				
 					
 				//The below loop is to find the first tile that is in the whiteTiles
@@ -172,7 +174,7 @@ public class TileClicked implements EventProcessor{
 					gameState.getUnitClicked().attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 				}
 			
-		
+		}
 			
 		/*Scenario 2: if the player is clicking on a redTile, but not in move and attack range, only adjacent attack
 		 */
@@ -181,7 +183,6 @@ public class TileClicked implements EventProcessor{
 				gameState.getBoard().unhighlightWhiteTiles(out);
 				gameState.getBoard().unhighlightRedTiles(out);
 		
-				BasicCommands.addPlayer1Notification(out, "attackunit" , 2);
 				gameState.getUnitClicked().attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}
 			gameState.setTileClicked(currentTileClicked);
