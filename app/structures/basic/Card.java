@@ -71,7 +71,7 @@ public class Card {
 			fullName=nameWord[0]+nameWord[1];
 		}
 		if (classMap.get(fullName)!=null) {
-			unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), classMap.get(nameWord[0]+nameWord[1]));
+			unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), classMap.get(fullName));
 		}else {
 			unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);
 		}

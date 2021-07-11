@@ -85,7 +85,7 @@ public class AIPlayer extends Player{
 		for (Tile i: targetTile) {
 			if (tile==null) {tile=i;}
 			else {//aim for tile closer to avatar		
-				if (tile.absdiff(player1Tile)>i.absdiff(player1Tile) ) {tile=i;} 
+				//if (tile.absdiff(player1Tile)>i.absdiff(player1Tile) ) {tile=i;} 
 			}
 			return tile;
 		}
