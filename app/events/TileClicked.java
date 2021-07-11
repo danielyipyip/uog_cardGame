@@ -59,25 +59,8 @@ public class TileClicked implements EventProcessor{
 		if (gameState.getCardSelected()!=null) {
 			Card currentCard = gameState.getCardSelected();
 
-			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
-				if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
-					gameState.playCard(out, gameState, currentCard, currentTileClicked);
-					gameState.setTileClicked(currentTileClicked);
-					return;
-				}
-			}
-			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
-				//if is valid target -> play the card
-				if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)) {
-				gameState.playCard(out, gameState, currentCard, currentTileClicked);
-				gameState.setTileClicked(currentTileClicked);
-				return;
-				}
-			}
-
-			playCardOnTile(out, gameState, currentCard, currentTileClicked); //will return if a card is successfully played
+			if(playCardOnTile(out, gameState, currentCard, currentTileClicked)) {return;} //will return if a card is successfully played
 			
-
 			gameState.unHighlightCard(out);
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
@@ -207,13 +190,17 @@ public class TileClicked implements EventProcessor{
 
 
 	//Helper method
-	public static void playCardOnTile(ActorRef out, GameState gameState, Card card, Tile tile) {
+	public static boolean playCardOnTile(ActorRef out, GameState gameState, Card card, Tile tile) {
 //		Tile currTile = gameState.getBoard().getTile(tilex, tiley);
+		if(gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+			if(card.getManacost() > gameState.getPlayer1().getMana()) return false;
+		}
+		
 		if(card instanceof UnitCard) { //if a unit card is selected previously
 			if(gameState.getBoard().getHighlightedWhiteTiles().contains(tile)) {
 				gameState.playCard(out, gameState, card, tile);
 				gameState.setTileClicked(tile);
-				return;
+				return true;
 			}
 		}
 		if(card instanceof SpellCard) { //if a spell card is selected previously
@@ -221,9 +208,9 @@ public class TileClicked implements EventProcessor{
 			if(gameState.getBoard().getHighlightedRedTiles().contains(tile)) {
 				gameState.playCard(out, gameState, card, tile);
 				gameState.setTileClicked(tile);
-				return;
+				return true;
 			}
-		}
+		} return false;
 	}
 	
 
