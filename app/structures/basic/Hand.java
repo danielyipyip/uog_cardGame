@@ -24,7 +24,7 @@ public class Hand {
 	}
 	
 	public void addCard(Card card) {
-		if (myhand.size()<=6) myhand.add(card);
+		if (myhand.size()<6) myhand.add(card);
 		//if hand is full, just NOT add the card (still draw from deck so is removed)
 		//but we decide no exception is needed
 	}
