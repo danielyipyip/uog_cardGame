@@ -67,12 +67,12 @@ public class AIPlayer extends Player{
 		if (targetTile==null) {
 			BasicCommands.addPlayer1Notification(out, "Oops"+card.getCardname(), 2);
 			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-			for (Tile i:gameState.getBoard().getHighlightedWhiteTiles()) {
-				BasicCommands.addPlayer1Notification(out, "Oops", 2);
-				try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
-				BasicCommands.addPlayer1Notification(out, ""+i.getTilex() + i.getTiley(), 2);
-				try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
-			}
+//			for (Tile i:gameState.getBoard().getHighlightedWhiteTiles()) {
+//				BasicCommands.addPlayer1Notification(out, "Oops", 2);
+//				try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+//				BasicCommands.addPlayer1Notification(out, ""+i.getTilex() + i.getTiley(), 2);
+//				try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+//			}
 		}
 		TileClicked.playCardOnTile(out, gameState,card, targetTile);
 	}
@@ -80,11 +80,12 @@ public class AIPlayer extends Player{
 	public Tile pickSpellTarget(Card card, Set<Tile> targetTile, GameState gameState) 
 			throws DontPlayThisCardException{
 		if (card.getCardname().equals("Staff of Y'Kir'")) {
-			for (Tile i: targetTile) {return i;}//always return player 2 avatar
+			return gameState.getBoard().getPlayer1UnitTiles().get(0);//always return player 2 avatar
 		}else if (card.getCardname().equals("Entropic Decay")) {
 			Tile tile = null;
 			for (Tile i: targetTile) {
-				if (i.getUnit().getId()>0) {
+				if (tile==null) {tile=i;}
+				else if (i.getUnit().getId()>0) {
 					if (tile.getUnit().getHealth()<i.getUnit().getHealth() ) {tile=i;} 
 				}
 			}

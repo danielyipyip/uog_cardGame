@@ -200,21 +200,22 @@ public class GameState {
 		//Move and Attack
 		Set<Tile> targetTiles;
 		Tile targetTile;
-		if (this.getBoard().getPlayer2UnitTiles()==null) {
-			BasicCommands.addPlayer1Notification(out, "Unit Tiles is null", 2);
-			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-		if (this.getBoard().getPlayer2Units()==null) {
-			BasicCommands.addPlayer1Notification(out, "Units is null", 2);
-			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-		}
-		for(Tile i:this.getBoard().getPlayer2UnitTiles()) {
-			if (i==null) {
-				BasicCommands.addPlayer1Notification(out, "sth is null", 2);
-				try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-			}
-		}
-		for(Tile i:this.getBoard().getPlayer2UnitTiles()) {
+//		if (this.getBoard().getPlayer2UnitTiles()==null) {
+//			BasicCommands.addPlayer1Notification(out, "Unit Tiles is null", 2);
+//			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+//		}
+//		if (this.getBoard().getPlayer2Units()==null) {
+//			BasicCommands.addPlayer1Notification(out, "Units is null", 2);
+//			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+//		}
+//		for(Tile i:this.getBoard().getPlayer2UnitTiles()) {
+//			if (i==null) {
+//				BasicCommands.addPlayer1Notification(out, "sth is null", 2);
+//				try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+//			}
+//		}
+		for(int j = 0; j<this.getBoard().getPlayer2UnitTiles().size(); j++) {
+			Tile i = this.getBoard().getPlayer2UnitTiles().get(j);
 			Unit currUnit = i.getUnit();
 			this.setUnitClicked(currUnit);
 			this.setTileClicked(this.getBoard().unit2Tile(currUnit));

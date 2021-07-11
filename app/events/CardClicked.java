@@ -81,11 +81,11 @@ public class CardClicked implements EventProcessor{
 				for(int i=0; i<gameState.getBoard().getX(); i++) {
 					for(int j=0; j<gameState.getBoard().getY();j++) {
 						tile = gameState.getBoard().getTile(i, j);
-						if(occupiedTiles.contains(tile)) continue;
+						if(occupiedTiles.contains(tile)) {continue;}
 						//if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 							BasicCommands.drawTile(out, tile, 1); //only draw for player1
 						//}
-						highlightedWhiteTile.add(tile);
+							gameState.getBoard().addHighlightWhiteTiles(tile);
 						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 					}			
 				}
@@ -106,7 +106,7 @@ public class CardClicked implements EventProcessor{
 							//if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 								BasicCommands.drawTile(out, tile, 1);
 							//}
-							highlightedWhiteTile.add(tile);
+								gameState.getBoard().addHighlightWhiteTiles(tile);
 							try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 						}
 					}
@@ -125,7 +125,7 @@ public class CardClicked implements EventProcessor{
 					if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 						BasicCommands.drawTile(out, tile, 2);
 					}
-					highlightedRedTile.add(tile);
+					gameState.getBoard().addHighlightRedTiles(tile);
 				}
 			}
 			if(cardName.equals("Sundrop Elixir")) {
@@ -134,7 +134,7 @@ public class CardClicked implements EventProcessor{
 					if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 						BasicCommands.drawTile(out, tile, 2); //change the tile to red
 					}
-					highlightedRedTile.add(tile); //add in "red-tile" list
+					gameState.getBoard().addHighlightRedTiles(tile);
 				}
 			}
 			if(cardName.equals("Staff of Y'Kir'")) { 
@@ -142,13 +142,13 @@ public class CardClicked implements EventProcessor{
 				//only player 2 can have this card currently, so hardcoded for player 2 for now
 				tile = gameState.getBoard().getPlayer2UnitTiles().get(0); 
 				BasicCommands.drawTile(out, tile, 2);
-				highlightedRedTile.add(tile);
+				gameState.getBoard().addHighlightRedTiles(tile);
 			}
 			if(cardName.equals("Entropic Decay")) { 
 				//hightlight unit except at position 1 of array (=avatar)
 				//do it separately for player1 & 2 units
-				for(Tile i: player1UnitTiles.subList(1, player1UnitTiles.size())){highlightedRedTile.add(i); BasicCommands.drawTile(out, i, 2);}
-				for(Tile i: player2UnitTiles.subList(1, player2UnitTiles.size())){highlightedRedTile.add(i); BasicCommands.drawTile(out, i, 2);}
+				for(Tile i: player1UnitTiles.subList(1, player1UnitTiles.size())){gameState.getBoard().addHighlightRedTiles(i); BasicCommands.drawTile(out, i, 2);}
+				for(Tile i: player2UnitTiles.subList(1, player2UnitTiles.size())){gameState.getBoard().addHighlightRedTiles(i); BasicCommands.drawTile(out, i, 2);}
 			}
 		}
 	}
