@@ -127,8 +127,9 @@ public class GameState {
 	public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
 		try{unit.setHealth(newHealth, out);} //will 
 		catch(UnitDieException e) {
+			//add death trigger for "WindShrike"
+			unit.deathTrigger(currentPlayer, out);
 			this.getBoard().removeUnit(unit);
-			//add death triggert"WindShrike"
 		}
 		catch(AvatarException f) {
 			Avatar avatar = (Avatar) unit; 
@@ -196,14 +197,14 @@ public class GameState {
 			this.setUnitClicked(currUnit);
 			//if can attack then attack la
 			currUnit.highlightAttackTile(this, i);
-			if ((targetTiles=this.getBoard().getHighlightedRedTiles())!=null) {
+			if ((targetTiles=this.getBoard().getHighlightedRedTiles()).size()!=0) {
 				//choose which one to atk
 				targetTile = pickAttackTile(currUnit, targetTiles);
 				currUnit.attackUnit(out, this, currUnit, targetTile);
 			} //move (maybe atk afterward)
 			else{
 				currUnit.highlightMoveTile(this, i);
-				if ((targetTiles=this.getBoard().getHighlightedWhiteTiles())!=null) {
+				if ((targetTiles=this.getBoard().getHighlightedWhiteTiles()).size()!=0) {
 					//choose which one to atk
 //					targetTile = pickAttackTile(currUnit, targetTiles);
 //					currUnit.attackUnit(out, this, currUnit, targetTile);
@@ -228,16 +229,18 @@ public class GameState {
 			CardClicked.cardHighlightTiles(out, this, i);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 
+			boolean haveValidTarget=true;
 			//check is there valid target
 			if(i instanceof SpellCard) {
-				if (board.getHighlightedRedTiles()==null) {continue;} //no valid target -> next card
+				if (board.getHighlightedRedTiles().size()==0) {haveValidTarget=false; continue;} //no valid target -> next card
 			}else if(i instanceof UnitCard) {
-				if (board.getHighlightedWhiteTiles()==null) {continue;} //no valid target -> next card
+				if (board.getHighlightedWhiteTiles().size()==0) {haveValidTarget=false; continue;} //no valid target -> next card
 			}
 			//play according to logic
-			this.getCurrentPlayer().playCard(out, this, i);
-			try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-
+			if (haveValidTarget) {
+				this.getCurrentPlayer().playCard(out, this, i);
+				try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			}
 			board.unhighlightWhiteTiles(out);
 			board.unhighlightRedTiles(out);
 			try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
