@@ -76,8 +76,8 @@ public class CardClicked implements EventProcessor{
 		//"Planar Scout"
 		//UNIT card
 		if(cardSelected instanceof UnitCard) {	//if it is a unit card
-			//if "Azurite Lion"/"Planar Scout", highlight all unoccupied tiles
-			if(cardName.equals("Azurite Lion") || cardName.equals("Planar Scout")) {	
+			//if "Ironcliff Guardian"/"Planar Scout", highlight all unoccupied tiles
+			if(cardName.equals("Ironcliff Guardian") || cardName.equals("Planar Scout")) {	
 				for(int i=0; i<gameState.getBoard().getX(); i++) {
 					for(int j=0; j<gameState.getBoard().getY();j++) {
 						tile = gameState.getBoard().getTile(i, j);
