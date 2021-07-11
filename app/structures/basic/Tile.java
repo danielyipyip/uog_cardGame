@@ -89,6 +89,11 @@ public class Tile {
 
 	}
 
+	//differeces in 2 tile (abs sum of X diff & Y diff)
+	public int absdiff(Tile that) {
+		return Math.abs(this.getTilex()-that.getTilex()) + 
+		Math.abs(this.getTiley()-that.getTiley());
+	}
 
 
 }

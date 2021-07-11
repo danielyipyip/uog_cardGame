@@ -58,12 +58,19 @@ public class Card {
 	
 	public void playCard(ActorRef out, GameState gameState, Tile currentTileClicked) {
 		int n;
+		String unitConfigName="", fullName="";
 		String[] nameWord = this.getCardname().split(" ");
 		Unit unit = null;
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {n=1;}
 		else {n=2;}
-		String unitConfigName = "conf/gameconfs/units/"+nameWord[0]+"_"+nameWord[1]+".json";
-		if (classMap.get(nameWord[0]+nameWord[1])!=null) {
+		if (nameWord.length==1) { //some unit name length =1
+			unitConfigName = "conf/gameconfs/units/"+nameWord[0]+".json";
+			fullName=nameWord[0];
+		}else {
+			unitConfigName = "conf/gameconfs/units/"+nameWord[0]+"_"+nameWord[1]+".json";
+			fullName=nameWord[0]+nameWord[1];
+		}
+		if (classMap.get(fullName)!=null) {
 			unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), classMap.get(nameWord[0]+nameWord[1]));
 		}else {
 			unit = BasicObjectBuilders.loadUnit(unitConfigName, Unit.newid(n), Unit.class);

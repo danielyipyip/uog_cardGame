@@ -1,9 +1,11 @@
 package structures.basic;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import events.TileClicked;
 import structures.GameState;
 
 /**
@@ -43,10 +45,53 @@ public class AIPlayer extends Player{
 	//card only delete from Hand, not display
 	public void removeCard(ActorRef out, int n) {myhand.removeCard(n);}
 	
+//	@Override
+//	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
+//		card.playCard(out, gameState, currentTileClicked);
+//	}
+	
 	@Override
-	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
-		
+	public void playCard(ActorRef out, GameState gameState, Card card) {
+		Tile targetTile=null;
+		if(card instanceof SpellCard) {
+			Set<Tile> targetTileSet = gameState.getBoard().getHighlightedRedTiles();
+			targetTile = pickSpellTarget(card, targetTileSet, gameState);
+		}else if(card instanceof UnitCard) {
+			Set<Tile> targetTileSet = gameState.getBoard().getHighlightedWhiteTiles();
+			targetTile = pickUnitPlayTarget(card, targetTileSet, gameState);
+		}
+		TileClicked.playCardOnTile(out, gameState,card, targetTile);
 	}
+	
+	public Tile pickSpellTarget(Card card, Set<Tile> targetTile, GameState gameState) {
+		if (card.getCardname().equals("Staff of Y'Kir'")) {
+			for (Tile i: targetTile) {return i;}//always return player 2 avatar
+		}else if (card.getCardname().equals("Entropic Decay")) {
+			Tile tile = null;
+			for (Tile i: targetTile) {
+				if (tile==null) {tile=i;}
+				else {//aim for higher health unit
+					if (tile.getUnit().getHealth()<i.getUnit().getHealth() ) {tile=i;} 
+				}
+			}
+			return tile;
+		}
+		return null;
+	}
+	
+	public Tile pickUnitPlayTarget(Card card, Set<Tile> targetTile, GameState gameState) {
+		Tile tile = null;
+		Tile player1Tile = gameState.getBoard().getPlayer1UnitTiles().get(0);
+		for (Tile i: targetTile) {
+			if (tile==null) {tile=i;}
+			else {//aim for tile closer to avatar		
+				if (tile.absdiff(player1Tile)>i.absdiff(player1Tile) ) {tile=i;} 
+			}
+			return tile;
+		}
+		return null;
+	}
+	
 	@Override
 	public void displayWhiteTile (ActorRef out,GameState gameState) {
 	

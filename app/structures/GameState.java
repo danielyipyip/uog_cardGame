@@ -40,9 +40,10 @@ public class GameState {
 	Player currentPlayer;
 	//Boolean unitMoving;
 	
-	
+	int sleepTime = EventProcessor.sleepTime;
 	int middleSleepTime = EventProcessor.middleSleepTime;
 	int shortSleepTime = EventProcessor.shortSleepTime;
+	int longSleepTime = EventProcessor.longSleepTime;
 	
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -185,32 +186,38 @@ public class GameState {
 	//play AI Turn
 	public void playAITurn(ActorRef out) {
 		//Play cards		
-		ArrayList<Card> AICards = player2.getMyhand().getMyhand();
-		
-		for(Card i: AICards) {
-			//Check mana
-			/*if(player2.getMana() < i.getManacost()) {
-				continue;
-			}*/
+		for(int j=0;j< this.getCurrentPlayer().getHand().size();j++) {
+//		(Card i: this.getCurrentPlayer().getHand()) {
+			Card i=this.getCurrentPlayer().getHand().get(j);
+			this.setcardPos(j); //set which card is selected so can delete
+			
+			//just add here so not play too fast
+			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+			//if not enough mana, skip this card
+			if(player2.getMana() < i.getManacost()) {continue;}
 
 			//highlight available tiles
 			CardClicked.cardHighlightTiles(out, this, i);
-			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			
-			//play according to logic
-			if(i instanceof UnitCard) {
-				
-			}
+			//check is there valid target
 			if(i instanceof SpellCard) {
-				
+				if (board.getHighlightedRedTiles()==null) {continue;} //no valid target -> next card
+			}else if(i instanceof UnitCard) {
+				if (board.getHighlightedWhiteTiles()==null) {continue;} //no valid target -> next card
 			}
+			//play according to logic
+			this.getCurrentPlayer().playCard(out, this, i);
+			try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 			
 			board.unhighlightWhiteTiles(out);
 			board.unhighlightRedTiles(out);
 			try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
-		
 		//Move and Attack
+//		for(Tile i)
+//		List<Unit> player2Units = this.getBoard().get
+		
 		
 		//Pass the turn to player again
 		EndTurnClicked endTurn = new EndTurnClicked();

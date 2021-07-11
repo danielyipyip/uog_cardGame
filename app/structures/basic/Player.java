@@ -2,6 +2,7 @@ package structures.basic;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import Exceptions.NotEnoughCardException;
 import akka.actor.ActorRef;
@@ -49,6 +50,9 @@ public class Player {
 		card.playCard(out, gameState, currentTileClicked);
 	}
 	
+	//just for AI player
+	public void playCard(ActorRef out, GameState gameState, Card card) {;}
+	
 	//draw a card
 	public void cardDraw() {
 		Card tempCard;
@@ -88,6 +92,7 @@ public class Player {
 	public void removeCard(ActorRef out, int n) {}
 	public void lose(ActorRef out) {}
 	
+	public List<Card> getHand(){return this.getMyhand().getMyhand();}
 	public void setHealth(int health) {this.health = health;}
 
 	public int getHealth() {return health;}

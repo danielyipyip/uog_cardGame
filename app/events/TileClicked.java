@@ -59,6 +59,7 @@ public class TileClicked implements EventProcessor{
 		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
 		if (gameState.getCardSelected()!=null) {
 			Card currentCard = gameState.getCardSelected();
+
 			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
 				if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
 					gameState.playCard(out, gameState, currentCard, currentTileClicked);
@@ -74,6 +75,10 @@ public class TileClicked implements EventProcessor{
 				return;
 				}
 			}
+
+			playCardOnTile(out, gameState, currentCard, currentTileClicked); //will return if a card is successfully played
+			
+
 			gameState.unHighlightCard(out);
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
@@ -200,8 +205,28 @@ public class TileClicked implements EventProcessor{
 		return;
 		}
 
-		
-		
+
+	//Helper method
+	public static void playCardOnTile(ActorRef out, GameState gameState, Card card, Tile tile) {
+//		Tile currTile = gameState.getBoard().getTile(tilex, tiley);
+		if(card instanceof UnitCard) { //if a unit card is selected previously
+			if(gameState.getBoard().getHighlightedWhiteTiles().contains(tile)) {
+				gameState.playCard(out, gameState, card, tile);
+				gameState.setTileClicked(tile);
+				return;
+			}
+		}
+		if(card instanceof SpellCard) { //if a spell card is selected previously
+			//if is valid target -> play the card
+			if(gameState.getBoard().getHighlightedRedTiles().contains(tile)) {
+				gameState.playCard(out, gameState, card, tile);
+				gameState.setTileClicked(tile);
+				return;
+			}
+		}
+	}
+	
+
 	
 	//Helper method
 
