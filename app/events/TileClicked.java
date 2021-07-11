@@ -210,7 +210,11 @@ public class TileClicked implements EventProcessor{
 				if(gameState.getCurrentPlayer() == gameState.getPlayer1() && card.getManacost() > gameState.getPlayer1().getMana()) {
 					BasicCommands.addPlayer1Notification(out, "You have no MANA!", 2);
 					try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-					return false;
+					if(tile.getUnit() != null) {
+						gameState.unHighlightCard(out); 
+						gameState.getBoard().unhighlightRedTiles(out); 
+						return true; //not really played, just to stop the process event to prevent running code following}
+					} return false;
 				}
 				gameState.playCard(out, gameState, card, tile);
 				gameState.setTileClicked(tile);
