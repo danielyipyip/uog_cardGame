@@ -133,6 +133,7 @@ public class GameState {
 		}
 		catch(AvatarException f) {
 			Avatar avatar = (Avatar) unit; 
+			silverGuardKnightPassive(out, this, avatar);
 			if(avatar.getPlayer()==this.getPlayer1()) {
 				BasicCommands.setPlayer1Health(out, this.getPlayer1());
 				try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -270,6 +271,21 @@ public class GameState {
 		return targetTile;
 	}
 	
+	//Silverguard knight +attack when avatar is damaged
+	public void silverGuardKnightPassive(ActorRef out, GameState gameState, Avatar avatar) {
+		ArrayList<Unit> playerUnitArray;
+		ArrayList<Unit> player1Units = gameState.getBoard().getPlayer1Units(); 
+		ArrayList<Unit> player2Units = gameState.getBoard().getPlayer2Units();
+		if(avatar.getId() == 1) { playerUnitArray = player1Units; } else { playerUnitArray = player2Units; }
+				
+		for(Unit unit: playerUnitArray) {
+			String name = unit.getName();
+			if(name == null) {continue;} 
+			if(name.equals("Silverguard Knight")) {
+				unit.setAttack(unit.getAttack() + 2, out);
+			} 
+		}
+	}
 //	public Tile pickMoveTile(Unit currUnit, Set<Tile> targetTiles) {
 //		Tile targetTile=null;
 //		for(Tile j:targetTiles) {
