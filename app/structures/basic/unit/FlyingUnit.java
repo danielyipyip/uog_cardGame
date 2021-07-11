@@ -14,30 +14,43 @@ int shortSleepTime = EventProcessor.shortSleepTime;
 	public FlyingUnit() {
 		super();
 	}
-
-	public void flyAbility (ActorRef out,GameState gameState ,Tile tileClicked) {
-		
-		int positionX = tileClicked.getTilex();
-		int positionY = tileClicked.getTiley();
-		//Flying ability
-		if(gameState.getBoard().getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
-			
-			for(int i=0; i<gameState.getBoard().getX(); i++) {
-				for(int j=0; j<gameState.getBoard().getY();j++) {
-					Tile tile = gameState.getBoard().getTile(i, j);
-					if(gameState.getBoard().getUnitOccupiedTiles().contains(tile)) continue;
-					if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
-						BasicCommands.drawTile(out, tile, 1); //only draw for player1
-					}
-					gameState.getBoard().addHighlightWhiteTiles(tile);
-					try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
-				}			
-			} return;
-		}
+	
+	@Override
+	public void highlightMoveTile (GameState gameState ,Tile tileClicked) {
+	
+		for(int i=0; i<gameState.getBoard().getX(); i++) {
+			for(int j=0; j<gameState.getBoard().getY();j++) {
+				Tile tile = gameState.getBoard().getTile(i, j);
+				if(gameState.getBoard().getUnitOccupiedTiles().contains(tile)) continue;
+				gameState.getBoard().addHighlightWhiteTiles(tile);
+			}			
+		} return;
 	}
-
-	
-
-	
-
 }
+	
+	//public void flyAbility (ActorRef out,GameState gameState ,Tile tileClicked) {
+		
+		//int positionX = tileClicked.getTilex();
+		//int positionY = tileClicked.getTiley();
+		//Flying ability
+		//if(gameState.getBoard().getTile(positionX, positionY).getUnit().getName().equals("Windshrike")){
+			
+			//for(int i=0; i<gameState.getBoard().getX(); i++) {
+				//for(int j=0; j<gameState.getBoard().getY();j++) {
+					//Tile tile = gameState.getBoard().getTile(i, j);
+					//if(gameState.getBoard().getUnitOccupiedTiles().contains(tile)) continue;
+					//if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+						//BasicCommands.drawTile(out, tile, 1); //only draw for player1
+					//}
+					//gameState.getBoard().addHighlightWhiteTiles(tile);
+					//try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
+				//}			
+			//} return;
+		//}
+	//}
+
+	
+
+	
+
+//}

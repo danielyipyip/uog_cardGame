@@ -29,19 +29,27 @@ public class PlayerTest {
 	}
     @Test
 	public void checkPlayerStatus()
-	{
+	{	
+    	Player1 = new Player (20, 2);
 		assertTrue(Player1.getHealth()==20);
 		assertTrue(Player1.getMana()==2);
 	}
     @Test
 	public void checkPlayerHand()
-	{
+	{	
+    	Player1 = new Player (20, 2);
+    	myhand = new Hand();
+    	Player1.setMyhand(myhand);
 		assertTrue(Player1.getMyhand().equals(myhand));
 		
 	}
     @Test
 	public void checkPlayerDeck()
-	{
+	{	
+    	Player1 = new Player (20, 2); 		
+		
+		player1deck = new Deck(1);
+		Player1.setMydeck(player1deck);
 		assertTrue(Player1.getMydeck().equals(player1deck));
 		
 	}
