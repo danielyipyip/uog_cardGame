@@ -15,6 +15,8 @@ import structures.basic.unit.Attack2;
 import structures.basic.unit.summonDraw;
 import structures.basic.unit.summonHeal;
 import structures.basic.unit.RangedUnit;
+import structures.basic.unit.FlyingUnit;
+import structures.basic.unit.Provoke;
 import structures.basic.unit.WindShrike;
 import utils.BasicObjectBuilders;
 
@@ -43,9 +45,9 @@ public class Card {
 	@JsonIgnore
 	Map<String, Class<? extends Unit>> classMap= Map.of("AzureHerald", summonHeal.class, 
 			"BlazeHound", summonDraw.class,"Serpenti",Attack2.class, "AzuriteLion",Attack2.class,
-			"FireSpitter",RangedUnit.class,"Pyromancer",RangedUnit.class, "WindShrike", WindShrike.class
-			);
-	
+			"FireSpitter",RangedUnit.class,"Pyromancer",RangedUnit.class, "WindShrike", FlyingUnit.class,
+			"SilverguardKnight",Provoke.class, "IroncliffGuardian",Provoke.class,"RockPulveriser",Provoke.class);
+
 	public Card() {};
 	public Card(int id, String cardname, int manacost, MiniCard miniCard, BigCard bigCard) {
 		super();
