@@ -18,10 +18,7 @@ public class RangedUnit extends Unit{
 
 	@JsonIgnore
 	int shortSleepTime = EventProcessor.shortSleepTime;
-	
-	public RangedUnit() {
-		super();
-	}
+
 	
 	@Override
 	public void highlightAttackTile(GameState gameState,Tile tileClicked) {//Range Attack highlight

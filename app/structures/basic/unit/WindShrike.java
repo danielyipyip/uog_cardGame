@@ -4,14 +4,15 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import events.EventProcessor;
 import structures.GameState;
+import structures.basic.Player;
 import structures.basic.Tile;
 import structures.basic.Unit;
 
-public class FlyingUnit extends Unit{
+public class WindShrike extends Unit{
 	
 int shortSleepTime = EventProcessor.shortSleepTime;
 	
-	public FlyingUnit() {
+	public WindShrike() {
 		super();
 	}
 	
@@ -26,6 +27,13 @@ int shortSleepTime = EventProcessor.shortSleepTime;
 			}			
 		} return;
 	}
+
+	@Override
+	public void deathTrigger(Player player, ActorRef out) {
+		// TODO Auto-generated method stub
+		player.cardDraw(out);
+	}	
+
 }
 	
 	//public void flyAbility (ActorRef out,GameState gameState ,Tile tileClicked) {

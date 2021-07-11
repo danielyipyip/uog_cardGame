@@ -277,6 +277,7 @@ public class Unit {
 		//if(target.getUnit().getHealth()>=0) {counterAttack(out,gameState,unit,target);}
 		//unit.setAttacked(attacked+1);
 //}
+	public void deathTrigger(Player player, ActorRef out) {;}
 
 	
 	//getter setter

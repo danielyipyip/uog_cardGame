@@ -13,7 +13,6 @@ import structures.GameState;
 import structures.basic.Board;
 import structures.basic.Card;
 import structures.basic.Position;
-import structures.basic.unit.FlyingUnit;
 import structures.basic.unit.RangedUnit;
 import structures.basic.SpellCard;
 import structures.basic.Tile;

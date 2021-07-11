@@ -50,6 +50,7 @@ public class AIPlayer extends Player{
 //		card.playCard(out, gameState, currentTileClicked);
 //	}
 	
+	/////////// AI decide what card to play //////////////
 	@Override
 	public void playCard(ActorRef out, GameState gameState, Card card) {
 		Tile targetTile=null;
@@ -84,13 +85,21 @@ public class AIPlayer extends Player{
 		Tile player1Tile = gameState.getBoard().getPlayer1UnitTiles().get(0);
 		for (Tile i: targetTile) {
 			if (tile==null) {tile=i;}
-			else {//aim for tile closer to avatar		
-				//if (tile.absdiff(player1Tile)>i.absdiff(player1Tile) ) {tile=i;} 
+			else {//aim for tile closer to avatar
+				if (tile.absdiff(player1Tile)>i.absdiff(player1Tile) ) {tile=i;} 
 			}
 			return tile;
 		}
 		return null;
 	}
+	
+/////////// AI decide unit move //////////////
+//	@Override
+//	public void moveUnit(ActorRef out, Unit unit, Tile targetTile) {
+//		unit.moveUnit(out, targetTile);
+//	}
+	
+	
 	
 	@Override
 	public void displayWhiteTile (ActorRef out,GameState gameState) {

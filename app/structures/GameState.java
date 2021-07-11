@@ -29,7 +29,7 @@ public class GameState {
 	Player player1;
 	Player player2;
 	Board board;
-	
+
 	/*cardSelected = x when card x is clicked
 	 *cardPos = n when card on hand position n is clicked
 	 *if not selecting anyCard, n=-1 */
@@ -39,16 +39,16 @@ public class GameState {
 	Unit unitClicked;
 	Player currentPlayer;
 	//Boolean unitMoving;
-	
+
 	int sleepTime = EventProcessor.sleepTime;
 	int middleSleepTime = EventProcessor.middleSleepTime;
 	int shortSleepTime = EventProcessor.shortSleepTime;
 	int longSleepTime = EventProcessor.longSleepTime;
-	
+
 	//constructor
 	public GameState() { //is an object hold by GameActor
 		this.turn=1; //start of game, turn =1
-		
+
 		//create new players
 		//starting mana =2 (turn 1)
 		player1 = new HumanPlayer(20,2);
@@ -61,14 +61,14 @@ public class GameState {
 
 		//start from player 1
 		currentPlayer=player1;
-		
+
 		//unitMoving = false;
 	}
-	
+
 	//helper method
 	//just to group 2 steps in once
 	public void unSelectCard() {this.setcardPos(-1); this.setCardSelected(null);} //unselect the card
-	
+
 	//Getter and Setter Method
 	public int getTurn() {return turn;}
 	public void setTurn(int turn) {this.turn = turn;}
@@ -78,7 +78,7 @@ public class GameState {
 	public void setCardSelected(Card cardClicked) {this.cardSelected = cardClicked;}
 	public Card getCardSelected() {return cardSelected;}
 	public void setcardPos(int pos) {this.cardPos = pos;}
-	
+
 	public Tile getTileClicked() {return tileClicked;}
 	public void setTileClicked(Tile tileClicked) {this.tileClicked = tileClicked;}
 
@@ -88,7 +88,7 @@ public class GameState {
 	public boolean getUnitMoving() {
 		return this.unitMoving;
 	}*/
-	
+
 	public int getcardPos() {return cardPos;}	
 	public Unit getUnitClicked() {return unitClicked;}
 	public void setUnitClicked(Unit unitClicked) {this.unitClicked = unitClicked;}
@@ -107,7 +107,7 @@ public class GameState {
 		this.currentPlayer.removeCard(out, cardPos); //(2,3)
 		this.unSelectCard(); //(1)
 	} 
-	
+
 	//play a card: go to player then card
 	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
 		currentPlayer.playCard(out, gameState, card, currentTileClicked);
@@ -119,16 +119,21 @@ public class GameState {
 		//remove the card from hand (& update display)
 		gameState.deleteCard(out);
 	}
-	
+
 	///////////////////unit related/////////////////
-	
+
 	//other than 4 things to remove when a unit died, 2 more things
 	//(5)show dead animation (6)remove from front end display 
 	public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
 		try{unit.setHealth(newHealth, out);} //will 
-		catch(UnitDieException e) {this.getBoard().removeUnit(unit);}
+		catch(UnitDieException e) {
+			//add death trigger for "WindShrike"
+			unit.deathTrigger(currentPlayer, out);
+			this.getBoard().removeUnit(unit);
+		}
 		catch(AvatarException f) {
 			Avatar avatar = (Avatar) unit; 
+			silverGuardKnightPassive(out, this, avatar);
 			if(avatar.getPlayer()==this.getPlayer1()) {
 				BasicCommands.setPlayer1Health(out, this.getPlayer1());
 				try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
@@ -138,11 +143,11 @@ public class GameState {
 			}
 		}
 	}
-	
+
 	public void setUnitAttack(ActorRef out, Unit targetUnit, int attack) {
 		targetUnit.setAttack(attack, out);
 	}
-	
+
 	/////////////////unit action related (unit move/attack) ///////////////////
 	public void moveUnit(ActorRef out,  Unit unit, Tile targetTile) {
 		int player;
@@ -158,39 +163,64 @@ public class GameState {
 		//(3) un-hightlight tiles
 		this.getBoard().unhighlightWhiteTiles(out);
 		this.getBoard().unhighlightRedTiles(out);
-		
+
 		this.getCurrentPlayer().moveUnit(out, unit, targetTile);
 		//(6) set seleted unit to null & pos to -1
 		this.unSelectCard();
 	}
-	
-	
+
+
 	//////////////highlight related/////////////////
 	public boolean ablePlayOrMove(Tile tile) {
 		return this.getBoard().getHighlightedWhiteTiles().contains(tile);
 	}
-	
-	
-	
-	
+
+
+
+
 	//unhighlight card and set instance variables to default value
 	public void unHighlightCard(ActorRef out) {
 		BasicCommands.drawCard(out, cardSelected, cardPos, 0);
 		unSelectCard();
 	}
-		public int currentPlayer() {
-			if (this.getCurrentPlayer()==this.getPlayer1()) {return 1;}
-			else {return 2;}
-		}
-	
+	public int currentPlayer() {
+		if (this.getCurrentPlayer()==this.getPlayer1()) {return 1;}
+		else {return 2;}
+	}
+
 	//play AI Turn
 	public void playAITurn(ActorRef out) {
+		//Move and Attack
+		Set<Tile> targetTiles;
+		Tile targetTile;
+		for(Tile i:this.getBoard().getPlayer2UnitTiles()) {
+			Unit currUnit = i.getUnit();
+			this.setUnitClicked(currUnit);
+			//if can attack then attack la
+			currUnit.highlightAttackTile(this, i);
+			if ((targetTiles=this.getBoard().getHighlightedRedTiles()).size()!=0) {
+				//choose which one to atk
+				targetTile = pickAttackTile(currUnit, targetTiles);
+				currUnit.attackUnit(out, this, currUnit, targetTile);
+			} //move (maybe atk afterward)
+			else{
+				currUnit.highlightMoveTile(this, i);
+				if ((targetTiles=this.getBoard().getHighlightedWhiteTiles()).size()!=0) {
+					//choose which one to atk
+//					targetTile = pickAttackTile(currUnit, targetTiles);
+//					currUnit.attackUnit(out, this, currUnit, targetTile);
+				} 
+			}
+
+			//			this.moveUnit(out, currUnit, i);
+		}
+
 		//Play cards		
 		for(int j=0;j< this.getCurrentPlayer().getHand().size();j++) {
-//		(Card i: this.getCurrentPlayer().getHand()) {
+			//		(Card i: this.getCurrentPlayer().getHand()) {
 			Card i=this.getCurrentPlayer().getHand().get(j);
 			this.setcardPos(j); //set which card is selected so can delete
-			
+
 			//just add here so not play too fast
 			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 			//if not enough mana, skip this card
@@ -199,32 +229,75 @@ public class GameState {
 			//highlight available tiles
 			CardClicked.cardHighlightTiles(out, this, i);
 			try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			
+
+			boolean haveValidTarget=true;
 			//check is there valid target
 			if(i instanceof SpellCard) {
-				if (board.getHighlightedRedTiles()==null) {continue;} //no valid target -> next card
+				if (board.getHighlightedRedTiles().size()==0) {haveValidTarget=false; continue;} //no valid target -> next card
 			}else if(i instanceof UnitCard) {
-				if (board.getHighlightedWhiteTiles()==null) {continue;} //no valid target -> next card
+				if (board.getHighlightedWhiteTiles().size()==0) {haveValidTarget=false; continue;} //no valid target -> next card
 			}
 			//play according to logic
-			this.getCurrentPlayer().playCard(out, this, i);
-			try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			
+			if (haveValidTarget) {
+				this.getCurrentPlayer().playCard(out, this, i);
+				try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+			}
 			board.unhighlightWhiteTiles(out);
 			board.unhighlightRedTiles(out);
 			try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
-		//Move and Attack
-//		for(Tile i)
-//		List<Unit> player2Units = this.getBoard().get
-		
-		
+
+		//highlightMoveTile
+		//highlightAttackTile
+
+		//		for(Tile i)
+		//		List<Unit> player2Units = this.getBoard().get
+
+
 		//Pass the turn to player again
 		EndTurnClicked endTurn = new EndTurnClicked();
 		endTurn.processEvent(out, this, null);
 	}
-		
+
+
+	public Tile pickAttackTile(Unit currUnit, Set<Tile> targetTiles) {
+		Tile targetTile=null;
+		for(Tile j:targetTiles) {
+			targetTile=j;
+			//prioritize avatar -> can kill -> random (last of list)
+			if (j.getUnit() instanceof Avatar) {targetTile=j; return targetTile;}
+			if (j.getUnit().getHealth()<=currUnit.getAttack()) {targetTile=j;return targetTile;}
+		}
+		return targetTile;
+	}
+	
+	//Silverguard knight +attack when avatar is damaged
+	public void silverGuardKnightPassive(ActorRef out, GameState gameState, Avatar avatar) {
+		ArrayList<Unit> playerUnitArray;
+		ArrayList<Unit> player1Units = gameState.getBoard().getPlayer1Units(); 
+		ArrayList<Unit> player2Units = gameState.getBoard().getPlayer2Units();
+		if(avatar.getId() == 1) { playerUnitArray = player1Units; } else { playerUnitArray = player2Units; }
+				
+		for(Unit unit: playerUnitArray) {
+			String name = unit.getName();
+			if(name == null) {continue;} 
+			if(name.equals("Silverguard Knight")) {
+				unit.setAttack(unit.getAttack() + 2, out);
+			} 
+		}
+	}
+//	public Tile pickMoveTile(Unit currUnit, Set<Tile> targetTiles) {
+//		Tile targetTile=null;
+//		for(Tile j:targetTiles) {
+//			if (targetTile==null) {targetTile=j;}
+//			//prioritize avatar -> can kill -> random (last of list)
+//			if () {}
+//		}
+//		return targetTile;
+//	}
 }
+
+
 
 
 //other than 4 things to remove when a unit died, 2 more things
