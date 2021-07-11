@@ -27,16 +27,19 @@ public class PlayerTest {
 		Player1.setMyhand(myhand);
 				
 	}
+    @Test
 	public void checkPlayerStatus()
 	{
 		assertTrue(Player1.getHealth()==20);
 		assertTrue(Player1.getMana()==2);
 	}
+    @Test
 	public void checkPlayerHand()
 	{
 		assertTrue(Player1.getMyhand().equals(myhand));
 		
 	}
+    @Test
 	public void checkPlayerDeck()
 	{
 		assertTrue(Player1.getMydeck().equals(player1deck));

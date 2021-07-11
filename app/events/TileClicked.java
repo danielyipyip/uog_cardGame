@@ -13,6 +13,7 @@ import structures.GameState;
 import structures.basic.Board;
 import structures.basic.Card;
 import structures.basic.Position;
+import structures.basic.unit.FlyingUnit;
 import structures.basic.unit.RangedUnit;
 import structures.basic.SpellCard;
 import structures.basic.Tile;
@@ -95,17 +96,19 @@ public class TileClicked implements EventProcessor{
 			gameState.setUnitClicked(currentTileClicked.getUnit());
 		
 			if((gameState.getUnitClicked().getAttacked()<=0)&&(gameState.getUnitClicked().isMoved()==false)) {
-				gameState.getBoard().highlightMoveAndAttackTile(out,gameState,currentTileClicked);
+				if(!(gameState.getUnitClicked() instanceof FlyingUnit))
+
+					gameState.getUnitClicked().highlightMoveAndAttackTile(gameState,currentTileClicked);
 				gameState.getCurrentPlayer().displayAllTiles(out,gameState);
 			}
 				
 			else if(gameState.getUnitClicked().getAttacked()<=0) {
-				gameState.getBoard().highlightAttackTile(gameState,currentTileClicked);
+				gameState.getUnitClicked().highlightAttackTile(gameState,currentTileClicked);
 				gameState.getCurrentPlayer().displayRedTile(out,gameState);
 			}
 				
 			else if(gameState.getUnitClicked().isMoved()==false){
-				gameState.getBoard().highlightMoveTile(out,gameState,currentTileClicked);
+				gameState.getUnitClicked().highlightMoveTile(gameState,currentTileClicked);
 				gameState.getCurrentPlayer().displayWhiteTile(out,gameState);
 			}
 			gameState.setTileClicked(currentTileClicked);
@@ -173,6 +176,7 @@ public class TileClicked implements EventProcessor{
 			gameState.setTileClicked(currentTileClicked);
 			return;
 			}
+		
 		gameState.setTileClicked(currentTileClicked);
 		return;
 		}
