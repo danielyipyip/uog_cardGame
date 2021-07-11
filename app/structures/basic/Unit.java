@@ -1,5 +1,7 @@
 package structures.basic;
 
+import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -137,6 +139,77 @@ public class Unit {
 		throw new UnitDieException("");
 	}
 	
+	
+	//Below is the method to highlight the tiles in white for move, adjacent
+	public void highlightAdjacentTile (GameState gameState,Tile tileClicked) {
+		int positionX = tileClicked.getTilex();
+		int positionY = tileClicked.getTiley();
+		//Normal Unit move, without ability
+		//Highlighted the valid move tiles surrounding the unit first.
+		for(int i=positionX-1;i<= positionX+1;i++) {
+			for(int j=positionY-1;j<=positionY+1;j++) {
+				gameState.getBoard().addHighlightWhiteTiles(gameState.getBoard().getTile(i, j));//adding the tile to the white tile list
+			}
+		}
+	}
+	
+	/* drawing the x+2,y and x-2,y and x,y+2 and x,y-2 tile
+	 * It will only be highlighted when it is null and if x+1,y and x-1,y is not occupied by the opponent unit.
+	 * If x+1,y and x-1,y contains opponent units..x+2,y and x-2,y will not be highlighted.
+	 * Only player 1 will display the tiles.
+	 */
+	
+	public void highlightFarTile (GameState gameState ,Tile tileClicked) {
+		int x = tileClicked.getTilex();
+		int y = tileClicked.getTiley();
+		ArrayList<Tile> opponentUnitTiles = gameState.getBoard().getPlayer2UnitTiles();
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())){opponentUnitTiles = gameState.getBoard().getPlayer1UnitTiles();}
+
+		if(!opponentUnitTiles.contains(gameState.getBoard().getTile(x+1, y)))
+			{gameState.getBoard().addHighlightWhiteTiles(gameState.getBoard().getTile(x+2, y));}
+		if(!opponentUnitTiles.contains(gameState.getBoard().getTile(x-1, y)))
+			{gameState.getBoard().addHighlightWhiteTiles(gameState.getBoard().getTile(x-2, y));}
+		if(!opponentUnitTiles.contains(gameState.getBoard().getTile(x, y-1)))
+			{gameState.getBoard().addHighlightWhiteTiles(gameState.getBoard().getTile(x, y-2));}
+		if(!opponentUnitTiles.contains(gameState.getBoard().getTile(x, y+1)))
+			{gameState.getBoard().addHighlightWhiteTiles(gameState.getBoard().getTile(x, y+2));}
+	}
+	
+	
+	public void highlightMoveTile (GameState gameState ,Tile tileClicked) {
+		highlightAdjacentTile(gameState,tileClicked);
+		highlightFarTile(gameState,tileClicked);
+	}
+	
+	public void highlightMoveAndAttackTile ( GameState gameState ,Tile tile) {
+		highlightMoveTile(gameState,tile);
+		for(Tile i: gameState.getBoard().getHighlightedWhiteTiles()) {	
+			highlightAttackTile(gameState,i);
+		}
+	}
+	
+	
+	//Below is the method to highlight the adjacent tiles in red for attack
+	public void highlightAttackTile (GameState gameState ,Tile tileClicked) {
+		int positionX = tileClicked.getTilex();
+		int positionY = tileClicked.getTiley();
+		//Highlighted the tiles surrounding the unit first.
+		ArrayList<Tile> opponentUnitTiles = gameState.getBoard().getPlayer2UnitTiles();
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())){opponentUnitTiles = gameState.getBoard().getPlayer1UnitTiles();}
+
+		//Checking whether the surrounding tile contains opponent unit. if yes, it will be red highlighted
+		if(gameState.getUnitClicked().getAttacked()<=0) {
+			for(int i=positionX-1;i<= positionX+1;i++) {
+				for(int j=positionY-1;j<=positionY+1;j++) {
+					Tile tile = gameState.getBoard().getTile(i, j) ;
+					if(opponentUnitTiles.contains(tile)&&(tile!=null)){
+						gameState.getBoard().addHighlightRedTiles(tile);
+					}
+				}
+			}
+		}
+	}
+
 	
 	public void windShrikeAbility() {
 		
