@@ -39,7 +39,7 @@ public class CardClicked implements EventProcessor{
 		gameState.getBoard().unhighlightWhiteTiles(out);
 		gameState.setUnitClicked(null);
 		
-		//------------------------------------Highlight Card(START)------------------------------------//
+		//----------------------------------Highlight Card(START)-----------------------------------//
 		Card cardSelected = gameState.getPlayer1().getMyhand().getCard(handPosition);
 
 		Card previousCard = gameState.getCardSelected();
@@ -53,7 +53,12 @@ public class CardClicked implements EventProcessor{
 		gameState.setcardPos(handPosition);
 		//------------------------------------Highlight Card(END)------------------------------------//
 
-		//------------------------------------Highlight Tiles(START)------------------------------------//
+		//Highlight Tiles
+		cardHighlightTiles(out, gameState, cardSelected);
+		
+	}
+
+	public static void cardHighlightTiles(ActorRef out, GameState gameState, Card cardSelected) {
 		String cardName = cardSelected.getCardname();
 
 		ArrayList<Tile> player1UnitTiles = gameState.getBoard().getPlayer1UnitTiles();
@@ -77,9 +82,9 @@ public class CardClicked implements EventProcessor{
 					for(int j=0; j<gameState.getBoard().getY();j++) {
 						tile = gameState.getBoard().getTile(i, j);
 						if(occupiedTiles.contains(tile)) continue;
-						if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+						//if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 							BasicCommands.drawTile(out, tile, 1); //only draw for player1
-						}
+						//}
 						highlightedWhiteTile.add(tile);
 						try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 					}			
@@ -87,16 +92,20 @@ public class CardClicked implements EventProcessor{
 			} 
 			//Select other unit cards, highlight unoccupied tiles around ally units
 			else {
-				for(Tile ally: player1UnitTiles) {
+				ArrayList<Tile> unitTiles;
+				if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {
+					unitTiles = player1UnitTiles;
+				} else { unitTiles = player2UnitTiles; }
+				for(Tile ally: unitTiles) {
 					int x = ally.getTilex() - 1;
 					int y = ally.getTiley() - 1;
 					for(int i=x; i<=x+2; i++) {
 						for(int j=y; j<=y+2; j++) {
 							tile = gameState.getBoard().getTile(i, j);
 							if(occupiedTiles.contains(tile)) continue;
-							if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
+							//if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 								BasicCommands.drawTile(out, tile, 1);
-							}
+							//}
 							highlightedWhiteTile.add(tile);
 							try {Thread.sleep(20);} catch (InterruptedException e) {e.printStackTrace();}
 						}
@@ -132,19 +141,16 @@ public class CardClicked implements EventProcessor{
 				//avatar is always first unit; 
 				//only player 2 can have this card currently, so hardcoded for player 2 for now
 				tile = gameState.getBoard().getPlayer2UnitTiles().get(0); 
+				BasicCommands.drawTile(out, tile, 2);
 				highlightedRedTile.add(tile);
 			}
 			if(cardName.equals("Entropic Decay")) { 
 				//hightlight unit except at position 1 of array (=avatar)
 				//do it separately for player1 & 2 units
-				for(Tile i: player1UnitTiles.subList(1, player1UnitTiles.size())){highlightedRedTile.add(i);}
-				for(Tile i: player2UnitTiles.subList(1, player2UnitTiles.size())){highlightedRedTile.add(i);}
+				for(Tile i: player1UnitTiles.subList(1, player1UnitTiles.size())){highlightedRedTile.add(i); BasicCommands.drawTile(out, i, 2);}
+				for(Tile i: player2UnitTiles.subList(1, player2UnitTiles.size())){highlightedRedTile.add(i); BasicCommands.drawTile(out, i, 2);}
 			}
 		}
-
-		//------------------------------------Highlight Tiles(END)------------------------------------//
-
-
 	}
-
+	
 }

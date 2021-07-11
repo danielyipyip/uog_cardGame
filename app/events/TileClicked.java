@@ -55,29 +55,16 @@ public class TileClicked implements EventProcessor{
 
 		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
-		//insert here: play spell card
-		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
+		//if there is card selected, try to play it on the tile
 		if (gameState.getCardSelected()!=null) {
 			Card currentCard = gameState.getCardSelected();
-			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
-				if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
-					gameState.playCard(out, gameState, currentCard, currentTileClicked);
-					gameState.setTileClicked(currentTileClicked);
-					return;
-				}
-			}
-			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
-				//if is valid target -> play the card
-				if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)) {
-				gameState.playCard(out, gameState, currentCard, currentTileClicked);
-				gameState.setTileClicked(currentTileClicked);
-				return;
-				}
-			}
+			playCardOnTile(out, gameState, currentCard); //will return if a card is successfully played
+			
 			gameState.unHighlightCard(out);
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
 		}
+		
 		/*4 Possible Scenarios:
 		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
 		 * 2. Clicking on the WhiteHighlighted tiles--->Player 1 unit will move
@@ -194,11 +181,26 @@ public class TileClicked implements EventProcessor{
 		return;
 		}
 
-		
-		
-	
 	//Helper method
-
+	public void playCardOnTile(ActorRef out, GameState gameState, Card card) {
+		if(card instanceof UnitCard) { //if a unit card is selected previously
+			if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
+				gameState.playCard(out, gameState, card, currentTileClicked);
+				gameState.setTileClicked(currentTileClicked);
+				return;
+			}
+		}
+		if(card instanceof SpellCard) { //if a spell card is selected previously
+			//if is valid target -> play the card
+			if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)) {
+				gameState.playCard(out, gameState, card, currentTileClicked);
+				gameState.setTileClicked(currentTileClicked);
+				return;
+			}
+		}
+	}
+	
+	
 	//Getter and setter
 	public Tile getCurrentTileClicked() {return currentTileClicked;}
 	public void setCurrentTileClicked(Tile currentTileClicked) {this.currentTileClicked = currentTileClicked;}
