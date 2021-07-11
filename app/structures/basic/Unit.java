@@ -271,6 +271,7 @@ public class Unit {
 		int attackerNewHealth = unit.getHealth() - target.getUnit().getAttack();
 		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.idle);
 		gameState.setUnitHealth(out, unit, attackerNewHealth);
 	}
 	//combine attack with counter attack

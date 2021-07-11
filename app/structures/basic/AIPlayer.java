@@ -3,6 +3,7 @@ package structures.basic;
 import java.util.HashSet;
 import java.util.Set;
 
+import Exceptions.DontPlayThisCardException;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import events.TileClicked;
@@ -52,8 +53,10 @@ public class AIPlayer extends Player{
 
 	/////////// AI decide what card to play //////////////
 	@Override
-	public void playCard(ActorRef out, GameState gameState, Card card) {
+	public void playCard(ActorRef out, GameState gameState, Card card) 
+			throws DontPlayThisCardException{
 		Tile targetTile=null;
+		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		if(card instanceof SpellCard) {
 			Set<Tile> targetTileSet = gameState.getBoard().getHighlightedRedTiles();
 			targetTile = pickSpellTarget(card, targetTileSet, gameState);
@@ -74,18 +77,19 @@ public class AIPlayer extends Player{
 		TileClicked.playCardOnTile(out, gameState,card, targetTile);
 	}
 
-	public Tile pickSpellTarget(Card card, Set<Tile> targetTile, GameState gameState) {
+	public Tile pickSpellTarget(Card card, Set<Tile> targetTile, GameState gameState) 
+			throws DontPlayThisCardException{
 		if (card.getCardname().equals("Staff of Y'Kir'")) {
 			for (Tile i: targetTile) {return i;}//always return player 2 avatar
 		}else if (card.getCardname().equals("Entropic Decay")) {
 			Tile tile = null;
 			for (Tile i: targetTile) {
-				if (tile==null) {tile=i;}
-				else {//aim for higher health unit
+				if (i.getUnit().getId()>0) {
 					if (tile.getUnit().getHealth()<i.getUnit().getHealth() ) {tile=i;} 
 				}
 			}
-			return tile;
+			if (tile==null) {throw new DontPlayThisCardException();}
+			else {return tile;}
 		}
 		return null;
 	}
