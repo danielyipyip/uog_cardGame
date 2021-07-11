@@ -11,6 +11,8 @@ import java.util.*;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import events.CardClicked;
+import events.EndTurnClicked;
 import events.EventProcessor;
 import structures.basic.*;
 
@@ -179,6 +181,42 @@ public class GameState {
 			if (this.getCurrentPlayer()==this.getPlayer1()) {return 1;}
 			else {return 2;}
 		}
+	
+	//play AI Turn
+	public void playAITurn(ActorRef out) {
+		//Play cards		
+		ArrayList<Card> AICards = player2.getMyhand().getMyhand();
+		
+		for(Card i: AICards) {
+			//Check mana
+			if(player2.getMana() < i.getManacost()) {
+				continue;
+			}
+
+			//highlight available tiles
+			CardClicked.cardHighlightTiles(out, this, i);
+			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+			
+			//play according to logic
+			if(i instanceof UnitCard) {
+				
+			}
+			if(i instanceof SpellCard) {
+				
+			}
+			
+			board.unhighlightWhiteTiles(out);
+			board.unhighlightRedTiles(out);
+			try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		}
+		
+		//Move and Attack
+		
+		//Pass the turn to player again
+		EndTurnClicked endTurn = new EndTurnClicked();
+		endTurn.processEvent(out, this, null);
+	}
+		
 }
 
 
