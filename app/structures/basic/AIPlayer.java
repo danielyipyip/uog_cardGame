@@ -48,15 +48,15 @@ public class AIPlayer extends Player{
 		
 	}
 	@Override
-	public void displayWhiteTile (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles) {
+	public void displayWhiteTile (ActorRef out,GameState gameState) {
 	
 		}
 	@Override
-	public void displayRedTile(ActorRef out,GameState gameState, HashSet<Tile> redTiles) {
+	public void displayRedTile(ActorRef out,GameState gameState) {
 
 	}
 	@Override
-	public void displayAllTiles (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles,HashSet<Tile> redTiles) {
+	public void displayAllTiles (ActorRef out,GameState gameState) {
 
 }
 	

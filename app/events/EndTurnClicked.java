@@ -62,11 +62,13 @@ public class EndTurnClicked implements EventProcessor{
 		//reset attacked OR moved for all units
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 			for (Unit i: gameState.getBoard().getPlayer1Units()) {
-				i.setAttacked(false); i.setMoved(false);
+				i.setAttacked(0); i.setMoved(false);
+				//i.setAttacked(false); i.setMoved(false);
 			}
 		}else {
 			for (Unit i: gameState.getBoard().getPlayer2Units()) {
-				i.setAttacked(false); i.setMoved(false);
+				i.setAttacked(0); i.setMoved(false);
+				//i.setAttacked(false); i.setMoved(false);
 			}
 		}
 		

@@ -37,7 +37,8 @@ public class Unit {
 	@JsonIgnore
 	int health;
 	@JsonIgnore
-	boolean attacked = false; 
+	//boolean attacked = false; change to int..indicate the number of attacked.
+	protected int attacked = 0;
 	@JsonIgnore
 	boolean moved = false; 
 	@JsonIgnore
@@ -99,7 +100,8 @@ public class Unit {
 		this.initSetHealth(card.getBigCard().getHealth());
 		this.setMaxHealth(this.health);
 		this.setName(card.getCardname());
-		this.setAttacked(true);
+		this.setAttacked(1);
+		//this.setAttacked(true);
 		this.setMoved(true);
 	}
 	
@@ -178,7 +180,7 @@ public class Unit {
 	public void setName(String name) {this.name = name;}
 	public String getName() {return this.name;}
 
-	
+	//Normal attack with counter
 	public void attackUnit (ActorRef out, GameState gameState,Unit unit, Tile target) {
 		//unit = attacker, target = being attacked
 		Unit attackTarget = target.getUnit();
@@ -186,40 +188,23 @@ public class Unit {
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		gameState.setUnitHealth(out, attackTarget, targetNewHealth);
-		unit.setAttacked(true);
+		if(targetNewHealth >0) {counterAttack(out,gameState,unit,target);}
+		unit.setAttacked(attacked+1);
 	}
 	
 	public void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){
-		
 		int attackerNewHealth = unit.getHealth() - target.getUnit().getAttack();
 		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		gameState.setUnitHealth(out, unit, attackerNewHealth);
 	}
 	//combine attack with counter attack
-	public void attackWithCounter (ActorRef out, GameState gameState,Unit unit, Tile target) {
-		attackUnit(out,gameState,unit,target);
-		if(target.getUnit().getHealth()>=0) {counterAttack(out,gameState,unit,target);}
-		unit.setAttacked(true);
-}
-	
-	//public void rangeAttackHighLight(ActorRef out,GameState gameState) {
-		
-		//if(gameState.getCurrentPlayer().equals(gameState.getPlayer1())) {	
-			//for(Tile i : gameState.getBoard().getPlayer2UnitTiles()) {
-				//gameState.getBoard().addHighlightRedTiles(i);
-			//}
-			//gameState.getCurrentPlayer().displayRedTile(out,gameState, gameState.getBoard().getHighlightedRedTiles());
-		//}else {
-			//for(Tile i : gameState.getBoard().getPlayer1UnitTiles()) {
-				//gameState.getBoard().addHighlightRedTiles(i);
-		//}
-	//}
+	//public void attackWithCounter (ActorRef out, GameState gameState,Unit unit, Tile target) {
+		//attackUnit(out,gameState,unit,target);
+		//if(target.getUnit().getHealth()>=0) {counterAttack(out,gameState,unit,target);}
+		//unit.setAttacked(attacked+1);
 //}
-	
-	
-	
-	
+
 	
 	//getter setter
 	public void initSetAttack(int atk) {this.attack=atk;}
@@ -236,8 +221,8 @@ public class Unit {
 	public void setAnimations(UnitAnimationSet animations) {this.animations = animations;}
 	public int getAttack() {return attack;}
 	public int getHealth() {return health;}
-	public boolean isAttacked() {return attacked;}
-	public void setAttacked(boolean attacked) {this.attacked = attacked;}
+	public int getAttacked() {return attacked;}
+	public void setAttacked(int attacked) {this.attacked = attacked;}
 	public boolean isMoved() {return moved;}
 	public void setMoved(boolean moved) {this.moved = moved;}
 	public int getMaxHealth() {return maxHealth;}

@@ -13,7 +13,7 @@ import structures.GameState;
 import structures.basic.Board;
 import structures.basic.Card;
 import structures.basic.Position;
-import structures.basic.RangedUnits;
+import structures.basic.unit.RangedUnit;
 import structures.basic.SpellCard;
 import structures.basic.Tile;
 import structures.basic.Unit;
@@ -107,19 +107,19 @@ public class TileClicked implements EventProcessor{
 			gameState.setUnitClicked(currentTileClicked.getUnit());
 		
 		
-			if((gameState.getUnitClicked().isAttacked()==false)&&(gameState.getUnitClicked().isMoved()==false)) {
+			if((gameState.getUnitClicked().getAttacked()<=0)&&(gameState.getUnitClicked().isMoved()==false)) {
 				gameState.getBoard().highlightMoveAndAttackTile(out,gameState,currentTileClicked);
-				gameState.getCurrentPlayer().displayAllTiles(out,gameState,gameState.getBoard().getHighlightedRedTiles(),gameState.getBoard().getHighlightedWhiteTiles());
+				gameState.getCurrentPlayer().displayAllTiles(out,gameState);
 			}
 				
-			else if(gameState.getUnitClicked().isAttacked()==false) {
+			else if(gameState.getUnitClicked().getAttacked()<=0) {
 				gameState.getBoard().highlightAttackTile(gameState,currentTileClicked);
-				gameState.getCurrentPlayer().displayWhiteTile(out,gameState,gameState.getBoard().getHighlightedRedTiles());
+				gameState.getCurrentPlayer().displayRedTile(out,gameState);
 			}
 				
 			else if(gameState.getUnitClicked().isMoved()==false){
 				gameState.getBoard().highlightMoveTile(out,gameState,currentTileClicked);
-				gameState.getCurrentPlayer().displayRedTile(out,gameState,gameState.getBoard().getHighlightedWhiteTiles());
+				gameState.getCurrentPlayer().displayWhiteTile(out,gameState);
 			}
 			gameState.setTileClicked(currentTileClicked);
 			return;
@@ -138,10 +138,8 @@ public class TileClicked implements EventProcessor{
 			int y = gameState.getUnitClicked().getPosition().getTiley();
 		
 			if ((tilex-x>=2)||(x-tilex>=2)||(tiley-y>=2)||(y-tiley>=2)&&
-					(gameState.getUnitClicked().isMoved()==false && gameState.getUnitClicked().isAttacked()==false)) {
-		
-
-				if(gameState.getUnitClicked() instanceof RangedUnits == false) {//Ranged units does not have move and attack methods
+					(gameState.getUnitClicked().isMoved()==false && gameState.getUnitClicked().getAttacked()<=0)) {
+				if(gameState.getUnitClicked() instanceof RangedUnit == false) {//Ranged units does not have move and attack methods
 					
 				//The below loop is to find the first tile that is in the whiteTiles
 						int x1 = currentTileClicked.getTilex()-1;
@@ -162,16 +160,16 @@ public class TileClicked implements EventProcessor{
 						}	
 
 					gameState.moveUnit(out, gameState.getUnitClicked(), moveTile);
-					gameState.getUnitClicked().attackWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
+					gameState.getUnitClicked().attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 					}
 				}
 			
 		/*Scenario 2: if the player is clicking on a redTile, but not in move and attack range, only adjacent attack
 		 */
-		else if	(gameState.getUnitClicked().isAttacked()==false)  {
+		else if	(gameState.getUnitClicked().getAttacked()<=0)  {
 				gameState.getBoard().unhighlightWhiteTiles(out);
 				gameState.getBoard().unhighlightRedTiles(out);
-				gameState.getUnitClicked().attackWithCounter(out, gameState,gameState.getUnitClicked(),currentTileClicked);
+				gameState.getUnitClicked().attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}
 			gameState.setTileClicked(currentTileClicked);
 			return;

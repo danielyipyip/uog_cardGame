@@ -230,7 +230,7 @@ public class Board {//This Class is used to store all the variables related to u
 		if(gameState.getCurrentPlayer().equals(gameState.getPlayer2())){opponentUnitTiles = player1UnitTiles;}
 
 		//Checking whether the surrounding tile contains opponent unit. if yes, it will be red highlighted
-		if(gameState.getUnitClicked().isAttacked()==false) {
+		if(gameState.getUnitClicked().getAttacked()==0) {
 			for(int i=positionX-1;i<= positionX+1;i++) {
 				for(int j=positionY-1;j<=positionY+1;j++) {
 					Tile tile = gameState.getBoard().getTile(i, j) ;

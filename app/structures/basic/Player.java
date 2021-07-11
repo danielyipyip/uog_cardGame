@@ -25,6 +25,9 @@ public class Player {
 	protected Deck mydeck;
 	protected Hand myhand;
 	protected int playerID;
+	protected HashSet<Tile> whiteTiles;
+	protected HashSet<Tile> redTiles;
+
 	
 	//imported
 	int middleSleepTime = EventProcessor.middleSleepTime;
@@ -39,7 +42,6 @@ public class Player {
 		this.health = health;
 		this.mana = mana;		
 		myhand = new Hand();
-		
 	}
 	
 
@@ -63,27 +65,24 @@ public class Player {
 		unit.moveUnit(out, targetTile);
 	}
 	
-	public void displayWhiteTile (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles) {
-		
-		for(Tile i : gameState.getBoard().getHighlightedWhiteTiles()) {
+	public void displayWhiteTile (ActorRef out,GameState gameState) {
+		whiteTiles = gameState.getBoard().getHighlightedWhiteTiles();
+		for(Tile i : whiteTiles) {
 			BasicCommands.drawTile(out, i, 1);
 			try {Thread.sleep(50);} catch (InterruptedException e) {e.printStackTrace();}
 		}
 	}
-	public void displayRedTile (ActorRef out,GameState gameState, HashSet<Tile> redTiles) {
-			
-			for(Tile i : gameState.getBoard().getHighlightedRedTiles()) {
+	public void displayRedTile (ActorRef out,GameState gameState) {
+		redTiles = gameState.getBoard().getHighlightedRedTiles();
+			for(Tile i : redTiles) {
 				BasicCommands.drawTile(out, i, 2);
 				try {Thread.sleep(50);} catch (InterruptedException e) {e.printStackTrace();}
 		}
-		
 	}
-	
-	public void displayAllTiles (ActorRef out,GameState gameState, HashSet<Tile> whiteTiles,HashSet<Tile> redTiles) {
-		displayWhiteTile(out,gameState,whiteTiles);
-		displayRedTile(out,gameState,redTiles);
-}
-
+	public void displayAllTiles (ActorRef out,GameState gameState) {
+		displayWhiteTile(out,gameState);
+		displayRedTile(out,gameState);
+	}
 	
 	public void drawHand(ActorRef out) {;}
 	public void removeCard(ActorRef out, int n) {}
