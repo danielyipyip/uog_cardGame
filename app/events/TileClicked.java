@@ -194,7 +194,7 @@ public class TileClicked implements EventProcessor{
 //		Tile currTile = gameState.getBoard().getTile(tilex, tiley);
 		if(card instanceof UnitCard) { //if a unit card is selected previously
 			if(gameState.getBoard().getHighlightedWhiteTiles().contains(tile)) {
-				if(card.getManacost() > gameState.getPlayer1().getMana()) {
+				if(gameState.getCurrentPlayer() == gameState.getPlayer1() && card.getManacost() > gameState.getPlayer1().getMana()) {
 					BasicCommands.addPlayer1Notification(out, "You have no MANA!", 2);
 					try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 					return false;
@@ -207,7 +207,7 @@ public class TileClicked implements EventProcessor{
 		if(card instanceof SpellCard) { //if a spell card is selected previously
 			//if is valid target -> play the card
 			if(gameState.getBoard().getHighlightedRedTiles().contains(tile)) {
-				if(card.getManacost() > gameState.getPlayer1().getMana()) {
+				if(gameState.getCurrentPlayer() == gameState.getPlayer1() && card.getManacost() > gameState.getPlayer1().getMana()) {
 					BasicCommands.addPlayer1Notification(out, "You have no MANA!", 2);
 					try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 					return false;
