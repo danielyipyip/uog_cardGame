@@ -6,7 +6,9 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import commands.GroupsCommands;
 import structures.GameState;
+import structures.basic.Avatar;
 import structures.basic.Unit;
+import structures.basic.unit.Attack2;
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case
@@ -62,12 +64,15 @@ public class EndTurnClicked implements EventProcessor{
 		//reset attacked OR moved for all units
 		if (gameState.getCurrentPlayer()==gameState.getPlayer1()) {
 			for (Unit i: gameState.getBoard().getPlayer1Units()) {
+
 				i.setAttacked(0); i.setMoved(false);
+				if(i instanceof Attack2) {i.setAttacked(-1); i.setMoved(false);}
 				//i.setAttacked(false); i.setMoved(false);
 			}
 		}else {
 			for (Unit i: gameState.getBoard().getPlayer2Units()) {
 				i.setAttacked(0); i.setMoved(false);
+				if(i instanceof Attack2) {i.setAttacked(-1); i.setMoved(false);}
 				//i.setAttacked(false); i.setMoved(false);
 			}
 		}

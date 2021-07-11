@@ -189,7 +189,7 @@ public class Unit {
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 		gameState.setUnitHealth(out, attackTarget, targetNewHealth);
 		if(targetNewHealth >0) {counterAttack(out,gameState,unit,target);}
-		unit.setAttacked(attacked+1);
+		unit.setAttacked(this.attacked+1);
 	}
 	
 	public void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){

@@ -51,8 +51,9 @@ public class TileClicked implements EventProcessor{
 		//Set gameState.setTileClicked() = currentTile for the first round
 
 		if(gameState.getTileClicked()==null){gameState.setTileClicked(currentTileClicked);}
-		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 
+		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		
 		//insert here: play spell card
 		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
 		if (gameState.getCardSelected()!=null) {
@@ -105,7 +106,6 @@ public class TileClicked implements EventProcessor{
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
 			gameState.setUnitClicked(currentTileClicked.getUnit());
-		
 		
 			if((gameState.getUnitClicked().getAttacked()<=0)&&(gameState.getUnitClicked().isMoved()==false)) {
 				gameState.getBoard().highlightMoveAndAttackTile(out,gameState,currentTileClicked);
