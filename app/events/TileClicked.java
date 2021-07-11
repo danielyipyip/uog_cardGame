@@ -55,16 +55,29 @@ public class TileClicked implements EventProcessor{
 
 		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
-		//if there is card selected, try to play it on the tile
+		//insert here: play spell card
+		//can also insert summon unit here (inside the "gameState.getCardSelected()!=null")
 		if (gameState.getCardSelected()!=null) {
 			Card currentCard = gameState.getCardSelected();
-			playCardOnTile(out, gameState, currentCard); //will return if a card is successfully played
-			
+			if(currentCard instanceof UnitCard) { //if a unit card is selected previously
+				if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
+					gameState.playCard(out, gameState, currentCard, currentTileClicked);
+					gameState.setTileClicked(currentTileClicked);
+					return;
+				}
+			}
+			if(currentCard instanceof SpellCard) { //if a spell card is selected previously
+				//if is valid target -> play the card
+				if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)) {
+				gameState.playCard(out, gameState, currentCard, currentTileClicked);
+				gameState.setTileClicked(currentTileClicked);
+				return;
+				}
+			}
 			gameState.unHighlightCard(out);
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
 		}
-		
 		/*4 Possible Scenarios:
 		 * 1. Clicking on the Player 1 unit--->Tiles will get highlighted
 		 * 2. Clicking on the WhiteHighlighted tiles--->Player 1 unit will move
@@ -85,6 +98,7 @@ public class TileClicked implements EventProcessor{
 					gameState.getBoard().unhighlightRedTiles(out);
 		}
 		
+		
 							
 		/*Scenario 1: if the player is clicking on a player1 unit tile, setting the unitClick of gameState.
 		 * The tiles will get highlighted
@@ -94,11 +108,9 @@ public class TileClicked implements EventProcessor{
 			gameState.getBoard().unhighlightWhiteTiles(out);
 			gameState.getBoard().unhighlightRedTiles(out);
 			gameState.setUnitClicked(currentTileClicked.getUnit());
-		
+			
 			if((gameState.getUnitClicked().getAttacked()<=0)&&(gameState.getUnitClicked().isMoved()==false)) {
-				if(!(gameState.getUnitClicked() instanceof FlyingUnit))
-
-					gameState.getUnitClicked().highlightMoveAndAttackTile(gameState,currentTileClicked);
+				gameState.getUnitClicked().highlightMoveAndAttackTile(gameState,currentTileClicked);
 				gameState.getCurrentPlayer().displayAllTiles(out,gameState);
 			}
 				
@@ -121,15 +133,18 @@ public class TileClicked implements EventProcessor{
 		
 		/*Scenario 2&3 : if the player is clicking on a redTile and the not yet moved before, 
 		 * the unit will move and attack.
+		 * Ranged unit does not have move and attack method and it can attack far away.
 		 */
-		if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)) {
-
-			int x = gameState.getUnitClicked().getPosition().getTilex();
-			int y = gameState.getUnitClicked().getPosition().getTiley();
+		if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)){
+				
+				int x = gameState.getUnitClicked().getPosition().getTilex();
+				int y = gameState.getUnitClicked().getPosition().getTiley();
 		
-			if ((tilex-x>=2)||(x-tilex>=2)||(tiley-y>=2)||(y-tiley>=2)&&
-					(gameState.getUnitClicked().isMoved()==false && gameState.getUnitClicked().getAttacked()<=0)) {
-				if(gameState.getUnitClicked() instanceof RangedUnit == false) {//Ranged units does not have move and attack methods
+				if ((tilex-x>=2)||(x-tilex>=2)||(tiley-y>=2)||(y-tiley>=2)&&
+					(gameState.getUnitClicked().isMoved()==false) && 
+						(gameState.getUnitClicked().getAttacked()<=0)
+						&&(gameState.getUnitClicked() instanceof RangedUnit == false)){
+				
 					
 				//The below loop is to find the first tile that is in the whiteTiles
 						int x1 = currentTileClicked.getTilex()-1;
@@ -151,14 +166,18 @@ public class TileClicked implements EventProcessor{
 
 					gameState.moveUnit(out, gameState.getUnitClicked(), moveTile);
 					gameState.getUnitClicked().attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
-					}
 				}
+			
+		
 			
 		/*Scenario 2: if the player is clicking on a redTile, but not in move and attack range, only adjacent attack
 		 */
 		else if	(gameState.getUnitClicked().getAttacked()<=0)  {
+			
 				gameState.getBoard().unhighlightWhiteTiles(out);
 				gameState.getBoard().unhighlightRedTiles(out);
+		
+				BasicCommands.addPlayer1Notification(out, "attackunit" , 2);
 				gameState.getUnitClicked().attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 			}
 			gameState.setTileClicked(currentTileClicked);
@@ -181,26 +200,11 @@ public class TileClicked implements EventProcessor{
 		return;
 		}
 
+		
+		
+	
 	//Helper method
-	public void playCardOnTile(ActorRef out, GameState gameState, Card card) {
-		if(card instanceof UnitCard) { //if a unit card is selected previously
-			if(gameState.getBoard().getHighlightedWhiteTiles().contains(currentTileClicked)) {
-				gameState.playCard(out, gameState, card, currentTileClicked);
-				gameState.setTileClicked(currentTileClicked);
-				return;
-			}
-		}
-		if(card instanceof SpellCard) { //if a spell card is selected previously
-			//if is valid target -> play the card
-			if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)) {
-				gameState.playCard(out, gameState, card, currentTileClicked);
-				gameState.setTileClicked(currentTileClicked);
-				return;
-			}
-		}
-	}
-	
-	
+
 	//Getter and setter
 	public Tile getCurrentTileClicked() {return currentTileClicked;}
 	public void setCurrentTileClicked(Tile currentTileClicked) {this.currentTileClicked = currentTileClicked;}
