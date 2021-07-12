@@ -145,10 +145,10 @@ public class Board {//This Class is used to store all the variables related to u
 	}
 	public void addUnit(Tile tile, int player) {
 		Unit unit = tile.getUnit();
-		if (player==1) {
+		if (unit.getId()>0) {
 			player1Units.add(unit);//(1)
 			player1UnitTiles.add(tile);//(2)
-		}else {
+		}else if (unit.getId()<0){
 			player2Units.add(unit);//(1)
 			player2UnitTiles.add(tile);//(2)
 		}
@@ -261,6 +261,11 @@ public class Board {//This Class is used to store all the variables related to u
 		if(tile==null) {;}
 		else {highlightedRedTiles.add(tile);}
 	}
+	
+	public void unhightlightWhiteRedTiles(ActorRef out){
+		unhighlightWhiteTiles(out);
+		unhighlightRedTiles(out);
+	}
 
 	//Getter and setter method for Board Class;
 	public ArrayList<Tile> getPlayer1UnitTiles() {return player1UnitTiles;}
@@ -283,8 +288,27 @@ public class Board {//This Class is used to store all the variables related to u
 		//}
 		return highlightedWhiteTiles;
 	}
-	public Avatar getPlayer1Avatar() { return (Avatar)player1Units.get(0); }
-	public Avatar getPlayer2Avatar() { return (Avatar)player2Units.get(0); }	
+	public Avatar getPlayer1Avatar() { 
+		for (Unit i:player1Units) {
+			if (i instanceof Avatar) {return (Avatar)i;}
+		}return null;
+	}
+	public Avatar getPlayer2Avatar() { 
+		for (Unit i:player2Units) {
+			if (i instanceof Avatar) {return (Avatar)i;}
+		}return null;
+	}	
+	
+	public Tile getPlayer1AvatarTile() { 
+		for (Tile i:player1UnitTiles) {
+			if (i.getUnit() instanceof Avatar) {return i;}
+		}return null;
+	}
+	public Tile getPlayer2AvatarTile() { 
+		for (Tile i:player2UnitTiles) {
+			if (i.getUnit() instanceof Avatar) {return i;}
+		}return null;
+	}	
 }		
 
 /*public Avatar getPlayer1Avatar() {

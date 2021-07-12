@@ -80,12 +80,12 @@ public class AIPlayer extends Player{
 	public Tile pickSpellTarget(Card card, Set<Tile> targetTile, GameState gameState) 
 			throws DontPlayThisCardException{
 		if (card.getCardname().equals("Staff of Y'Kir'")) {
-			return gameState.getBoard().getPlayer1UnitTiles().get(0);//always return player 2 avatar
+			return gameState.getBoard().getPlayer2AvatarTile();//always return player 2 avatar
 		}else if (card.getCardname().equals("Entropic Decay")) {
 			Tile tile = null;
 			for (Tile i: targetTile) {
 				if (tile==null) {tile=i;}
-				else if (i.getUnit().getId()>0) {
+				else if (i.getUnit().getId()>1) {
 					if (tile.getUnit().getHealth()<i.getUnit().getHealth() ) {tile=i;} 
 				}
 			}
@@ -97,7 +97,7 @@ public class AIPlayer extends Player{
 
 	public Tile pickUnitPlayTarget(Card card, Set<Tile> targetTile, GameState gameState) {
 		Tile tile = null;
-		Tile player1Tile = gameState.getBoard().getPlayer1UnitTiles().get(0);
+		Tile player1Tile = gameState.getBoard().getPlayer1AvatarTile();
 		for (Tile i: targetTile) {
 			if (i!=null) {
 				if (tile==null) {tile=i;}
