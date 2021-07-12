@@ -44,5 +44,23 @@ public class UnitTest {
 		assertTrue(target.getHealth()==6);
 	}
 	
-	
+	@Test
+	public void RangedUnitTest()
+	{
+		GameState gamestate = new GameState();
+		Board boardtest = gamestate.getBoard();
+		RangedUnit Attacker = new RangedUnit();
+		Attacker.setAttack(2, null);
+		Attacker.setHealth(10, null);
+		Unit target =new Unit();
+		target.setAttack(2, null);
+		target.setHealth(10, null);
+		Tile tiletest = new Tile ();
+		tiletest.setUnit(target);
+		Attacker.attackUnit(null,gamestate,Attacker,tiletest);
+		
+		assertTrue(target.getHealth()==8);
+		assertTrue(Attacker.getHealth()==10);
+		//without counterattack
+	}
 }
