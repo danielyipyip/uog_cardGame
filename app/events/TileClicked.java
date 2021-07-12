@@ -124,9 +124,8 @@ public class TileClicked implements EventProcessor{
 		if(gameState.getBoard().getHighlightedRedTiles().contains(currentTileClicked)){
 			
 			// Ranged unit does not have move and attack method and it can attack far away.
-			 
+
 			if(gameState.getUnitClicked() instanceof RangedUnit == false){
-				
 				int x = gameState.getUnitClicked().getPosition().getTilex();
 				int y = gameState.getUnitClicked().getPosition().getTiley();
 		
@@ -157,11 +156,11 @@ public class TileClicked implements EventProcessor{
 					gameState.getUnitClicked().attackUnit(out, gameState,gameState.getUnitClicked(),currentTileClicked);
 				}
 			
-		}
+			}
 			
 		/*Scenario 2: if the player is clicking on a redTile, but not in move and attack range, only adjacent attack
 		 */
-		else if	(gameState.getUnitClicked().getAttacked()<=0)  {
+			if	(gameState.getUnitClicked().getAttacked()<=0)  {
 			
 				gameState.getBoard().unhighlightWhiteTiles(out);
 				gameState.getBoard().unhighlightRedTiles(out);
