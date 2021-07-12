@@ -60,6 +60,10 @@ public class Unit {
 	int longSleepTime= EventProcessor.longSleepTime;
 	@JsonIgnore
 	int sleepTime = EventProcessor.sleepTime;
+	@JsonIgnore
+	int walkingTime = EventProcessor.walkingTime;
+	@JsonIgnore
+	int attackTime = EventProcessor.attackTime;
 	
 	
 	//different constructors
@@ -223,7 +227,7 @@ public class Unit {
 		//(5) moveUnitToTile
 		BasicCommands.moveUnitToTile(out, this, targetTile);
 		this.setPositionByTile(targetTile); 
-		try {Thread.sleep(sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(walkingTime);} catch (InterruptedException e) {e.printStackTrace();}
 		//(7) set move to true
 		this.setMoved(true);
 	}
@@ -254,7 +258,7 @@ public class Unit {
 		Unit attackTarget = target.getUnit();
 		int targetNewHealth = attackTarget.getHealth() - unit.getAttack();
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.attack);
-		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(attackTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.idle);
 //		BasicCommands.drawUnit(out, unit, gameState.getBoard().unit2Tile(unit));
 		gameState.setUnitHealth(out, attackTarget, targetNewHealth);
@@ -265,7 +269,7 @@ public class Unit {
 	public void counterAttack (ActorRef out, GameState gameState,Unit unit, Tile target){
 		int attackerNewHealth = unit.getHealth() - target.getUnit().getAttack();
 		BasicCommands.playUnitAnimation(out, target.getUnit(), UnitAnimationType.attack);
-		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(attackTime);} catch (InterruptedException e) {e.printStackTrace();}
 		BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.idle);
 		gameState.setUnitHealth(out, unit, attackerNewHealth);
 	}

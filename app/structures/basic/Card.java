@@ -90,40 +90,8 @@ public class Card {
 		try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		unit.summonEffect(out, gameState);
-//		//Unit ability on summon
-//		if(unit.getName().equals("Azure Herald")) {
-//			azureHeraldPassive(out,gameState);
-//		}
-//		if(unit.getName().equals("Blaze Hound")) {
-//			blazeHoundPassive(out,gameState);
-//		}
 	}
-	
-	/*
-	Can we do something like unit.skillOnSummon();
-	Then, Azure Herald and Blaze Hound are extended from unit.
-	And our code will call their own skill method?
-	
-	Or other ways, such that we do not need to hard code the abilities on summon like the above.
-	*/
-	//works for player1 only for now
-//	public void azureHeraldPassive(ActorRef out, GameState gameState) {
-//		Unit player1Avatar = gameState.getBoard().getPlayer1Units().get(0);
-//		int value = 0;
-//		if(player1Avatar.getHealth() + 3 > player1Avatar.getMaxHealth()) {
-//			value = player1Avatar.getMaxHealth();
-//		} else {value = player1Avatar.getHealth() + 3;}
-//		gameState.setUnitHealth(out, gameState.getBoard().getPlayer1Units().get(0), value);
-//	}
-//	
-//	public void blazeHoundPassive(ActorRef out, GameState gameState) {
-//		gameState.getPlayer1().cardDraw();
-//		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//		gameState.getPlayer2().cardDraw();
-//		try {Thread.sleep(middleSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//	}
-	
-	
+		
 	
 	//getter setter
 	public int getId() {return id;}

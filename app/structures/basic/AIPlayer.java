@@ -46,11 +46,6 @@ public class AIPlayer extends Player{
 	//card only delete from Hand, not display
 	public void removeCard(ActorRef out, int n) {myhand.removeCard(n);}
 
-	//	@Override
-	//	public void playCard(ActorRef out, GameState gameState, Card card, Tile currentTileClicked) {
-	//		card.playCard(out, gameState, currentTileClicked);
-	//	}
-
 	/////////// AI decide what card to play //////////////
 	@Override
 	public void playCard(ActorRef out, GameState gameState, Card card) 
@@ -109,14 +104,6 @@ public class AIPlayer extends Player{
 		}
 		return null;
 	}
-
-	/////////// AI decide unit move //////////////
-	//	@Override
-	//	public void moveUnit(ActorRef out, Unit unit, Tile targetTile) {
-	//		unit.moveUnit(out, targetTile);
-	//	}
-
-
 
 	@Override
 	public void displayWhiteTile (ActorRef out,GameState gameState) {

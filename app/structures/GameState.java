@@ -45,6 +45,7 @@ public class GameState {
 	int middleSleepTime = EventProcessor.middleSleepTime;
 	int shortSleepTime = EventProcessor.shortSleepTime;
 	int longSleepTime = EventProcessor.longSleepTime;
+	int walkingTime = EventProcessor.walkingTime;
 
 	//constructor
 	public GameState() { //is an object hold by GameActor
@@ -82,13 +83,6 @@ public class GameState {
 
 	public Tile getTileClicked() {return tileClicked;}
 	public void setTileClicked(Tile tileClicked) {this.tileClicked = tileClicked;}
-
-	/*public void switchUnitMoving() {
-		this.unitMoving = !this.unitMoving;
-	}
-	public boolean getUnitMoving() {
-		return this.unitMoving;
-	}*/
 
 	public int getcardPos() {return cardPos;}	
 	public Unit getUnitClicked() {return unitClicked;}
@@ -204,6 +198,8 @@ public class GameState {
 		Set<Tile> targetTiles;
 		Tile targetTile;
 		for(int j = 0; j<this.getBoard().getPlayer2UnitTiles().size(); j++) {
+			//just add here so not play too fast
+			try {Thread.sleep(walkingTime);} catch (InterruptedException e) {e.printStackTrace();}
 			Tile i = this.getBoard().getPlayer2UnitTiles().get(j);
 			Unit currUnit = i.getUnit();
 			this.setUnitClicked(currUnit);
@@ -246,7 +242,7 @@ public class GameState {
 			this.setcardPos(j); //set which card is selected so can delete
 
 			//just add here so not play too fast
-			try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
+			try {Thread.sleep(walkingTime);} catch (InterruptedException e) {e.printStackTrace();}
 			//if not enough mana, skip this card
 			if(player2.getMana() < i.getManacost()) {continue;}
 
@@ -272,13 +268,6 @@ public class GameState {
 			board.unhighlightRedTiles(out);
 			try {Thread.sleep(shortSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
 		}
-
-		//highlightMoveTile
-		//highlightAttackTile
-
-		//		for(Tile i)
-		//		List<Unit> player2Units = this.getBoard().get
-
 
 		//Pass the turn to player again
 		EndTurnClicked endTurn = new EndTurnClicked();
@@ -326,32 +315,3 @@ public class GameState {
 
 }
 
-
-
-
-//other than 4 things to remove when a unit died, 2 more things
-//(5)show dead animation (6)remove from front end display 
-//public void setUnitHealth(ActorRef out, Unit unit, int newHealth) {
-//	int pos;
-//	//unit died
-//	if (newHealth<=0) {
-//		//only one of the indexOf will find
-//		pos=board.getPlayer1Units().indexOf(unit); 
-//		pos=board.getPlayer2Units().indexOf(unit);
-//		//unit died
-//		if (pos!=-1) {
-//			board.removeUnit(unit); //(1-4)
-//			//(5)
-//			BasicCommands.playUnitAnimation(out, unit, UnitAnimationType.death); 
-//			try {Thread.sleep(EventProcessor.sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//			//(6) just redraw empty tile?
-//			BasicCommands.drawTile(out, board.unit2Tile(unit), 0);
-//			try {Thread.sleep(EventProcessor.sleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-//		} //avatar died
-//		else{
-//			//add win/lose logic
-//		}
-//	}
-//	//unit NOT died, just do normally
-//	else {unit.setHealth(newHealth);} 
-//}

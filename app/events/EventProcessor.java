@@ -25,10 +25,13 @@ public interface EventProcessor {
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message);
 	
 	//newly added: the amount of thread.sleep(time) after each command
-	int sleepTime=100;
-	int shortSleepTime=100;
-	int middleSleepTime=100;
-	int longSleepTime=200;
+	int sleepTime=200;
+	int shortSleepTime=200;
+	int middleSleepTime=200;
+	int longSleepTime=500;
 	int drawTileSleepTime=50; //for drawtile
+	int walkingTime=1500;
+	int playCardTime=1000;
+	int attackTime=1000;
 	
 }
