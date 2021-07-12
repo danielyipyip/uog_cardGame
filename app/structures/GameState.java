@@ -222,7 +222,7 @@ public class GameState {
 					board.unhighlightWhiteTiles(out);
 					board.unhighlightRedTiles(out);
 				}
-				currUnit.highlightMoveTile(this, i);
+				currUnit.highlightAttackTile(this, i);
 				if ((targetTiles=this.getBoard().getHighlightedRedTiles()).size()!=0) {
 					//choose which one to atk
 					targetTile = pickAttackTile(currUnit, targetTiles);
