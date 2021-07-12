@@ -171,7 +171,7 @@ public class GameState {
 		this.getBoard().unhighlightWhiteTiles(out);
 		this.getBoard().unhighlightRedTiles(out);
 
-		this.getCurrentPlayer().moveUnit(out, unit, targetTile);
+		this.getCurrentPlayer().moveUnit(out, unit, targetTile); //(4),(5)
 		//(6) set seleted unit to null & pos to -1
 		this.unSelectCard();
 	}
@@ -183,6 +183,9 @@ public class GameState {
 	}
 
 
+	public void unhightlightWhiteRedTiles(ActorRef out){
+		this.getBoard().unhightlightWhiteRedTiles(out);
+	}
 
 
 	//unhighlight card and set instance variables to default value
@@ -200,31 +203,19 @@ public class GameState {
 		//Move and Attack
 		Set<Tile> targetTiles;
 		Tile targetTile;
-//		if (this.getBoard().getPlayer2UnitTiles()==null) {
-//			BasicCommands.addPlayer1Notification(out, "Unit Tiles is null", 2);
-//			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-//		}
-//		if (this.getBoard().getPlayer2Units()==null) {
-//			BasicCommands.addPlayer1Notification(out, "Units is null", 2);
-//			try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-//		}
-//		for(Tile i:this.getBoard().getPlayer2UnitTiles()) {
-//			if (i==null) {
-//				BasicCommands.addPlayer1Notification(out, "sth is null", 2);
-//				try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-//			}
-//		}
 		for(int j = 0; j<this.getBoard().getPlayer2UnitTiles().size(); j++) {
 			Tile i = this.getBoard().getPlayer2UnitTiles().get(j);
 			Unit currUnit = i.getUnit();
 			this.setUnitClicked(currUnit);
-			this.setTileClicked(this.getBoard().unit2Tile(currUnit));
+			this.setTileClicked(i);
 			//if can attack then attack la
 			currUnit.highlightAttackTile(this, i);
 			if ((targetTiles=this.getBoard().getHighlightedRedTiles()).size()!=0) {
 				//choose which one to atk
 				targetTile = pickAttackTile(currUnit, targetTiles);
 				currUnit.attackUnit(out, this, currUnit, targetTile);
+				board.unhighlightWhiteTiles(out);
+				board.unhighlightRedTiles(out);
 			} //move (maybe atk afterward)
 			else{
 				currUnit.highlightMoveTile(this, i);
@@ -232,11 +223,16 @@ public class GameState {
 					//choose which one to atk
 					targetTile = pickMoveTile(currUnit, targetTiles);
 					this.moveUnit(out, currUnit, targetTile);
+					board.unhighlightWhiteTiles(out);
+					board.unhighlightRedTiles(out);
 				}
+				currUnit.highlightMoveTile(this, i);
 				if ((targetTiles=this.getBoard().getHighlightedRedTiles()).size()!=0) {
 					//choose which one to atk
 					targetTile = pickAttackTile(currUnit, targetTiles);
 					currUnit.attackUnit(out, this, currUnit, targetTile);
+					board.unhighlightWhiteTiles(out);
+					board.unhighlightRedTiles(out);
 				} //move (maybe atk afterward)
 			}
 			board.unhighlightWhiteTiles(out);
@@ -267,10 +263,10 @@ public class GameState {
 			}
 			//play according to logic
 			try {
-			if (haveValidTarget) {
-				this.getCurrentPlayer().playCard(out, this, i);
-				try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
-			}
+				if (haveValidTarget) {
+					this.getCurrentPlayer().playCard(out, this, i);
+					try {Thread.sleep(longSleepTime);} catch (InterruptedException e) {e.printStackTrace();}
+				}
 			}catch (DontPlayThisCardException e) {continue;} //just skip this round
 			board.unhighlightWhiteTiles(out);
 			board.unhighlightRedTiles(out);
@@ -300,25 +296,25 @@ public class GameState {
 		}
 		return targetTile;
 	}
-	
+
 	public Tile pickMoveTile(Unit currUnit, Set<Tile> targetTiles) {
-	Tile targetTile=null;
-	Tile player1Tile = this.getBoard().getPlayer1UnitTiles().get(0);
-	for(Tile j:targetTiles) {
-		if (targetTile==null) {targetTile=j;}
-		//prioritize avatar -> can kill -> random (last of list)
-		if (targetTile.absdiff(player1Tile)>j.absdiff(player1Tile) ) {targetTile=j;} 
+		Tile targetTile=null;
+		Tile player1Tile = this.getBoard().getPlayer1AvatarTile();
+		for(Tile j:targetTiles) {
+			if (targetTile==null) {targetTile=j;}
+			//prioritize avatar -> can kill -> random (last of list)
+			if (targetTile.absdiff(player1Tile)>j.absdiff(player1Tile) ) {targetTile=j;} 
+		}
+		return targetTile;
 	}
-	return targetTile;
-}
-	
+
 	//Silverguard knight +attack when avatar is damaged
 	public void silverGuardKnightPassive(ActorRef out, GameState gameState, Avatar avatar) {
 		ArrayList<Unit> playerUnitArray;
 		ArrayList<Unit> player1Units = gameState.getBoard().getPlayer1Units(); 
 		ArrayList<Unit> player2Units = gameState.getBoard().getPlayer2Units();
 		if(avatar.getId() == 1) { playerUnitArray = player1Units; } else { playerUnitArray = player2Units; }
-				
+
 		for(Unit unit: playerUnitArray) {
 			String name = unit.getName();
 			if(name == null) {continue;} 
